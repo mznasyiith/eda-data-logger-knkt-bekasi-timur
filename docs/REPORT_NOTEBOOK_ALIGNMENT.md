@@ -23,7 +23,7 @@ Dokumen ini memetakan sembilan bab laporan utama ke notebook, generator, modul a
 | VI. Transformasi dan rekayasa fitur | `notebooks/06_data_transformation.ipynb` | `chapter_vi_temporal_feature`; `extended_chapter_vi`; `transformation.py` | `test_transformation.py`; `test_notebooks.py` |
 | VII. Visualisasi dan hubungan antarvariabel | `notebooks/07_visualizing_relationships.ipynb` | `chapter_vii_visuals`; `extended_chapter_vii`; `visualization.py`; `statistics.py` | `test_visualization.py`; `test_notebooks.py` |
 | VIII. Pencilan dan anomali | `notebooks/08_handling_outliers.ipynb` | `chapter_viii_outliers`; `extended_chapter_viii`; `statistics.py` | `test_statistics.py`; `test_validation.py` |
-| IX. Temuan dan rekomendasi | `notebooks/09_findings_and_insights.ipynb` | `chapter_ix_findings`; `extended_chapter_ix`; `reporting.py` | `test_reporting.py`; `test_notebooks.py` |
+| IX. Temuan dan rekomendasi | `notebooks/09_findings_and_insights.ipynb` | `chapter_ix_findings`; `extended_chapter_ix`; `reporting.py` | `test_reporting.py`; `test_notebooks.py`; `test_bab_ix_audit.py` |
 
 `notebooks/00_project_setup.ipynb` merupakan notebook penyiapan lingkungan, bukan bab laporan.
 
@@ -86,10 +86,10 @@ Dokumen ini memetakan sembilan bab laporan utama ke notebook, generator, modul a
 | Gap 20:51:28–20:51:33 | Timestamp CSV dan interval aktual | `test_dataset_integrity.py`; `test_visualization.py` |
 | Statistik deskriptif dan momen | Notebook 05, `statistics.py`, generator | `test_statistics.py` |
 | Perubahan parameter waktu | CSV, Notebook 07, generator, tabel sumber KNKT | `test_visualization.py`; review silang |
-| Kandidat IQR | `outputs/bab_viii/ringkasan_iqr.csv` | `test_statistics.py` |
-| Waktu perubahan parameter Bab IX | Tabel 6–10 KNKT dan CSV transkripsi | Pemeriksaan angka per timestamp |
+| Kandidat IQR | `outputs/bab_viii/ringkasan_iqr.csv` | `test_statistics.py`; `test_bab_ix_audit.py` |
+| Waktu perubahan parameter Bab IX | Tabel 5–10 KNKT, grafik Lampiran 7, dan CSV transkripsi | `test_bab_ix_audit.py`; pemeriksaan silang timestamp dan fase |
 
-## Pengujian otomatis wajib
+## Audit angka Bab IX (26 November 2026)\n\nAudit Bab IX menambahkan tabel per timestamp untuk 20:51:18 sampai 20:52:21, frekuensi kategori beserta denominator, ringkasan statistik deskriptif, serta pagar dan jumlah kandidat IQR. Tabel 5 KNKT menjelaskan koreksi timestamp Data Logger lokomotif +2 detik terhadap master time CCTV KA 5568A; EDA menggunakan timestamp yang sudah tercantum pada Tabel 6–10 dan tidak menerapkan koreksi ulang. Peristiwa tabrakan 20:52:12 (40 km/jam) dibedakan dari berhenti 20:52:19 (0 km/jam). Perbedaan waktu narasi fase service brake dengan waktu tabel/grafik dicatat sebagai penyesuaian waktu, bukan disembunyikan.\n\nPengujian `tests/test_bab_ix_audit.py` memeriksa nilai timestamp terpilih, frekuensi kategori, statistik deskriptif, hasil IQR, dan keterangan penyesuaian master time terhadap dataset repositori.\n\n## Pengujian otomatis wajib
 
 CI harus memvalidasi:
 - seluruh referensi gambar Markdown lokal pada laporan utama menunjuk file yang ada;
