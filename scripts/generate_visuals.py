@@ -68,6 +68,27 @@ def save(fig: plt.Figure, path: Path) -> None:
     plt.close(fig)
 
 
+def chapter_i_scope(out: Path) -> None:
+    fig, ax = plt.subplots(figsize=(12, 4.5), constrained_layout=True)
+    ax.axis("off")
+    ax.set_title("BAB I — Ruang Lingkup dan Tujuan EDA", fontsize=16, pad=18)
+    stages = [("Sumber", "Tabel 6–10\\nLaporan KNKT"),
+              ("Dataset", "58 rekaman unik\\n16 kolom"),
+              ("Analisis", "Kualitas • statistik\\ntren • asosiasi"),
+              ("Batas", "Deskriptif\\nbukan kausal")]
+    for i, (head, body) in enumerate(stages):
+        x = 0.03 + i * 0.245
+        ax.text(x, 0.65, head, transform=ax.transAxes, fontsize=13,
+                weight="bold", bbox={"boxstyle": "round,pad=0.5", "facecolor": "#e8f1f8"})
+        ax.text(x, 0.38, body, transform=ax.transAxes, fontsize=11, va="center")
+        if i < len(stages) - 1:
+            ax.annotate("", xy=(x + 0.22, 0.57), xytext=(x + 0.16, 0.57),
+                        xycoords=ax.transAxes, arrowprops={"arrowstyle": "->"})
+    ax.text(0.03, 0.08, "Tujuan: mendeskripsikan rekaman yang tersedia, memeriksa kualitasnya, "
+            "dan menjaga batas interpretasi bukti.", transform=ax.transAxes, fontsize=10)
+    save(fig, out / "bab_i" / "ruang_lingkup_eda.png")
+
+
 def chapter_ii_source_coverage(df: pd.DataFrame, out: Path) -> None:
     fig, ax = plt.subplots(figsize=(12, 3.8), constrained_layout=True)
     ax.scatter(df["Timestamp"], np.ones(len(df)), s=35)
@@ -86,7 +107,8 @@ def chapter_ii_source_coverage(df: pd.DataFrame, out: Path) -> None:
 
 
 def chapter_iii_profile(raw: pd.DataFrame, out: Path) -> None:
-    completeness = raw.replace("", np.nan).notna().mean().mul(100).sort_values()
+    profile = raw.replace({"": np.nan, "---": np.nan})
+    completeness = profile.notna().mean().mul(100).sort_values()
     fig, ax = plt.subplots(figsize=(10, 7), constrained_layout=True)
     ax.barh(completeness.index, completeness.values)
     ax.set_xlim(0, 105)
@@ -99,7 +121,7 @@ def chapter_iii_profile(raw: pd.DataFrame, out: Path) -> None:
 
 
 def chapter_iv_missingness(raw: pd.DataFrame, out: Path) -> None:
-    plot = raw.replace("", np.nan).isna().sum().sort_values()
+    plot = raw.replace({"": np.nan, "---": np.nan}).isna().sum().sort_values()
     plot = plot[plot > 0]
     fig, ax = plt.subplots(figsize=(10, 4.8), constrained_layout=True)
     ax.bar(plot.index, plot.values)
@@ -202,6 +224,11 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
     )
     heat.update_layout(template="plotly_white")
     heat.write_html(folder / "heatmap_spearman_interaktif.html", include_plotlyjs="cdn")
+    counts = pd.DataFrame(index=CORRELATION_COLUMNS, columns=CORRELATION_COLUMNS, dtype=int)
+    for left in CORRELATION_COLUMNS:
+        for right in CORRELATION_COLUMNS:
+            counts.loc[left, right] = int(df[[left, right]].dropna().shape[0])
+    counts.to_csv(folder / "jumlah_pasangan_valid_korelasi.csv")
 
     fig, ax = plt.subplots(figsize=(8.5, 6.5), constrained_layout=True)
     image = ax.imshow(corr, vmin=-1, vmax=1, cmap="RdBu_r", aspect="auto")
@@ -297,6 +324,7 @@ def main() -> None:
     args = parser.parse_args()
     raw, df = load_data(args.input)
     out = args.output_dir
+    chapter_i_scope(out)
     chapter_ii_source_coverage(df, out)
     chapter_iii_profile(raw, out)
     chapter_iv_missingness(raw, out)
