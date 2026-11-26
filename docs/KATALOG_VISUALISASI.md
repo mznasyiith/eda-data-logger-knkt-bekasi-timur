@@ -127,6 +127,6 @@ Jalankan secara lokal:
 python scripts/generate_visuals.py
 ```
 
-Atau jalankan workflow CI. Workflow menghasilkan visual dari CSV, lalu mengunggah direktori `outputs/` sebagai artifact. Workflow memiliki izin read-only dan tidak melakukan commit/push; menjalankan workflow tidak mengubah berkas `outputs/` yang terlacak pada branch. Untuk hasil regenerasi yang tervalidasi, unduh [artifact `eda-visualizations` dari run 45836980007](https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur/actions/runs/45836980007/artifacts/15126546343).
+Atau jalankan workflow CI. Workflow menghasilkan visual dari CSV, lalu mengunggah direktori `outputs/` sebagai artifact. Workflow memiliki izin read-only dan tidak melakukan commit/push; menjalankan workflow tidak mengubah berkas `outputs/` yang terlacak pada branch. Untuk hasil regenerasi yang tervalidasi, unduh [artifact `eda-visualizations` dari run 45837376001](https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur/actions/runs/45837376001/artifacts/15126266625).
 
 Semua visual tambahan dihasilkan oleh generator yang sama. Berkas pada `outputs/` di branch adalah snapshot yang dikomit; artifact CI adalah keluaran regenerasi pada commit yang diuji. Keduanya tidak boleh dianggap identik tanpa perbandingan berkas. Untuk reproduksi lokal, jalankan `python scripts/generate_visuals.py` dari root repository.
