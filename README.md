@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/hero.svg" alt="Animated railway data hero banner" width="100%" /></p>
+
 <div align="center">
 
 # EDA Data Logger KNKT — Bekasi Timur
@@ -46,6 +48,17 @@ python scripts/generate_visuals.py
 ~~~~
 
 Hasil disimpan pada outputs/: GIF deret waktu kecepatan, PNG beresolusi tinggi, heatmap korelasi Spearman, dan HTML Plotly interaktif. Animasi memperlihatkan urutan rekaman yang tersedia; bukan simulasi fisika atau rekonstruksi sebab kecelakaan.
+
+## Portal interaktif
+
+Jalankan portal lokal dengan Streamlit:
+
+~~~~bash
+pip install -r requirements-streamlit.txt
+streamlit run app.py
+~~~~
+
+Portal menyediakan filter waktu dan variabel, grafik interaktif, tabel rekaman terfilter, serta unduhan CSV. Ini merupakan alat eksplorasi lokal; belum dipublikasikan sebagai layanan web ter-host.
 
 ## Arsitektur dan alur data
 
