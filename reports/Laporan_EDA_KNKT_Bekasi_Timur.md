@@ -17,7 +17,7 @@
 
 Laporan Akhir Investigasi KNKT Nomor KNKT.26.04.03.02 membahas tabrakan antara KA 4B Argo Bromo Anggrek dan KA 5568A Commuter Line di Jalur 1 Stasiun Bekasi Timur pada 27 April 2026. Salah satu sumber informasi teknis dalam laporan adalah rekaman Data Logger lokomotif KA 4B. Data Logger merekam sejumlah parameter operasi, antara lain waktu, jarak, kecepatan, akselerasi, arus motor traksi, tekanan Brake Pipe (BP), tekanan Brake Cylinder (BC), posisi throttle, indikator PCS, dan status Independent Brake System (IBS).
 
-Permasalahan yang dikaji dalam proyek ini bukan persoalan komersial seperti kehilangan pelanggan atau prediksi harga. Permasalahan analitisnya adalah bagaimana memahami karakteristik rekaman Data Logger pada fase pengereman darurat dan saat tabrakan, serta memastikan bahwa data yang ditranskripsikan dari laporan investigasi dapat dibaca, diperiksa, dan dianalisis secara terstruktur.
+Permasalahan yang dikaji dalam proyek ini bukan persoalan komersial seperti kehilangan pelanggan atau prediksi harga. Permasalahan analitisnya adalah bagaimana merekonstruksi secara terbatas perubahan parameter operasi lokomotif KA 4B pada rentang waktu yang disajikan, khususnya perubahan kecepatan, sistem pengereman, dan kontrol traksi, serta memastikan bahwa data yang ditranskripsikan dari laporan investigasi dapat dibaca, diperiksa, dan dianalisis secara terstruktur. Dalam perspektif investigasi kecelakaan, Data Logger merupakan satu sumber bukti teknis; interpretasinya harus diuji silang dengan kronologi KNKT dan bukti independen lain sebelum digunakan untuk menyimpulkan urutan sebab-akibat.
 
 Tujuan EDA adalah:
 1. Mengidentifikasi struktur dan cakupan dataset Data Logger yang digunakan.
@@ -25,10 +25,11 @@ Tujuan EDA adalah:
 3. Mendeskripsikan perubahan kecepatan, jarak, tekanan BP/BC, arus motor traksi, throttle, PCS, dan IBS selama cuplikan waktu yang tersedia.
 4. Menyajikan pola melalui statistik deskriptif dan visualisasi eksploratif.
 5. Menetapkan batas interpretasi agar hasil EDA tidak disamakan dengan pembuktian sebab-akibat atau kesimpulan investigasi teknis.
+6. Menyusun kebutuhan integrasi bukti lanjutan untuk rekonstruksi kejadian yang tersinkronisasi, termasuk data persinyalan, komunikasi, sarana, prasarana, dan faktor manusia.
 
 ## 1.2 Tipe Masalah
 
-Proyek ini merupakan **Exploratory Data Analysis (EDA) deskriptif terhadap data runtun waktu (time-series)**. Proyek ini tidak ditetapkan sebagai klasifikasi, regresi, maupun klasterisasi karena belum terdapat variabel target dan tujuan prediksi yang dirumuskan.
+Proyek ini merupakan **Exploratory Data Analysis (EDA) deskriptif terhadap data runtun waktu (time-series)**. Dalam konteks investigasi, analisis ini merupakan tahap *data understanding* dan *preliminary event-pattern analysis*, bukan rekonstruksi kecelakaan menyeluruh dan bukan penetapan penyebab. Proyek ini tidak ditetapkan sebagai klasifikasi, regresi, maupun klasterisasi karena belum terdapat variabel target dan tujuan prediksi yang dirumuskan.
 
 EDA digunakan untuk memahami data dan membangun pertanyaan analitis lanjutan. Penerapan model Machine Learning bukan sasaran wajib pada tahap ini. Pemaksaan algoritma klasifikasi atau regresi tanpa target yang sahih justru berisiko menghasilkan analisis yang tidak sesuai dengan tujuan penelitian.
 
@@ -42,6 +43,7 @@ Karena proyek ini tidak membangun model prediktif, akurasi, precision, recall, F
 - Proses pemuatan dengan Pandas berhasil dan dapat diulang.
 - Statistik dan visualisasi dapat dihasilkan kembali dari berkas dataset yang sama.
 - Setiap interpretasi dibatasi pada rekaman yang tersedia dan konteks yang dijelaskan dalam laporan KNKT.
+- Tidak ada klaim sinkronisasi lintas-sumber, analisis ATP/interlocking, perhitungan jarak henti, atau penilaian faktor manusia tanpa bukti primer yang relevan.
 
 ---
 
@@ -128,6 +130,26 @@ Data relevan untuk memahami perubahan parameter lokomotif pada cuplikan waktu ya
 
 Kebutuhan data tambahan untuk analisis yang lebih luas mencakup Tabel 6–8, keterangan teknis sistem pengereman, kronologi persinyalan dan komunikasi operasional, serta data pendukung lain yang telah diverifikasi dari laporan KNKT. Penambahan data harus menjaga identitas sumber, satuan, urutan waktu, dan jejak transkripsi.
 
+### 2.6 Kerangka Bukti Investigasi dan Kebutuhan Data Lintas-Disiplin
+
+Agar analisis tidak melampaui bukti yang tersedia, setiap kelompok pertanyaan investigasi dipetakan terhadap sumber data yang diperlukan. Status *tersedia* berarti tercakup dalam dataset yang dianalisis; *konteks dokumen* berarti dapat ditelaah dari bagian lain laporan KNKT tetapi belum menjadi variabel dalam dataset; dan *belum tersedia dalam dataset* berarti tidak boleh disimpulkan dari Data Logger KA 4B saja.
+
+| Domain investigasi | Pertanyaan analitis | Bukti/data yang diperlukan | Status dalam proyek ini |
+|---|---|---|---|
+| Data logger lokomotif | Bagaimana kecepatan, arus, throttle, BP, BC, dan IBS berubah terhadap waktu? | Tabel 6–10 Data Logger KA 4B | Tersedia sebagai transkripsi tabel |
+| Rekonstruksi kronologi | Bagaimana urutan kejadian lintas sumber dan ketidakpastian waktunya? | Timestamp logger, kronologi KNKT, jam sistem, catatan sinkronisasi | Terbatas; satu sumber logger dan narasi dokumen |
+| Persinyalan, block, interlocking, wesel | Apa aspek status sinyal, rute, okupansi petak, dan penguncian wesel? | Log interlocking, log block, indikasi sinyal, data CTC/PPKA, diagram rute | Belum tersedia sebagai dataset terstruktur |
+| ATP/ETCS/CBTC dan perlindungan SPAD | Apakah sistem proteksi aktif, memberi peringatan, atau melakukan intervensi? | Log perangkat proteksi yang benar-benar terpasang, konfigurasi, alarm, event record | Belum tersedia; jangan mengasumsikan teknologi tertentu terpasang |
+| Sinkronisasi dua kereta | Bagaimana posisi, kecepatan, dan waktu kedua rangkaian dibandingkan? | Data logger KA 5568A dan KA 4B, sumber waktu, metode clock correction | Belum tersedia untuk analisis sinkronisasi |
+| Komunikasi dan dispatch | Apa instruksi, konfirmasi, dan urutan komunikasi operasional? | Rekaman radio/audio, log telepon, catatan PPKA/OC, timestamp dan identitas kanal | Belum tersedia dalam dataset |
+| Dinamika pengereman | Berapa jarak henti dan perlambatan aktual serta bagaimana perbandingannya dengan karakteristik rem? | Kecepatan awal, waktu respons, tekanan rem, massa, gradien, kondisi roda-rel, komposisi rangkaian, parameter rem | Belum cukup untuk menghitung jarak henti secara tervalidasi |
+| Faktor manusia | Apa kondisi kewaspadaan, beban kerja, kepatuhan prosedur, dan tindakan kru? | Wawancara, rekaman komunikasi, jadwal dinas, bukti prosedural, data relevan lain | Tidak dapat dinilai dari logger saja |
+| Prasarana dan jarak pandang | Bagaimana geometri lintas, lokasi sinyal, jarak pandang, cuaca, dan pencahayaan? | Track chart, survei geospasial, foto/video, cuaca, kondisi penerangan | Belum dianalisis dari dataset ini |
+| Crashworthiness | Bagaimana pola deformasi, penetrasi, dan transfer energi benturan? | Pemeriksaan fisik, foto ukur, data struktur sarana, material, titik kontak | Di luar cakupan dataset logger |
+| Operasi perjalanan | Bagaimana posisi kejadian terhadap GAPEKA, perjalanan aktual, dan izin masuk petak? | GAPEKA, train graph aktual, log perjalanan, izin dan komunikasi operasi | Perlu dokumen operasional pendukung |
+
+Matriks tersebut adalah peta kebutuhan bukti, bukan pernyataan bahwa seluruh bukti telah diperoleh atau telah dianalisis. Istilah ATP, ETCS, CBTC, deadman, anti-climber, dan perangkat sejenis hanya boleh digunakan sebagai kategori pemeriksaan apabila relevan dengan konfigurasi sarana/prasarana yang dibuktikan oleh dokumen teknis. Tidak boleh diasumsikan terpasang hanya karena istilah tersebut termasuk dalam kerangka keahlian tim.
+
 ---
 
 # BAB 3. MEMUAT DAN MEMERIKSA DATA (IMPORTING AND INSPECTING THE DATA)
@@ -170,6 +192,10 @@ Hasil pembacaan dataset gabungan: `km`, `m`, `Speed (km/h)`, `Load (amps)`, `EAB
 
 Tipe object pada akselerasi dapat dimengerti karena kolom memuat angka dan teks `---`. Tipe tanggal dan waktu belum berupa datetime; parsing dilakukan secara eksplisit pada salinan analisis.
 
+### 3.5 Penanganan Waktu dan Integritas Urutan Rekaman
+
+Kolom `Date` dan `Time` perlu digabung menjadi timestamp pada salinan analisis dengan format yang eksplisit. Pemeriksaan urutan dilakukan setelah parsing, tetapi timestamp hasil parsing tetap merepresentasikan waktu sebagaimana dicetak pada tabel sumber. Belum ada dasar untuk menyatakan bahwa jam Data Logger telah tersinkronisasi dengan jam interlocking, radio, CCTV, atau logger kereta lain. Setiap analisis lintas-sumber nantinya harus mendokumentasikan zona waktu, resolusi timestamp, kemungkinan offset/drift, metode koreksi jam, dan rentang ketidakpastian. Jangan menggeser timestamp agar tampak cocok dengan kronologi tanpa dasar kalibrasi atau bukti sinkronisasi.
+
 ## 3.4 Ringkasan Statistik Awal
 
 Ringkasan statistik untuk variabel numerik yang memiliki data:
@@ -191,9 +217,7 @@ Untuk akselerasi, n numerik adalah 51 karena tujuh nilai `---` tidak dapat diper
 
 ## 4.1 Identifikasi Nilai yang Hilang
 
-Pemeriksaan `isnull().sum()` menemukan 26 nilai kosong pada masing-masing kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, atau 44,83% dari 58 baris per kolom. Kolom lain tidak memiliki null teknis. Secara terpisah, akselerasi memiliki tujuh placeholder `---` (12,07% dari 58 baris), yang bukan null teknis pada berkas transkripsi mentah.
-
-Namun, `Acceleration (m/sec²)` memiliki tujuh placeholder `---`. Placeholder tersebut bukan null secara teknis pada data mentah, sehingga harus dihitung terpisah. Proporsinya adalah 7 dari 58 rekaman gabungan atau 12,07% dari seluruh baris; seluruh tujuh placeholder berada pada bagian Tabel 10.
+Pemeriksaan `isnull().sum()` menemukan 26 nilai kosong pada masing-masing kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, atau 44,83% dari 58 baris per kolom. Keempat kolom tersebut tidak ditampilkan pada Tabel 9–10. Secara terpisah, `Acceleration (m/sec²)` memiliki tujuh placeholder `---` (12,07% dari 58 baris) pada bagian Tabel 10. Placeholder ini bukan null teknis dalam berkas transkripsi mentah, tetapi menandakan data akselerasi tidak tersedia/tidak terbaca sebagaimana ditampilkan pada sumber.
 
 ## 4.2 Analisis Mekanisme Missing Data
 
@@ -267,7 +291,7 @@ Analisis univariat dilakukan dengan histogram/box plot untuk variabel numerik da
 
 ## 7.2 Analisis Bivariate dan Multivariate
 
-Grafik garis kecepatan terhadap waktu dan grafik tekanan BP/BC terhadap waktu lebih sesuai daripada scatter plot generik karena urutan waktu merupakan konteks utama data. Perbandingan dua tekanan harus memperhatikan satuan yang sama (psi), sedangkan arus motor traksi menggunakan ampere dan kecepatan menggunakan km/jam. Hubungan visual tidak otomatis menunjukkan pengaruh kausal.
+Grafik garis kecepatan terhadap waktu dan grafik tekanan BP/BC terhadap waktu lebih sesuai daripada scatter plot generik karena urutan waktu merupakan konteks utama data. Perbandingan dua tekanan harus memperhatikan satuan yang sama (psi), sedangkan arus motor traksi menggunakan ampere dan kecepatan menggunakan km/jam. Hubungan visual tidak otomatis menunjukkan pengaruh kausal. Untuk rekonstruksi kecelakaan, sumbu waktu harus diperlakukan sebagai kunci pengurutan yang masih memiliki ketidakpastian sumber. Dataset ini hanya memuat logger KA 4B; karena itu, tidak boleh dibuat klaim bahwa data telah disinkronkan dengan KA 5568A, log persinyalan, rekaman radio, CCTV, atau data operasi. Analisis silang baru dapat dilakukan setelah timestamp, sumber jam, offset, drift, dan metode penyelarasan didokumentasikan. Jika tersedia data tambahan, gunakan *timeline evidence matrix* yang mencatat waktu sumber, waktu terkoreksi, ketidakpastian, sumber bukti, dan status verifikasi untuk setiap peristiwa.
 
 ## 7.3 Analisis Korelasi dan Asosiasi
 
@@ -283,7 +307,7 @@ Deteksi menggunakan aturan Interquartile Range (IQR), dengan batas bawah Q1 − 
 
 ## 8.2 Keputusan Perlakuan terhadap Pencilan
 
-Semua nilai dipertahankan. Nilai ekstrem terjadi dalam cuplikan perubahan keadaan pengereman, sehingga secara domain dapat merepresentasikan transisi sistem yang justru penting untuk diamati. Tidak dilakukan trimming, capping, winsorization, atau transformasi untuk menyembunyikan nilai ekstrem. Setiap koreksi hanya dapat dilakukan jika ditemukan kesalahan transkripsi yang dapat dibuktikan dengan membandingkan kembali ke tabel sumber.
+Semua nilai dipertahankan. Nilai ekstrem terjadi dalam cuplikan perubahan keadaan pengereman, sehingga secara domain dapat merepresentasikan transisi sistem yang justru penting untuk diamati. Tidak dilakukan trimming, capping, winsorization, atau transformasi untuk menyembunyikan nilai ekstrem. Setiap koreksi hanya dapat dilakukan jika ditemukan kesalahan transkripsi yang dapat dibuktikan dengan membandingkan kembali ke tabel sumber. Perlu dibedakan tiga konsep: (1) pencilan statistik, yaitu nilai yang berada di luar pagar metode statistik; (2) anomali operasional, yaitu perilaku yang menyimpang dari ekspektasi teknis berdasarkan konteks sistem; dan (3) bukti kegagalan/penyebab, yang memerlukan verifikasi teknis dan bukti independen. Ketiganya tidak saling identik. Hasil IQR pada dataset ini tidak menemukan pencilan pada enam variabel numerik operasional, tetapi hal tersebut tidak membuktikan bahwa seluruh perilaku sistem normal atau bebas anomali.
 
 ---
 
@@ -322,6 +346,12 @@ Temuan di atas merupakan pembacaan deskriptif terhadap tabel. Interpretasi tekni
 5. Perluas konteks dengan bagian laporan KNKT yang menjelaskan kronologi, persinyalan, komunikasi, serta sistem pengereman.
 6. Jangan menerapkan SMOTE, klasifikasi, regresi, atau algoritma prediktif sebelum tujuan prediksi, target, cakupan data, dan strategi validasi runtun waktu dirumuskan.
 7. Jika analisis lanjutan bertujuan mendeteksi anomali, definisikan terlebih dahulu anomali berdasarkan konteks teknis dan validasi domain; jangan menjadikan pencilan IQR sebagai label kesalahan secara otomatis.
+8. Jika dokumen sumber tersedia, ekstrak log persinyalan/interlocking, catatan perjalanan aktual dan izin masuk petak, serta kronologi komunikasi PPKA/OC/masinis dengan mempertahankan file asli, metadata, zona waktu, dan hash integritasnya.
+9. Peroleh data logger KA 5568A dan dokumentasi sumber waktunya sebelum melakukan sinkronisasi dua kereta. Lakukan koreksi offset/drift hanya jika ada dasar teknis yang dapat diuji; laporkan rentang ketidakpastian waktu.
+10. Untuk kajian pengereman, kumpulkan parameter massa dan komposisi rangkaian, karakteristik rem, gradien lintas, kondisi adhesi roda-rel, kecepatan, tekanan dan waktu respons. Jangan menyimpulkan jarak henti dari perubahan kecepatan saja tanpa model dan parameter yang tervalidasi.
+11. Untuk aspek persinyalan, ATP/SPAD, geometri lintas, visibilitas, faktor manusia, dan crashworthiness, gunakan bukti primer yang sesuai: log perangkat yang benar-benar terpasang, diagram interlocking, track chart, survei lapangan, rekaman komunikasi, pemeriksaan sarana, dan dokumen prosedur. Jika bukti tidak tersedia, nyatakan sebagai keterbatasan, bukan mengisi dengan asumsi.
+12. Simpan setiap sumber sebagai artefak immutable, catat asal-usul dan checksum, pisahkan data mentah, data hasil transkripsi, data hasil normalisasi waktu, dan data analisis; lakukan validasi skema, unit test, pemeriksaan perubahan, serta review independen sebelum rilis dataset.
+13. Untuk pemodelan lanjutan, prioritaskan metode yang sesuai dengan tujuan dan struktur data. Dengan 58 rekaman dari satu kejadian, dataset ini belum memadai untuk melatih model prediktif yang dapat digeneralisasi. Model anomali atau klasifikasi baru dipertimbangkan setelah tersedia kumpulan kejadian yang representatif, label yang tervalidasi, dan strategi validasi berbasis waktu/kejadian agar tidak terjadi data leakage.
 
 ---
 
