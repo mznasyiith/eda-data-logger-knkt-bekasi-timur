@@ -1125,6 +1125,10 @@ def extended_chapter_viii(df, out):
     ax.set_xlabel("Jumlah kandidat menurut aturan IQR")
     ax.set_title("BAB VIII — Jumlah Kandidat Pencilan IQR per Variabel", weight="bold")
     ax.grid(axis="x", alpha=0.2)
+    max_candidates = int(summary["Kandidat IQR"].max())
+    axis_max = max(1, max_candidates + 1)
+    ax.set_xlim(0, axis_max)
+    ax.set_xticks(range(0, axis_max + 1))
     for i, value in enumerate(summary["Kandidat IQR"]):
         ax.text(value + 0.03, i, str(value), va="center")
     save(fig, folder / "jumlah_kandidat_iqr.png")
