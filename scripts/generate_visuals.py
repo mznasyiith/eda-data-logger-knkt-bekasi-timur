@@ -22,9 +22,9 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "data" / "processed" / "data_logger_knkt_tabel_6_10.csv"
 DEFAULT_OUTPUT = ROOT / "outputs"
 
+SOURCE_DISTANCE_COLUMNS = ["km", "m"]
 NUMERIC_COLUMNS = [
-    "km",
-    "m",
+    "distance_to_stop_m",
     "Speed (km/h)",
     "Acceleration (m/sec²)",
     "Load (amps)",
@@ -44,7 +44,7 @@ CATEGORICAL_COLUMNS = ["Throttle", "PCS Open", "IBS"]
 def load_data(path: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Return immutable-style raw transcription and a typed analysis copy."""
     raw = pd.read_csv(path, dtype=str, keep_default_na=False)
-    required = {"Date", "Time", "Speed (km/h)", *NUMERIC_COLUMNS}
+    required = {"Date", "Time", "Speed (km/h)", *SOURCE_DISTANCE_COLUMNS, "Acceleration (m/sec²)", "Load (amps)", "EAB BP (psi)", "EAB BC (psi)"}
     missing = required.difference(raw.columns)
     if missing:
         raise ValueError(f"Required columns are missing: {sorted(missing)}")
@@ -55,10 +55,13 @@ def load_data(path: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
         format="%d/%m/%Y %H.%M.%S",
         errors="raise",
     )
-    for column in NUMERIC_COLUMNS:
+    for column in [*SOURCE_DISTANCE_COLUMNS, "Speed (km/h)", "Acceleration (m/sec²)", "Load (amps)", "EAB BP (psi)", "EAB BC (psi)"]:
         df[column] = pd.to_numeric(
             df[column].replace({"---": np.nan, "": np.nan}), errors="coerce"
         )
+    # Source validation: km and m are components of remaining distance to final stop.
+    # Keep source columns in raw; analyze only their combined value.
+    df["distance_to_stop_m"] = df["km"] * 1000 + df["m"]
     for column in CATEGORICAL_COLUMNS:
         if column in df.columns:
             df[column] = df[column].replace("", np.nan)
@@ -253,7 +256,7 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
         y="Speed (km/h)",
         markers=True,
         title="KA 4B — Deret Waktu Kecepatan",
-        hover_data=["Elapsed (s)", "m", "EAB BP (psi)", "EAB BC (psi)"],
+        hover_data=["Elapsed (s)", "distance_to_stop_m", "EAB BP (psi)", "EAB BC (psi)"],
     )
     chart.update_layout(
         template="plotly_white",
@@ -340,7 +343,7 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
 
 def chapter_viii_outliers(df: pd.DataFrame, out: Path) -> None:
     columns = [
-        "m",
+        "distance_to_stop_m",
         "Speed (km/h)",
         "Acceleration (m/sec²)",
         "Load (amps)",
@@ -638,7 +641,7 @@ def extended_chapter_ii(df, raw, out):
         ],
         [
             "Apakah ada nilai ekstrem?",
-            "m, Speed, Acceleration, Load, BP, BC",
+            "distance_to_stop_m, Speed, Acceleration, Load, BP, BC",
             "IQR dan konteks waktu",
         ],
         [
@@ -667,7 +670,7 @@ def extended_chapter_ii(df, raw, out):
     ax.axis("off")
     ax.set_title("BAB II — Ringkasan Skema Dataset", fontsize=14, weight="bold")
     groups = [
-        ("Waktu/lokasi", "Date • Time • km • m"),
+        ("Waktu/lokasi", "Date • Time • komponen jarak km+m"),
         ("Dinamika", "Speed • Acceleration • Load"),
         ("Pengereman", "EAB BP • EAB BC"),
         ("Status", "DB Excit • Throttle • PCS Open\nDir Call • DB Set • DB Star • IBS"),
@@ -1057,7 +1060,7 @@ def extended_chapter_viii(df, out):
     folder = out / "bab_viii"
     folder.mkdir(parents=True, exist_ok=True)
     cols = [
-        "m",
+        "distance_to_stop_m",
         "Speed (km/h)",
         "Acceleration (m/sec²)",
         "Load (amps)",
