@@ -1,21 +1,16 @@
 name: CI
 on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: PR head branch to receive generated outputs
-        required: true
-        default: audit/verified-distance-semantics
-        type: string
   push:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: false
 
-# Default-deny write access. PR validation must remain read-only.
+# All CI events are read-only. Generated outputs are published as artifacts;
+# no workflow run pushes commits back to a branch.
 permissions:
   contents: read
 
@@ -27,9 +22,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Pin PR validation to the exact tested head; manual runs use the
-          # explicitly selected branch. No write token is exposed to PR code.
-          ref: ${{ github.event.pull_request.head.sha || inputs.branch || github.ref_name }}
+          # For PRs, test the exact PR head commit, not a moving branch ref.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
@@ -58,40 +52,3 @@ jobs:
           retention-days: 14
       - name: Tests
         run: pytest
-
-  # Only an explicitly requested workflow_dispatch run can write generated
-  # outputs back to a branch. This job is isolated from pull_request events.
-  publish-generated:
-    if: github.event_name == 'workflow_dispatch'
-    needs: quality
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.branch }}
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: pip
-      - name: Install project and development tools
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev]"
-      - name: Regenerate visual artifacts
-        run: python scripts/generate_visuals.py
-      - name: Commit generated outputs
-        env:
-          HEAD_BRANCH: ${{ inputs.branch }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add outputs/
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: synchronize generated EDA visualizations"
-            git push origin "HEAD:${HEAD_BRANCH}"
-          else
-            echo "Generated outputs are already synchronized."
-          fi
