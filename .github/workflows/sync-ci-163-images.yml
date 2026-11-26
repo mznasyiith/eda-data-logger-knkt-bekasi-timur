@@ -1,4 +1,4 @@
-name: One-time sync of CI #163 visualization snapshots
+name: "One-time sync of CI #163 visualization snapshots"
 
 on:
   push:
@@ -53,7 +53,6 @@ jobs:
           from pathlib import Path
           import hashlib
           import re
-          import sys
 
           artifact = Path("/tmp/ci163")
           output = Path("outputs")
@@ -69,10 +68,10 @@ jobs:
               elif hashlib.sha256(src.read_bytes()).digest() != hashlib.sha256(dst.read_bytes()).digest():
                   mismatches.append(f"hash mismatch: outputs/{rel.as_posix()}")
           if mismatches:
-              raise SystemExit("\n".join(mismatches))
+              raise SystemExit("\\n".join(mismatches))
           print("PASS: all 37 tracked PNGs exactly match artifact #163")
 
-          # Validate local Markdown image targets (including HTML img src attributes).
+          # Validate local Markdown image targets (Markdown and HTML syntax).
           errors = []
           patterns = (
               re.compile(r"!\\[[^\\]]*\\]\\(([^)]+)\\)"),
@@ -92,8 +91,8 @@ jobs:
                   target = target.split("#", 1)[0].split("?", 1)[0]
                   if not target:
                       continue
-                  resolved = (md.parent / target).resolve()
-                  if not resolved.is_file():
+                  candidate = Path(target.lstrip("/")) if target.startswith("/") else md.parent / target
+                  if not candidate.is_file():
                       errors.append(f"{md}: {target}")
           if errors:
               raise SystemExit("Broken local Markdown image links:\\n" + "\\n".join(errors))
@@ -101,7 +100,7 @@ jobs:
           PY
 
           mapfile -t changed < <(git status --short --untracked-files=no | awk '{print $2}' | sort)
-          expected="$(printf '%s\\n' ${replacements[@]} | sort)"
+          expected="$(printf '%s\\n' "${replacements[@]/#/outputs/}" | sort)"
           actual="$(printf '%s\\n' "${changed[@]}")"
           if [[ "$actual" != "$expected" ]]; then
             printf 'Unexpected tracked changes:\\n%s\\n' "$actual"
@@ -109,17 +108,15 @@ jobs:
           fi
 
       - name: Commit only the five PNG replacements
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- \
-            outputs/bab_v/distribusi_numerik.png \
-            outputs/bab_v/ecdf_variabel_numerik.png \
-            outputs/bab_v/skewness_kurtosis.png \
-            outputs/bab_vii/heatmap_spearman.png \
+          git add -- \\
+            outputs/bab_v/distribusi_numerik.png \\
+            outputs/bab_v/ecdf_variabel_numerik.png \\
+            outputs/bab_v/skewness_kurtosis.png \\
+            outputs/bab_vii/heatmap_spearman.png \\
             outputs/bab_vii/multi_panel_parameter_waktu.png
           git commit -m "chore(visuals): sync five PNGs with CI artifact 163"
           git push origin HEAD:audit/verified-distance-semantics
