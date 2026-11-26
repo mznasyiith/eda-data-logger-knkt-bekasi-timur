@@ -313,7 +313,7 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
     corr_display = corr.rename(index=DISPLAY_LABELS, columns=DISPLAY_LABELS)
     heat = px.imshow(
         corr_display,
-        text_auto=".2f",
+        text_auto=".3f",
         zmin=-1,
         zmax=1,
         color_continuous_scale="RdBu_r",
@@ -344,7 +344,7 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
     for i in range(len(corr_display.index)):
         for j in range(len(corr_display.columns)):
             value = corr_display.iloc[i, j]
-            ax.text(j, i, f"{value:.2f}", ha="center", va="center", fontsize=8)
+            ax.text(j, i, f"{value:.3f}", ha="center", va="center", fontsize=8)
     fig.colorbar(image, ax=ax, label="Koefisien Spearman")
     save(fig, folder / "heatmap_spearman.png")
 
