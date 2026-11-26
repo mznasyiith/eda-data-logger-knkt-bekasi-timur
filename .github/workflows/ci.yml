@@ -9,7 +9,7 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: false
 permissions:
-  contents: read
+  contents: write
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -33,6 +33,20 @@ jobs:
           jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=180 --output-dir /tmp/eda-executed notebooks/*.ipynb
       - name: Generate visual artifacts
         run: python scripts/generate_visuals.py
+      - name: Commit generated outputs to the PR branch
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: synchronize generated EDA visualizations"
+            git push origin "HEAD:${HEAD_BRANCH}"
+          else
+            echo "Generated outputs are already synchronized."
+          fi
       - name: Upload visual artifacts
         uses: actions/upload-artifact@v4
         with:
