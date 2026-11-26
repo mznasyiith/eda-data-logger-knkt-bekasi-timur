@@ -7,7 +7,7 @@
 **Sumber utama:** Laporan Akhir Investigasi KNKT Nomor KNKT.26.04.03.02  
 **Tanggal penyusunan:** 26 November 2026
 
-> **Pernyataan ruang lingkup.** Analisis empiris menggunakan transkripsi Tabel 6, 7, 8, 9, dan 10. Terdapat 59 baris sumber; satu rekaman pukul 20:51:43 tercantum identik pada Tabel 7 dan Tabel 8 sehingga dataset gabungan deduplikasi memuat 58 rekaman unik dan 16 kolom. Rentang waktu tercatat 20:51:18–20:52:21, dengan celah rekaman 20:51:28–20:51:33. Empat kolom pada Tabel 9–10 tidak ditampilkan dan tetap kosong untuk 26 rekaman dari dua tabel tersebut.
+> **Pernyataan ruang lingkup.** Analisis empiris menggunakan transkripsi Tabel 6, 7, 8, 9, dan 10. Terdapat 59 baris sumber; satu rekaman pukul 20:51:43 tercantum identik pada Tabel 7 dan Tabel 8 sehingga dataset gabungan deduplikasi memuat 58 rekaman unik dan 16 kolom. Rentang waktu subset tercatat 20:51:18–20:52:21. Subset Tabel 6–10 tidak memuat 20:51:28–20:51:33; enam timestamp tersebut tercantum pada Lampiran 7 PDF KNKT, tetapi belum dimasukkan dalam dataset analisis ini. Empat kolom pada Tabel 9–10 tidak ditampilkan dan tetap kosong untuk 26 rekaman dari dua tabel tersebut.
 
 ---
 
@@ -61,6 +61,8 @@ Karena proyek ini tidak membangun model prediktif, akurasi, precision, recall, F
 
 Sumber primer adalah dokumen **Laporan Akhir Investigasi Kecelakaan Perkeretaapian KNKT Nomor KNKT.26.04.03.02**, yang diterbitkan oleh Komite Nasional Keselamatan Transportasi. Dokumen membahas tabrakan KA 4B Argo Bromo Anggrek dan KA 5568A Commuter Line di Stasiun Bekasi Timur pada 27 April 2026.
 
+Dataset analisis ini secara sengaja dibatasi pada Tabel 6–10. PDF yang sama juga memuat Lampiran 7, berjudul *Data Logger Lokomotif KA 4B setelah disesuaikan dengan master time*, yang menampilkan enam rekaman tambahan pada 20:51:28–20:51:33. Enam rekaman itu belum termasuk dalam CSV 58 baris. Dengan demikian, jeda waktu pada dataset adalah batas subset tabel yang dipilih, bukan bukti bahwa data tidak tersedia di seluruh laporan KNKT. Perluasan ke Lampiran 7 memerlukan audit transkripsi dan rekalkulasi terpisah.
+
 Dataset yang diperiksa berasal dari lima tabel yang saling melengkapi:
 - Tabel 6–8, halaman tercetak 65–66 atau halaman PDF 75–76, yang memuat rekaman pada fase sebelum dan selama penerapan pengereman layanan.
 - Tabel 9, “Rekaman data logger lokomotif KA 4B saat emergency brake aktif”, halaman tercetak 67 atau halaman PDF 77.
@@ -76,7 +78,7 @@ Transkripsi tabel merupakan proses ekstraksi manual. Audit visual independen ter
 
 ## 2.2 Deskripsi dan Eksplorasi Awal Data
 
-Dataset gabungan memiliki **58 baris unik dan 16 kolom**. Baris sumber berjumlah 59 karena rekaman pukul 20:51:43 tercantum identik pada Tabel 7 dan Tabel 8. Setelah satu duplikasi lintas tabel dihilangkan, tersisa 58 timestamp unik. Cakupan waktu 20:51:18–20:52:21, tetapi terdapat celah enam detik tanpa rekaman yang disajikan, yaitu 20:51:28–20:51:33.
+Dataset gabungan memiliki **58 baris unik dan 16 kolom**. Baris sumber berjumlah 59 karena rekaman pukul 20:51:43 tercantum identik pada Tabel 7 dan Tabel 8. Setelah satu duplikasi lintas tabel dihilangkan, tersisa 58 timestamp unik. Cakupan waktu subset 20:51:18–20:52:21. Tabel 6–10 tidak memuat 20:51:28–20:51:33, sedangkan Lampiran 7 PDF KNKT memuat enam rekaman pada timestamp tersebut. Analisis ini tetap dibatasi pada Tabel 6–10; jeda tersebut merupakan batas cakupan subset, bukan ketiadaan data di seluruh PDF.
 
 Enam belas kolom pada skema dataset:
 1. `Date`
@@ -313,7 +315,7 @@ Tidak ditemukan duplikasi baris identik pada dataset analitis 58 × 16 setelah p
 
 Pemeriksaan konsistensi meliputi kesesuaian jumlah kolom (16), format tanggal dan waktu, nilai numerik, kategori status, placeholder, serta urutan timestamp. Tanggal ditulis `27/04/2026` dan waktu mengikuti format `HH.MM.SS`; parsing dilakukan pada salinan analisis menggunakan format eksplisit `%d/%m/%Y %H.%M.%S`. Tujuh placeholder `---` pada akselerasi dipertahankan sebagai teks pada data mentah dan dikonversi menjadi missing hanya pada seri numerik analisis. Empat kolom status dengan 26 nilai kosong tetap dipertahankan karena tidak tersedia pada Tabel 9–10.
 
-Tidak dilakukan imputasi mean, median, modus, KNN Imputer, atau MICE. Pengisian nilai sensor yang tidak terbaca dengan angka statistik akan menghasilkan nilai buatan yang tidak bersumber dari logger. Tidak dilakukan interpolasi pada celah waktu 20:51:28–20:51:33. Tidak dilakukan penghapusan baris/kolom, scaling, encoding, atau winsorization pada dataset mentah. Setiap koreksi transkripsi harus disertai bukti pembanding dari tabel PDF dan dicatat sebagai perubahan yang dapat ditelusuri.
+Tidak dilakukan imputasi mean, median, modus, KNN Imputer, atau MICE. Pengisian nilai sensor yang tidak terbaca dengan angka statistik akan menghasilkan nilai buatan yang tidak bersumber dari logger. Tidak dilakukan interpolasi pada jeda subset Tabel 6–10 20:51:28–20:51:33. Enam rekaman pada Lampiran 7 diketahui tersedia dalam PDF, tetapi tidak digabung ke CSV karena berada di luar cakupan tabel yang dipilih. Tidak dilakukan penghapusan baris/kolom, scaling, encoding, atau winsorization pada dataset mentah. Setiap koreksi transkripsi harus disertai bukti pembanding dari tabel PDF dan dicatat sebagai perubahan yang dapat ditelusuri.
 
 ---
 
@@ -419,7 +421,7 @@ Hasil konversi divalidasi dengan membandingkan jumlah baris sebelum dan sesudah 
 
 ## 6.3 Rekayasa Fitur Temporal
 
-Dari timestamp gabungan dibuat fitur `elapsed_seconds`, yaitu selisih detik terhadap timestamp paling awal. Fitur ini berguna untuk sumbu waktu numerik dan pengukuran jarak waktu antarrekaman. Karena terdapat gap 20:51:28–20:51:33, selisih waktu aktual dipertahankan; indeks baris tidak boleh dianggap sebagai detik yang selalu berjarak satu detik. Timestamp sumber tidak digeser dan tidak dinyatakan tersinkronisasi dengan sumber lain.
+Dari timestamp gabungan dibuat fitur `elapsed_seconds`, yaitu selisih detik terhadap timestamp paling awal. Fitur ini berguna untuk sumbu waktu numerik dan pengukuran jarak waktu antarrekaman. Karena subset Tabel 6–10 tidak memuat 20:51:28–20:51:33 (enam rekaman tersedia pada Lampiran 7 tetapi belum digabung), selisih waktu aktual dipertahankan; indeks baris tidak boleh dianggap sebagai detik yang selalu berjarak satu detik. Timestamp sumber tidak digeser dan tidak dinyatakan tersinkronisasi dengan sumber lain.
 
 **Gambar 6.1. Interval aktual antarrekaman**
 
@@ -493,7 +495,7 @@ Matriks korelasi tidak dijadikan dasar kesimpulan utama. Dataset berisi 58 rekam
 
 ![Multi-panel parameter waktu](../outputs/bab_vii/multi_panel_parameter_waktu.png)
 
-Tujuan visual adalah membandingkan kecepatan (km/jam), tekanan BP dan BC (psi), arus (ampere), serta akselerasi (m/s²) pada sumbu waktu yang sama. Cara membaca: setiap panel memiliki skala vertikal dan satuan sendiri; posisi horizontal menunjukkan detik sejak timestamp pertama. Garis diputus pada interval lebih dari satu detik, termasuk gap sumber 20:51:28–20:51:33. Visual mendukung identifikasi perubahan temporal yang berdekatan, bukan perbandingan besar nilai lintas satuan. Batasnya, EDA tidak melakukan sinkronisasi ulang secara independen. Timestamp mengikuti Tabel 6–10; KNKT menjelaskan penyesuaian +2 detik untuk logger lokomotif terhadap master time CCTV KA 5568A pada Tabel 5. Tidak dilakukan interpolasi pada gap sumber.
+Tujuan visual adalah membandingkan kecepatan (km/jam), tekanan BP dan BC (psi), arus (ampere), serta akselerasi (m/s²) pada sumbu waktu yang sama. Cara membaca: setiap panel memiliki skala vertikal dan satuan sendiri; posisi horizontal menunjukkan detik sejak timestamp pertama. Garis diputus pada interval lebih dari satu detik, termasuk jeda pada subset Tabel 6–10 20:51:28–20:51:33; enam rekaman terkait tercantum pada Lampiran 7 tetapi tidak termasuk dalam analisis ini. Visual mendukung identifikasi perubahan temporal yang berdekatan, bukan perbandingan besar nilai lintas satuan. Batasnya, EDA tidak melakukan sinkronisasi ulang secara independen. Timestamp mengikuti Tabel 6–10; KNKT menjelaskan penyesuaian +2 detik untuk logger lokomotif terhadap master time CCTV KA 5568A pada Tabel 5. Tidak dilakukan interpolasi atau penggabungan enam rekaman Lampiran 7 ke subset Tabel 6–10.
 
 **Gambar 7.6. Categorical State Timeline**
 
@@ -545,7 +547,7 @@ Semua nilai dipertahankan. Nilai ekstrem terjadi dalam cuplikan perubahan keadaa
 
 ## 9.1 Rangkuman Temuan Utama
 
-Ringkasan berikut menggabungkan dua tingkat bukti: (1) nilai pada transkripsi Tabel 6–10 dan (2) penamaan fase serta penjelasan KNKT pada Bab II.3 dan grafik Lampiran 7. Dataset EDA memuat 58 rekaman unik dari 59 baris sumber; satu rekaman 20:51:43 tercantum identik pada Tabel 7 dan 8. Tidak dilakukan interpolasi untuk celah 20:51:28–20:51:33.
+Ringkasan berikut menggabungkan dua tingkat bukti: (1) nilai pada transkripsi Tabel 6–10 dan (2) penamaan fase serta penjelasan KNKT pada Bab II.3 dan grafik Lampiran 7. Dataset EDA memuat 58 rekaman unik dari 59 baris sumber; satu rekaman 20:51:43 tercantum identik pada Tabel 7 dan 8. Tidak dilakukan interpolasi pada jeda subset Tabel 6–10 20:51:28–20:51:33; Lampiran 7 memuat enam rekaman tambahan yang belum termasuk dalam analisis.
 
 ### Audit kronologi parameter pada timestamp kunci
 
@@ -553,7 +555,7 @@ Ringkasan berikut menggabungkan dua tingkat bukti: (1) nilai pada transkripsi Ta
 |---|---|---:|---:|---:|---:|---|---|---|---|
 | 20:51:18 | Awal minimum reduction pada tabel | 108 | 71 | 0 | 168 | T7 | Closed | Rel | Awal rekaman gabungan |
 | 20:51:27 | Akhir interval minimum reduction | 107 | 65 | 0 | 168 | T7 | Closed | Rel | BP turun 6 psi dari 71 menjadi 65 |
-| 20:51:34 | Peralihan menuju full service | 105 | 62 | 0 | 168 | T7 | Closed | Rel | Timestamp pertama setelah gap; tidak mengisi 20:51:28–33 |
+| 20:51:34 | Peralihan menuju full service | 105 | 62 | 0 | 168 | T7 | Closed | Rel | Timestamp pertama setelah jeda pada subset Tabel 6–10; enam rekaman 20:51:28–33 tersedia pada Lampiran 7 tetapi tidak termasuk cakupan analisis |
 | 20:51:39 | Full service sedang terbentuk | 101 | 51 | 8 | 136 | T5 | Closed | Rel | BC mencapai 8 psi |
 | 20:51:43 | Awal rentang full service pada Tabel 8/grafik | 95 | 49 | 0 | 136 | T5 | Closed | Rel | BP 49 psi pada awal tabel full service |
 | 20:51:55 | Akhir rentang full service pada tabel | 79 | 49 | 0 | 144 | T4 | Closed | Rel | Baris terakhir Tabel 8 |
@@ -684,7 +686,7 @@ Komite Nasional Keselamatan Transportasi. (2026). *Laporan akhir investigasi kec
 - Input reproduksibel di repository: `data/processed/data_logger_knkt_tabel_6_10.csv`. Workbook kerja eksternal `data_logger_knkt_tabel_6_10_lengkap.xlsx` (sheet `Data_Logger_Raw`) merupakan catatan proses transkripsi/audit dan tidak disertakan; workbook tersebut bukan prasyarat untuk menjalankan ulang pipeline.
 - Cakupan sumber: Tabel 6–10, halaman tercetak 65–68.
 - Baris transkripsi dari seluruh tabel: 59; dataset gabungan setelah menghapus satu duplikasi identik lintas Tabel 7–8: 58 baris × 16 kolom.
-- Gap sumber: tidak ada rekaman yang ditampilkan untuk 20:51:28–20:51:33; tidak dilakukan interpolasi.
+- Batas cakupan: subset Tabel 6–10 tidak memuat 20:51:28–20:51:33; Lampiran 7 PDF memuat enam rekaman tambahan yang belum dimasukkan ke dataset ini. Tidak dilakukan interpolasi atau penggabungan diam-diam.
 - File CSV proyek: `data/processed/data_logger_knkt_tabel_6_10.csv`.
 - Placeholder `---` dipertahankan pada data mentah dan hanya dikecualikan dari kalkulasi numerik akselerasi.
 - Tidak dilakukan imputasi, penghapusan baris, penghapusan kolom, scaling, encoding, atau transformasi terhadap dataset mentah.
