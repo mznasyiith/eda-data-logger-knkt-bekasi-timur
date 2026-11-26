@@ -13,15 +13,24 @@ assert pdf.is_file() and pdf.stat().st_size > 10_000, "PDF missing or unexpected
 html_text = html.read_text(encoding="utf-8")
 # Reveal.js slide sections are emitted as HTML <section> elements.
 slides = html_text.count("<section")
-assert slides >= 15, f"Expected at least 15 slide sections, found {slides}"
-assert "Eksplorasi Data Logger Lokomotif KA 4B" in html_text, "Presentation title missing"
+assert slides >= 30, f"Expected at least 30 slide sections, found {slides}"
+assert "Laporan Exploratory Data Analysis (EDA)" in html_text, "Presentation title missing"
 
 # Quarto/reveal.js speaker notes are rendered as notes asides.
 notes = html_text.count('class="notes"')
-assert notes >= 15, f"Expected speaker notes on at least 15 slides, found {notes}"
+assert notes >= 30, f"Expected speaker notes on at least 30 slides, found {notes}"
 
 # Guard source-critical semantics and values against accidental presentation drift.
 for required in (
+    "Bab 1 — Pendahuluan & memahami masalah",
+    "Bab 2 — Memahami data",
+    "Bab 3 — Memuat & memeriksa data",
+    "Bab 4 — Penanganan data yang hilang",
+    "Bab 5 — Mengeksplorasi karakteristik data",
+    "Bab 6 — Transformasi data: kapan diperlukan?",
+    "Bab 7 — Visualisasi hubungan data",
+    "Bab 8 — Penanganan pencilan",
+    "Bab 9 — Komunikasi temuan dan insight",
     "20:51:28–20:51:33",
     "20:52:12",
     "20:52:19",
