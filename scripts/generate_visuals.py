@@ -501,7 +501,8 @@ def extended_chapter_iii(df, raw, out):
     ax.bar(type_counts.index,type_counts.values)
     ax.set(title="BAB III — Distribusi Tipe Data pada Salinan Analisis",ylabel="Jumlah kolom",xlabel="Tipe data setelah konversi")
     ax.grid(axis="y",alpha=.2)
-    for i,v in enumerate(type_counts.values): ax.text(i,v+.1,str(v),ha="center")
+    for i, value in enumerate(type_counts.values):
+        ax.text(i, value + 0.1, str(value), ha="center")
     save(fig,folder/"distribusi_tipe_data_raw.png")
 
     cols=[c for c in NUMERIC_COLUMNS if c in df and df[c].notna().any()]
@@ -547,7 +548,8 @@ def extended_chapter_iv(df, raw, out):
     ax.bar(counts.index,counts.values)
     ax.set(title="BAB IV — Ketidaktersediaan Empat Kolom Status",ylabel="Jumlah baris kosong")
     ax.grid(axis="y",alpha=.2)
-    for i,v in enumerate(counts.values): ax.text(i,v+.3,str(v),ha="center")
+    for i, value in enumerate(counts.values):
+        ax.text(i, value + 0.3, str(value), ha="center")
     ax.text(.01,-.25,"Nilai kosong berkelompok pada bagian tabel sumber yang tidak menampilkan kolom-kolom tersebut.",
             transform=ax.transAxes,fontsize=8.5)
     save(fig,folder/"missingness_kolom_status.png")
@@ -556,7 +558,8 @@ def extended_chapter_iv(df, raw, out):
     ax.bar(["Baris sumber","Rekaman unik"],[59,len(df)])
     ax.set(title="BAB IV — Dampak Deduplikasi Rekaman Identik",ylabel="Jumlah baris")
     ax.grid(axis="y",alpha=.2)
-    for i,v in enumerate([59,len(df)]): ax.text(i,v+.5,str(v),ha="center",weight="bold")
+    for i, value in enumerate([59, len(df)]):
+        ax.text(i, value + 0.5, str(value), ha="center", weight="bold")
     ax.text(.5,.05,"Satu timestamp 20:51:43 tercatat identik pada Tabel 7 dan 8.",
             transform=ax.transAxes,ha="center",fontsize=8.5)
     save(fig,folder/"dampak_deduplikasi.png")
@@ -572,7 +575,8 @@ def extended_chapter_v(df, out):
         ax.boxplot(vals,showmeans=True,meanline=True)
         ax.set_title(col,fontsize=9)
         ax.grid(axis="y",alpha=.2)
-    for ax in axes.flat[len(cols):]: ax.remove()
+    for ax in axes.flat[len(cols):]:
+        ax.remove()
     fig.suptitle("BAB V — Sebaran Numerik dengan Median dan Mean",fontsize=14,weight="bold")
     save(fig,folder/"boxplot_mean_median.png")
 
@@ -627,16 +631,20 @@ def extended_chapter_vi(df, raw, out):
         ax.text(x,.62,h,transform=ax.transAxes,fontsize=8.5,weight="bold",
                 bbox=dict(boxstyle="round,pad=.45",fc="#e8f1f8"))
         ax.text(x,.34,b,transform=ax.transAxes,fontsize=8,va="center")
-        if i<5: ax.annotate("",xy=(x+.15,.59),xytext=(x+.125,.59),
-                            xycoords=ax.transAxes,arrowprops=dict(arrowstyle="->"))
+        if i < 5:
+            ax.annotate("", xy=(x + 0.15, 0.59), xytext=(x + 0.125, 0.59),
+                        xycoords=ax.transAxes, arrowprops=dict(arrowstyle="->"))
     save(fig,folder/"alur_transformasi_aktual.png")
 
     cols=list(raw.columns)
     type_rows=[]
     for c in cols:
-        if c in ["Date","Time"]: target="datetime (gabungan)"
-        elif c in NUMERIC_COLUMNS: target="numerik"
-        else: target="kategori/teks"
+        if c in ["Date", "Time"]:
+            target = "datetime (gabungan)"
+        elif c in NUMERIC_COLUMNS:
+            target = "numerik"
+        else:
+            target = "kategori/teks"
         type_rows.append((c,str(raw[c].dtype),target))
     fig,ax=plt.subplots(figsize=(10,6),constrained_layout=True)
     ax.axis("off")
@@ -723,7 +731,8 @@ def extended_chapter_viii(df, out):
     ax.set_xlabel("Jumlah kandidat menurut aturan IQR")
     ax.set_title("BAB VIII — Jumlah Kandidat Pencilan IQR per Variabel",weight="bold")
     ax.grid(axis="x",alpha=.2)
-    for i,v in enumerate(summary["Kandidat IQR"]): ax.text(v+.03,i,str(v),va="center")
+    for i, value in enumerate(summary["Kandidat IQR"]):
+        ax.text(value + 0.03, i, str(value), va="center")
     save(fig,folder/"jumlah_kandidat_iqr.png")
 
     fig,axes=plt.subplots(3,1,figsize=(13,8),sharex=True,constrained_layout=True)
@@ -771,7 +780,7 @@ def extended_chapter_ix(df, raw, out):
     for i,(value,label) in enumerate(items):
         x=.035+(i%3)*.32
         y=.65-(i//3)*.42
-        ax.text(x,y,v,transform=ax.transAxes,fontsize=20,weight="bold",
+        ax.text(x, y, value, transform=ax.transAxes, fontsize=20, weight="bold",
                 bbox=dict(boxstyle="round,pad=.35",fc="#e8f1f8"))
         ax.text(x,y-.15,label,transform=ax.transAxes,fontsize=8.5)
     save(fig,folder/"scorecard_keterbatasan.png")
