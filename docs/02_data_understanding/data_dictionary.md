@@ -34,7 +34,7 @@
 ## Catatan kualitas dan transformasi
 
 1. Tujuh nilai `---` pada `Acceleration (m/sec²)` adalah placeholder tekstual dari sumber.
-2. Kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star` masing-masing memiliki 26 nilai kosong karena kolom tersebut tidak ditampilkan pada Tabel 9–10.
+2. Kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star` masing-masing memiliki 26 nilai kosong pada subset Tabel 6–10 karena kolom tersebut tidak ditampilkan pada Tabel 9–10. Lampiran 7 PDF memuat empat kolom status pada tabel Data Logger lengkap; header `DB Start` pada lampiran perlu direkonsiliasi dengan `DB Star` sebelum nilai tersebut digabungkan.
 3. Untuk analisis numerik, akselerasi dapat dikonversi pada salinan kerja menggunakan `pd.to_numeric(errors="coerce")`; CSV sumber tetap dipertahankan.
 4. `Date` dan `Time` dapat digabung menjadi timestamp analitis dengan format eksplisit `%d/%m/%Y %H.%M.%S`. Ini tidak dengan sendirinya membuktikan sinkronisasi dengan sumber waktu lain.
 5. Verifikasi sumber pada `source_validation_distance.md` menunjukkan `km` dan `m` adalah komponen satu besaran jarak tersisa menuju titik henti akhir, bukan dua variabel independen atau chainage absolut. Pada salinan analisis, bentuk `distance_to_stop_m = km * 1000 + m`; data mentah tetap tidak diubah.
