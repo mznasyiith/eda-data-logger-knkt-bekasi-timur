@@ -16,7 +16,7 @@ Besaran ini adalah jarak tersisa menuju titik henti akhir, bukan chainage absolu
 distance_to_stop_m          58  472.897  378.50  421.531  0.00  1341.00
 Speed (km/h)                58   73.638   82.50   33.077  0.00   109.00
 Acceleration (m/sec²)       51   -0.336   -0.38    0.203 -0.84     0.05
-Load (amps)                 58   86.345  136.00   76.730  0.00   168.00
+Load (amps)                 58   86.207  136.00   76.587  0.00   168.00
 EAB BP (psi)                58   31.897   49.00   28.264  0.00    71.00
 EAB BC (psi)                58   26.000    2.00   31.191  0.00    73.00
 
