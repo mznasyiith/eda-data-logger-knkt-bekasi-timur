@@ -1,4 +1,5 @@
 """Interactive Streamlit companion for the transcribed KNKT Data Logger dataset."""
+
 from pathlib import Path
 
 import plotly.express as px
@@ -55,17 +56,11 @@ with st.sidebar:
     category_columns = [
         column for column in ["Throttle", "PCS Open", "IBS"] if column in df.columns
     ]
-    selected_category = st.selectbox(
-        "Filter kategori", ["(Semua)"] + category_columns
-    )
+    selected_category = st.selectbox("Filter kategori", ["(Semua)"] + category_columns)
     selected_values = None
     if selected_category != "(Semua)":
-        values = sorted(
-            df[selected_category].dropna().astype(str).unique().tolist()
-        )
-        selected_values = st.multiselect(
-            "Nilai kategori", values, default=values
-        )
+        values = sorted(df[selected_category].dropna().astype(str).unique().tolist())
+        selected_values = st.multiselect("Nilai kategori", values, default=values)
 
 view = df[df["Timestamp"].between(start, end)].copy()
 if selected_category != "(Semua)" and selected_values is not None:
@@ -130,4 +125,6 @@ if len(view) >= 3:
         "distance_to_stop_m. Korelasi bersifat deskriptif dan bukan kausal."
     )
 else:
-    st.info("Pilih kategori/rentang yang menyisakan sedikitnya tiga rekaman untuk korelasi.")
+    st.info(
+        "Pilih kategori/rentang yang menyisakan sedikitnya tiga rekaman untuk korelasi."
+    )
