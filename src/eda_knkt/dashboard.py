@@ -2,6 +2,7 @@
 
 The dashboard follows the same verified variable semantics as the EDA pipeline.
 """
+
 from __future__ import annotations
 
 from pathlib import Path
