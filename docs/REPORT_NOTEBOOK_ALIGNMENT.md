@@ -9,9 +9,9 @@ Dokumen ini memetakan sembilan bab laporan utama ke notebook, generator, modul a
 3. Empat kolom status yang tidak ditampilkan pada Tabel 9–10 dibedakan dari tujuh placeholder akselerasi `---`.
 4. Kolom sumber `km` dan `m` dipertahankan, tetapi analisis jarak menggunakan fitur turunan `distance_to_stop_m = km * 1000 + m` sesuai verifikasi sumber KNKT. Fitur tersebut berarti jarak tersisa menuju titik henti akhir, bukan chainage absolut.
 5. Statistik, distribusi, korelasi, dan IQR tidak boleh memperlakukan `km` dan `m` sebagai variabel independen.
-5. Subset Tabel 6–10 tidak memuat 20:51:28–20:51:33, tetapi Lampiran 7 PDF memuat enam rekaman tersebut. Analisis saat ini sengaja mempertahankan cakupan Tabel 6–10; tidak ada interpolasi atau penggabungan diam-diam.
-6. Setiap gambar yang dirujuk laporan harus mempunyai file hasil pada `outputs/`.
-7. Klaim kuantitatif harus dapat ditelusuri ke dataset, notebook, generator, tabel sumber KNKT, atau pengujian.
+6. Subset Tabel 6–10 tidak memuat 20:51:28–20:51:33, tetapi Lampiran 7 PDF memuat enam rekaman tersebut. Analisis saat ini sengaja mempertahankan cakupan Tabel 6–10; tidak ada interpolasi atau penggabungan diam-diam.
+7. Setiap gambar yang dirujuk laporan harus mempunyai file hasil pada `outputs/`.
+8. Klaim kuantitatif harus dapat ditelusuri ke dataset, notebook, generator, tabel sumber KNKT, atau pengujian.
 
 ## Matriks bab, notebook, modul, dan pengujian
 
