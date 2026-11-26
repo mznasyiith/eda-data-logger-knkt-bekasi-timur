@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pytest
 
+from eda_knkt.config import OUTPUTS_DIR
 from eda_knkt.visualization import (
     plot_categorical_counts,
     plot_correlation_heatmap,
@@ -49,6 +50,7 @@ def test_plot_rejects_invalid_column_type_or_name():
         plot_numeric_distribution(df, "category")
     with pytest.raises(KeyError):
         plot_scatter(df, "missing", "category")
+
 
 def test_interactive_html_uses_stable_plotly_div_ids():
     expected = {
