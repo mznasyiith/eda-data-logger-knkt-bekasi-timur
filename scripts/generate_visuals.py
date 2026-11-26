@@ -589,7 +589,8 @@ def extended_chapter_v(df, out):
         ax.set_ylim(0,1.03)
         ax.grid(alpha=.2)
         ax.set_ylabel("Proporsi kumulatif")
-    for ax in axes.flat[len(cols):]: ax.remove()
+    for ax in axes.flat[len(cols):]:
+        ax.remove()
     fig.suptitle("BAB V — Empirical Cumulative Distribution Function (ECDF)",fontsize=14,weight="bold")
     save(fig,folder/"ecdf_variabel_numerik.png")
 
