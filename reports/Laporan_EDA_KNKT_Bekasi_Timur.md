@@ -34,7 +34,7 @@ EDA digunakan untuk memahami data dan membangun pertanyaan analitis lanjutan. Pe
 
 ## 1.3 Metrik Keberhasilan
 
-Keberhasilan proyek EDA diukur melalui kriteria kualitas dan keterlacakan, bukan akurasi atau F1-score:
+Karena proyek ini tidak membangun model prediktif, akurasi, precision, recall, F1-score, MAE, dan RMSE belum relevan sebagai metrik keberhasilan. Keberhasilan EDA dinilai melalui kriteria kualitas, keterlacakan, dan reproduksibilitas berikut:
 - Asal data dan halaman sumber dapat ditelusuri.
 - Struktur dataset yang digunakan konsisten, yaitu 58 baris unik dan 16 kolom untuk cakupan Tabel 6–10.
 - Nilai asli, termasuk penanda `---`, tidak diubah tanpa dasar.
@@ -53,9 +53,12 @@ Keberhasilan proyek EDA diukur melalui kriteria kualitas dan keterlacakan, bukan
 
 Sumber primer adalah dokumen **Laporan Akhir Investigasi Kecelakaan Perkeretaapian KNKT Nomor KNKT.26.04.03.02**, yang diterbitkan oleh Komite Nasional Keselamatan Transportasi. Dokumen membahas tabrakan KA 4B Argo Bromo Anggrek dan KA 5568A Commuter Line di Stasiun Bekasi Timur pada 27 April 2026.
 
-Dataset yang diperiksa berasal dari:
+Dataset yang diperiksa berasal dari lima tabel yang saling melengkapi:
+- Tabel 6–8, halaman tercetak 65–66 atau halaman PDF 75–76, yang memuat rekaman pada fase sebelum dan selama penerapan pengereman layanan.
 - Tabel 9, “Rekaman data logger lokomotif KA 4B saat emergency brake aktif”, halaman tercetak 67 atau halaman PDF 77.
 - Tabel 10, “Rekaman data logger lokomotif KA 4B saat tabrakan dengan KA 5568A”, halaman tercetak 68 atau halaman PDF 78.
+
+Dengan demikian, cakupan laporan ini bukan hanya dua tabel terakhir, melainkan seluruh Tabel 6–10.
 
 ### Akses dan ekstraksi data
 
@@ -87,7 +90,7 @@ Enam belas kolom pada skema dataset:
 
 Empat kolom, yaitu `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, tersedia pada Tabel 6–8 tetapi tidak ditampilkan pada Tabel 9–10. Karena itu, kolom tersebut terisi pada 32 rekaman dari Tabel 6–8 dan kosong pada 26 rekaman Tabel 9–10. Keberadaan kolom tersebut dipertahankan untuk menjaga skema 16 kolom yang digunakan dalam proyek; nilai tidak direkonstruksi atau diisi dari asumsi.
 
-Secara deskriptif, kecepatan berada pada rentang 0–109 km/jam, nilai kolom `m` pada rentang 0–863, dan kolom `km` bernilai 0 atau 1 sesuai tabel sumber. Nilai `km` dan `m` dipertahankan terpisah sebagaimana dicetak; tidak dilakukan rekonstruksi jarak absolut.
+Secara deskriptif, kecepatan berada pada rentang 0–109 km/jam, nilai kolom `m` pada rentang 0–863, dan kolom `km` bernilai 0 atau 1 sesuai tabel sumber. Nilai `km` dan `m` dipertahankan terpisah sebagaimana dicetak; tidak dilakukan rekonstruksi jarak absolut. Kolom `km` bernilai 1 pada sepuluh rekaman awal Tabel 6 dan 0 pada 48 rekaman berikutnya. Perubahan ini dicatat sebagai karakteristik representasi sumber dan tidak ditafsirkan sebagai kesalahan atau diperbaiki tanpa dokumentasi teknis.
 
 ## 2.3 Peninjauan Kualitas Data (Data Quality Assessment)
 
@@ -103,7 +106,7 @@ Pemeriksaan duplikasi seluruh baris pada dataset menghasilkan **0 baris duplikat
 
 ### Deteksi pencilan awal
 
-Pencilan statistik tidak otomatis merupakan kesalahan. Dengan aturan IQR 1,5 kali rentang antarkuartil, beberapa nilai ekstrem terdeteksi pada kolom arus dan tekanan. Nilai-nilai tersebut bertepatan dengan perubahan kondisi operasi dalam cuplikan pengereman, sehingga tidak boleh dihapus hanya karena melewati batas statistik. Rincian perlakuan dijelaskan pada Bab 8.
+Pencilan statistik tidak otomatis merupakan kesalahan. Pada hasil pemeriksaan IQR terhadap enam variabel numerik operasional (`m`, kecepatan, akselerasi numerik, arus, tekanan BP, dan tekanan BC), tidak ditemukan nilai di luar pagar IQR. Kolom `km` menghasilkan sepuluh penandaan mekanis karena Q1 dan Q3 sama-sama 0; hal ini merupakan konsekuensi variabel koordinat diskrit, bukan bukti pencilan operasional. Rincian dijelaskan pada Bab 8.
 
 ### Konsistensi format
 
@@ -111,7 +114,7 @@ Tanggal tercatat sebagai `27/04/2026`; waktu menggunakan format `HH.MM.SS`. Kolo
 
 ## 2.4 Eksplorasi Visual Awal
 
-Visualisasi yang relevan untuk dataset ini meliputi:
+Eksplorasi visual diarahkan pada urutan waktu dan karakteristik parameter operasi. Visualisasi yang relevan untuk dataset ini meliputi:
 - Grafik garis kecepatan terhadap waktu untuk melihat penurunan kecepatan pada cuplikan yang tersedia.
 - Grafik garis tekanan BP dan BC terhadap waktu untuk melihat perubahan tekanan selama pengereman.
 - Histogram dan box plot untuk memeriksa distribusi kecepatan, jarak meter, arus motor traksi, tekanan BP/BC, dan akselerasi numerik.
@@ -121,7 +124,7 @@ Visualisasi bersifat deskriptif. Pola yang tampak tidak dapat digunakan sendiri 
 
 ## 2.5 Penyelarasan dengan Kebutuhan Operasional
 
-Data relevan untuk memahami perubahan parameter lokomotif pada fase emergency brake dan saat tabrakan. Namun, cakupannya terbatas pada 26 rekaman dari dua tabel. Data ini belum cukup untuk menggambarkan keseluruhan rangkaian peristiwa sebelum emergency brake, seluruh sistem pengereman rangkaian, kondisi sarana lain, aspek persinyalan secara lengkap, atau faktor eksternal.
+Data relevan untuk memahami perubahan parameter lokomotif pada cuplikan waktu yang meliputi fase sebelum emergency brake, pengereman darurat, dan saat tabrakan. Dataset gabungan memuat 58 rekaman unik dari Tabel 6–10. Meskipun lebih luas daripada Tabel 9–10 saja, data ini tetap belum cukup untuk menggambarkan keseluruhan rangkaian peristiwa, seluruh sistem pengereman rangkaian, kondisi sarana lain, aspek persinyalan secara lengkap, atau faktor eksternal.
 
 Kebutuhan data tambahan untuk analisis yang lebih luas mencakup Tabel 6–8, keterangan teknis sistem pengereman, kronologi persinyalan dan komunikasi operasional, serta data pendukung lain yang telah diverifikasi dari laporan KNKT. Penambahan data harus menjaga identitas sumber, satuan, urutan waktu, dan jejak transkripsi.
 
@@ -137,14 +140,14 @@ Library utama adalah Pandas untuk pemuatan dan manipulasi tabel, NumPy untuk ope
 import pandas as pd
 import numpy as np
 
-file_path = "data_logger_knkt_tabel_9_10.xlsx"
+file_path = "data_logger_knkt_tabel_6_10_lengkap.xlsx"
 df = pd.read_excel(file_path, sheet_name="Data_Logger_Raw")
 ```
 
 Jika menggunakan CSV:
 
 ```python
-df = pd.read_csv("data_logger_knkt_tabel_9_10.csv")
+df = pd.read_csv("data/processed/data_logger_knkt_tabel_6_10.csv")
 ```
 
 Dataset tidak dibagi menjadi data latih dan data uji karena proyek ini belum melakukan pemodelan prediktif.
@@ -159,7 +162,7 @@ df.shape
 df.columns.tolist()
 ```
 
-Hasil pemeriksaan: `df.shape == (58, 16)`. Gunakan `pd.read_csv("data/processed/data_logger_knkt_tabel_6_10.csv")` untuk memuat versi CSV dalam repositori. Nama kolom mengikuti urutan skema 16 kolom yang disebutkan pada Bab 2. Dataset berisi 26 rekaman dari Tabel 9–10.
+Hasil pemeriksaan: `df.shape == (58, 16)`. Gunakan `pd.read_csv("data/processed/data_logger_knkt_tabel_6_10.csv")` untuk memuat versi CSV dalam repositori. Nama kolom mengikuti urutan skema 16 kolom yang disebutkan pada Bab 2. Dataset memuat 58 rekaman unik hasil penggabungan Tabel 6–10.
 
 ## 3.3 Pemeriksaan Tipe Data dan Informasi Umum
 
@@ -188,7 +191,7 @@ Untuk akselerasi, n numerik adalah 51 karena tujuh nilai `---` tidak dapat diper
 
 ## 4.1 Identifikasi Nilai yang Hilang
 
-Pemeriksaan `isnull().sum()` menemukan 26 nilai kosong pada masing-masing kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, atau 44,83% dari 58 baris per kolom. Kolom lain tidak memiliki null teknis; akselerasi memiliki tujuh placeholder `---`.
+Pemeriksaan `isnull().sum()` menemukan 26 nilai kosong pada masing-masing kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, atau 44,83% dari 58 baris per kolom. Kolom lain tidak memiliki null teknis. Secara terpisah, akselerasi memiliki tujuh placeholder `---` (12,07% dari 58 baris), yang bukan null teknis pada berkas transkripsi mentah.
 
 Namun, `Acceleration (m/sec²)` memiliki tujuh placeholder `---`. Placeholder tersebut bukan null secara teknis pada data mentah, sehingga harus dihitung terpisah. Proporsinya adalah 7 dari 58 rekaman gabungan atau 12,07% dari seluruh baris; seluruh tujuh placeholder berada pada bagian Tabel 10.
 
@@ -240,11 +243,11 @@ Ukuran skewness dan kurtosis pada sampel kecil dan berurutan ini tidak cukup unt
 
 ## 6.1 Transformasi untuk Memperbaiki Distribusi
 
-Tidak diterapkan transformasi log, akar kuadrat, Box-Cox, atau Yeo-Johnson pada dataset sumber. Beberapa variabel menunjukkan kemiringan distribusi, tetapi transformasi tidak diperlukan untuk statistik deskriptif dan dapat mengurangi keterbacaan satuan operasional. Jika pemodelan dilakukan pada tahap berikutnya, transformasi harus diuji pada salinan data dan hasil sebelum-sesudahnya dibandingkan.
+Tidak diterapkan transformasi log, akar kuadrat, Box-Cox, atau Yeo-Johnson pada dataset sumber. Beberapa variabel menunjukkan kemiringan distribusi, tetapi transformasi tidak diperlukan untuk tujuan deskriptif dan dapat mengurangi keterbacaan satuan operasional. Perlu diluruskan bahwa model linear tidak mensyaratkan setiap fitur harus berdistribusi normal; asumsi normalitas dalam regresi klasik terutama berkaitan dengan residual untuk keperluan inferensi. Jika pemodelan dilakukan pada tahap berikutnya, transformasi hanya dipertimbangkan berdasarkan kebutuhan model, bentuk hubungan, dan diagnostik residual, kemudian diuji pada salinan data.
 
 ## 6.2 Transformasi Skala
 
-StandardScaler dan MinMaxScaler tidak diterapkan. Scaling relevan untuk algoritma tertentu yang sensitif terhadap skala, tetapi bukan prasyarat EDA deskriptif. Nilai asli dalam km/jam, ampere, psi, meter, dan m/s² dipertahankan agar interpretasi domain tetap jelas.
+StandardScaler dan MinMaxScaler tidak diterapkan. Scaling relevan untuk algoritma yang sensitif terhadap perbedaan skala, seperti KNN, K-Means, SVM, dan PCA, tetapi bukan prasyarat EDA deskriptif. Nilai asli dalam km/jam, ampere, psi, meter, dan m/s² dipertahankan agar interpretasi domain tetap jelas. Apabila scaling diperlukan pada pemodelan lanjutan, parameter scaler harus dipelajari hanya dari data latih untuk mencegah data leakage.
 
 ## 6.3 Konversi Data Kategorikal
 
@@ -260,7 +263,7 @@ Untuk analisis lanjutan, fitur turunan yang dapat dipertimbangkan adalah timesta
 
 ## 7.1 Analisis Univariate
 
-Analisis univariat dilakukan dengan histogram/box plot untuk variabel numerik dan diagram batang untuk kategori. Variabel yang paling relevan adalah kecepatan, jarak meter, arus motor traksi, tekanan BP, tekanan BC, dan akselerasi numerik. Frekuensi throttle pada 58 baris: T5 17, Idle 13, T7 11, Off 10, T4 4, T6 2, dan T1 1. PCS tercatat Closed pada 32 baris dan Open pada 26 baris. IBS tercatat Rel pada 39 baris dan Appl pada 19 baris.
+Analisis univariat dilakukan dengan histogram/box plot untuk variabel numerik dan diagram batang untuk kategori. Variabel yang paling relevan adalah kecepatan, jarak meter, arus motor traksi, tekanan BP, tekanan BC, dan akselerasi numerik. Frekuensi throttle pada 58 baris: T5 17, Idle 13, T7 11, Off 10, T4 4, T6 2, dan T1 1. PCS tercatat Closed pada 32 baris dan Open pada 26 baris. IBS tercatat Rel pada 39 baris dan Appl pada 19 baris. Frekuensi tersebut menggambarkan keseluruhan gabungan Tabel 6–10, bukan hanya Tabel 9–10.
 
 ## 7.2 Analisis Bivariate dan Multivariate
 
@@ -268,7 +271,7 @@ Grafik garis kecepatan terhadap waktu dan grafik tekanan BP/BC terhadap waktu le
 
 ## 7.3 Analisis Korelasi dan Asosiasi
 
-Matriks korelasi tidak dijadikan dasar kesimpulan utama. Dataset hanya berisi 26 rekaman berurutan dari satu fase operasi, dengan variabel yang berubah mengikuti waktu dan fase pengereman. Korelasi Pearson atau Spearman pada cuplikan ini berpotensi dipengaruhi tren waktu, perubahan status sistem, dan ukuran sampel kecil. Jika ditampilkan sebagai eksplorasi tambahan, hasil harus diberi label deskriptif dan tidak ditafsirkan sebagai hubungan sebab-akibat.
+Matriks korelasi tidak dijadikan dasar kesimpulan utama. Dataset berisi 58 rekaman unik yang berurutan dari beberapa fase operasi dalam rentang waktu singkat. Variabel dapat berubah bersama karena dipengaruhi waktu dan fase pengereman. Korelasi Pearson atau Spearman berpotensi dipengaruhi tren waktu, autokorelasi, perubahan status sistem, dan ukuran sampel yang terbatas. Apabila heatmap korelasi ditampilkan, interpretasinya harus eksploratif, disertai jumlah observasi yang digunakan, dan tidak dianggap sebagai bukti sebab-akibat atau multikolinearitas dalam model yang belum dibangun.
 
 ---
 
@@ -276,7 +279,7 @@ Matriks korelasi tidak dijadikan dasar kesimpulan utama. Dataset hanya berisi 26
 
 ## 8.1 Metode Deteksi Pencilan
 
-Deteksi menggunakan aturan Interquartile Range (IQR), dengan batas bawah Q1 − 1,5 × IQR dan batas atas Q3 + 1,5 × IQR. Pada 58 rekaman gabungan (51 nilai akselerasi numerik), tidak ditemukan pencilan IQR pada `m`, `Speed (km/h)`, `Acceleration (m/sec²)`, `Load (amps)`, `EAB BP (psi)`, maupun `EAB BC (psi)`. Pada kolom `km`, Q1=Q3=0 sehingga pagar IQR sama dengan nol dan sepuluh nilai 1 terdeteksi secara mekanis. Karena `km` merupakan komponen koordinat diskrit yang hanya bernilai 0 atau 1 pada cuplikan ini, hasil tersebut tidak diperlakukan sebagai pencilan operasional. Z-score tidak digunakan sebagai metode utama karena data runtun waktu ini tidak memenuhi alasan yang cukup untuk mengasumsikan distribusi normal.
+Deteksi menggunakan aturan Interquartile Range (IQR), dengan batas bawah Q1 − 1,5 × IQR dan batas atas Q3 + 1,5 × IQR. Pada 58 rekaman gabungan (51 nilai akselerasi numerik), tidak ditemukan pencilan IQR pada enam variabel numerik operasional: `m`, `Speed (km/h)`, `Acceleration (m/sec²)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)`. Pada kolom `km`, Q1=Q3=0 sehingga IQR=0 dan pagar atas maupun bawah sama dengan nol. Sepuluh nilai `km=1` kemudian ditandai oleh aturan secara mekanis. Karena `km` adalah komponen koordinat diskrit dan pola tersebut mengikuti pembagian tabel sumber, penandaan ini tidak diperlakukan sebagai pencilan operasional. Z-score tidak digunakan sebagai metode utama karena distribusi normal tidak dapat diasumsikan pada cuplikan runtun waktu yang kecil dan berurutan.
 
 ## 8.2 Keputusan Perlakuan terhadap Pencilan
 
@@ -301,12 +304,12 @@ Temuan di atas merupakan pembacaan deskriptif terhadap tabel. Interpretasi tekni
 
 ## 9.2 Keterbatasan dan Kendala Analisis
 
-- Dataset mencakup Tabel 6–10 sebagaimana disajikan pada halaman 65–68 laporan KNKT. Dataset tetap bukan ekspor mentah perangkat logger dan tidak mencakup data lain di luar tabel tersebut.
+- Dataset mencakup Tabel 6–10 sebagaimana disajikan pada halaman tercetak 65–68 laporan KNKT. Dataset tetap bukan ekspor mentah perangkat logger dan tidak mencakup data lain di luar tabel tersebut.
 - Jumlah data gabungan adalah 58 timestamp unik dari 59 baris sumber; terdapat celah enam detik antara Tabel 6 dan Tabel 7.
 - Empat kolom kosong karena tidak tersedia pada dua tabel sumber.
 - Tujuh nilai akselerasi berupa placeholder `---`; nilai tersebut tidak dapat digunakan dalam perhitungan numerik.
 - Data bersifat time-series dan berurutan, sehingga asumsi independensi sampel tidak dapat langsung digunakan.
-- Analisis bergantung pada transkripsi tabel PDF dan memerlukan verifikasi visual baris demi baris.
+- Analisis bergantung pada transkripsi tabel PDF. Pemeriksaan visual telah dilakukan, tetapi verifikasi independen oleh pemeriksa kedua terhadap setiap sel masih direkomendasikan.
 - Data logger lokomotif saja tidak mewakili seluruh faktor teknis, operasional, persinyalan, kondisi lintas, dan rangkaian kereta.
 - EDA tidak membuktikan sebab-akibat, kelalaian, atau tanggung jawab pihak tertentu.
 
