@@ -12,7 +12,7 @@ Checklist pemeriksaan keluaran setelah menjalankan `python scripts/generate_visu
 
 ## Pemeriksaan analitis
 - [ ] Dataset tetap 58 rekaman × 16 kolom.
-- [ ] Gap timestamp 20:51:28–20:51:33 tidak diinterpolasi.
+- [ ] Jeda 20:51:28–20:51:33 dijelaskan sebagai batas subset Tabel 6–10; enam rekaman pada Lampiran 7 tidak dicampurkan atau diinterpolasi.
 - [ ] Placeholder akselerasi `---` tidak dikonversi menjadi nol.
 - [ ] Missingness struktural empat kolom status tidak disebut sebagai kegagalan sensor.
 - [ ] Korelasi tidak ditafsirkan sebagai sebab-akibat.
