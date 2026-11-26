@@ -295,7 +295,11 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
         xaxis_title="Waktu sumber",
         yaxis_title="Kecepatan (km/jam)",
     )
-    chart.write_html(folder / "deret_waktu_interaktif.html", include_plotlyjs="cdn")
+    chart.write_html(
+        folder / "deret_waktu_interaktif.html",
+        include_plotlyjs="cdn",
+        div_id="eda-deret-waktu-interaktif",
+    )
 
     brake = px.line(
         df,
@@ -307,7 +311,11 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
     brake.update_layout(
         template="plotly_white", xaxis_title="Waktu sumber", yaxis_title="Tekanan (psi)"
     )
-    brake.write_html(folder / "tekanan_bp_bc_interaktif.html", include_plotlyjs="cdn")
+    brake.write_html(
+        folder / "tekanan_bp_bc_interaktif.html",
+        include_plotlyjs="cdn",
+        div_id="eda-tekanan-bp-bc-interaktif",
+    )
 
     corr = df[CORRELATION_COLUMNS].corr(method="spearman", min_periods=3)
     corr_display = corr.rename(index=DISPLAY_LABELS, columns=DISPLAY_LABELS)
@@ -322,7 +330,11 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
         title="Korelasi Spearman — Variabel Operasional Terpilih",
     )
     heat.update_layout(template="plotly_white")
-    heat.write_html(folder / "heatmap_spearman_interaktif.html", include_plotlyjs="cdn")
+    heat.write_html(
+        folder / "heatmap_spearman_interaktif.html",
+        include_plotlyjs="cdn",
+        div_id="eda-heatmap-spearman-interaktif",
+    )
     counts = pd.DataFrame(
         index=CORRELATION_COLUMNS, columns=CORRELATION_COLUMNS, dtype=int
     )
