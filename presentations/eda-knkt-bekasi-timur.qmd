@@ -1,0 +1,184 @@
+---
+title: "Eksplorasi Data Logger KA 4B"
+subtitle: "Bekasi Timur | Analisis deskriptif berbasis Laporan Akhir KNKT"
+author: "Muhammad Za’iimun Nasyiith"
+date: "26 November 2026"
+lang: id
+---
+
+## Ringkasan eksekutif
+
+**Membaca pola parameter operasi dari rekaman yang tersedia, dengan batas bukti yang jelas.**
+
+::: {.columns}
+::: {.column width="33%"}
+<div class="kpi"><strong>58</strong><span>rekaman unik</span></div>
+:::
+::: {.column width="33%"}
+<div class="kpi"><strong>16</strong><span>kolom data</span></div>
+:::
+::: {.column width="33%"}
+<div class="kpi"><strong>71</strong><span>tes otomatis lulus pada audit terakhir</span></div>
+:::
+:::
+
+- Dataset berasal dari transkripsi Tabel 6–10 laporan KNKT.
+- Analisis bersifat eksploratif dan deskriptif, bukan rekonstruksi kausal.
+
+## Pertanyaan analisis
+
+1. Bagaimana struktur dan kelengkapan rekaman yang tersedia?
+2. Bagaimana kecepatan, tekanan rem, arus, akselerasi, dan jarak tersisa berubah terhadap waktu?
+3. Hubungan statistik apa yang tampak pada pasangan data yang valid?
+4. Apa yang dapat dan tidak dapat disimpulkan dari subset ini?
+
+## Sumber dan cakupan data
+
+- **Sumber primer:** Laporan Akhir KNKT KNKT.26.04.03.02, Tabel 6–10.
+- 59 baris tercetak dari lima tabel; satu timestamp 20:51:43 berulang identik.
+- Dataset gabungan: **58 timestamp unik × 16 kolom**.
+- Rentang: 27 April 2026, 20:51:18–20:52:21.
+- Ini bukan ekspor mentah perangkat Data Logger.
+
+::: {.callout-important}
+Lampiran 7 pada PDF memuat tabel Data Logger lebih lengkap (64 timestamp). Enam rekaman 20:51:28–20:51:33 belum digabung. Karena itu, presentasi ini secara konsisten membahas **subset Tabel 6–10**, bukan seluruh rekaman logger.
+:::
+
+## Variabel yang diamati
+
+| Kelompok | Parameter | Satuan / perlakuan |
+|---|---|---|
+| Gerak | Kecepatan | km/jam |
+| Pengereman | Tekanan BP dan BC | bar |
+| Traksi | Arus motor | ampere |
+| Dinamika | Akselerasi | sesuai tabel sumber; placeholder dipertahankan |
+| Jarak | km dan m | digabung menjadi `distance_to_stop_m` |
+| Status | Kolom status operasi | nilai kosong struktural tidak diisi |
+
+## Kualitas dan batas data
+
+- Timestamp 20:51:43 yang muncul pada dua tabel sumber dihitung satu kali.
+- Satu koreksi transkripsi terverifikasi: Tabel 7, 20:51:36, arus **160 A** (bukan 168 A).
+- Placeholder `---` berarti nilai tidak tersedia/tidak diketahui, bukan nol.
+- Empat kolom status memiliki sel kosong struktural pada subset; tidak ditafsirkan sebagai kegagalan sensor.
+- Gap 20:51:28–20:51:33 dipertahankan tanpa interpolasi.
+
+## Metode analisis
+
+1. Transkripsi dan pencocokan visual terhadap tabel PDF.
+2. Validasi struktur, tipe data, timestamp, duplikasi, dan nilai hilang.
+3. Transformasi terdefinisi, termasuk penyatuan komponen jarak.
+4. Statistik deskriptif, distribusi, korelasi Spearman, dan pemeriksaan IQR.
+5. Visualisasi deret waktu dan pembacaan temporal dengan konteks sumber.
+
+## Transformasi jarak: definisi yang benar
+
+[
+\text{distance\_to\_stop\_m} = (\text{km} \times 1000) + \text{m}
+]
+
+- `km` dan `m` merupakan komponen satu besaran jarak tersisa menuju titik henti akhir.
+- Bukan dua variabel analitis independen.
+- Bukan chainage absolut dan bukan jarak pengereman murni.
+
+## Perubahan kecepatan terhadap waktu
+
+![](../outputs/bab_vii/grafik_kecepatan_waktu.png){fig-alt="Grafik kecepatan terhadap waktu" width="92%"}
+
+<small class="small">Grafik mengikuti timestamp yang tercatat; jeda data tidak diisi dengan nilai hasil interpolasi.</small>
+
+## Parameter operasi dalam satu rangkaian waktu
+
+![](../outputs/bab_vii/multi_panel_parameter_waktu.png){fig-alt="Panel multi-parameter terhadap waktu" width="94%"}
+
+<small class="small">Baca setiap panel sesuai satuan masing-masing. Korelasi visual tidak otomatis menunjukkan hubungan sebab-akibat.</small>
+
+## Tekanan pengereman
+
+![](../outputs/bab_vii/tekanan_bp_bc_waktu.png){fig-alt="Tekanan BP dan BC terhadap waktu" width="92%"}
+
+- Perubahan tekanan dibaca bersama konteks waktu dan parameter lain.
+- Interpretasi operasional memerlukan definisi sistem, konfigurasi, dan data pembanding yang tidak seluruhnya tersedia pada dataset ini.
+
+## Distribusi dan bentuk data
+
+::: {.columns}
+::: {.column width="50%"}
+![](../outputs/bab_v/skewness_kurtosis.png){fig-alt="Skewness dan kurtosis variabel numerik"}
+:::
+::: {.column width="50%"}
+![](../outputs/bab_v/distribusi_numerik.png){fig-alt="Distribusi variabel numerik"}
+:::
+:::
+
+- Statistik meringkas bentuk distribusi, bukan menjelaskan penyebab pola.
+- Arus motor setelah koreksi transkripsi: mean **86,207 A**, simpangan baku **76,587 A**.
+- Skewness arus **−0,218**; excess kurtosis **−1,938**.
+
+## Hubungan antarparameter
+
+![](../outputs/bab_vii/heatmap_spearman.png){fig-alt="Heatmap korelasi Spearman" width="88%"}
+
+- Korelasi Spearman mengukur asosiasi monotonik pada pasangan observasi yang valid.
+- Jumlah pasangan valid dapat berbeda antar pasangan variabel.
+- Korelasi tidak membuktikan kausalitas atau urutan sebab-akibat.
+
+## Pemeriksaan pencilan IQR
+
+![](../outputs/bab_viii/boxplot_iqr.png){fig-alt="Boxplot pemeriksaan IQR" width="88%"}
+
+- Pemeriksaan IQR digunakan sebagai penanda statistik untuk observasi ekstrem.
+- Tidak ditemukan kandidat pencilan IQR pada variabel yang diuji.
+- Tidak adanya kandidat IQR bukan bukti bahwa seluruh operasi normal atau bebas anomali.
+
+## Titik waktu yang perlu dibaca hati-hati
+
+| Timestamp | Rekaman | Interpretasi terbatas |
+|---|---|---|
+| 20:52:12 | Waktu tabrakan menurut konteks laporan | Peristiwa tabrakan |
+| 20:52:18 | Jarak 0 m; kecepatan 3 km/jam | Jarak nol tidak identik dengan kecepatan nol |
+| 20:52:19 | Kecepatan pertama kali tercatat 0 km/jam | Rekaman berhenti |
+
+Tabrakan dan berhenti adalah dua peristiwa berbeda. Jangan menyatukannya menjadi satu timestamp.
+
+## Apa yang didukung data?
+
+**Dapat didukung**
+- Deskripsi nilai dan perubahan parameter pada timestamp yang tercantum di Tabel 6–10.
+- Pemeriksaan kualitas transkripsi dan pola statistik dalam subset.
+- Identifikasi jeda, placeholder, dan batas cakupan.
+
+**Belum dapat dibuktikan**
+- Penyebab kecelakaan atau kontribusi kausal suatu parameter.
+- Kesalahan/kelalaian individu atau pihak tertentu.
+- Chainage absolut dan jarak pengereman murni.
+- Kondisi sistem persinyalan, komunikasi, ATP, atau perangkat lain tanpa bukti konfigurasi dan log pendukung.
+
+## Data tambahan yang dibutuhkan
+
+- Transkripsi dan audit lengkap Lampiran 7, termasuk rekonsiliasi header `DB Start` dan `DB Star`.
+- Ekspor mentah logger dan metadata konfigurasi/perangkat.
+- Data logger rangkaian/lokomotif pembanding yang relevan.
+- Log persinyalan/interlocking, komunikasi, CCTV, dan catatan operasi yang terverifikasi.
+- Sinkronisasi waktu antar-sumber beserta dokumentasi metode koreksi waktunya.
+
+## Kesimpulan dan pesan utama
+
+1. Subset Tabel 6–10 berisi 58 rekaman unik dan 16 kolom setelah deduplikasi timestamp.
+2. Audit transkripsi menemukan dan memperbaiki satu nilai arus; pipeline analisis dapat direproduksi dan diuji.
+3. Interpretasi jarak, jeda waktu, placeholder, serta peristiwa tabrakan/berhenti harus mengikuti semantik sumber.
+4. EDA memberi deskripsi pola, **bukan penetapan sebab-akibat atau tanggung jawab**.
+
+::: {.callout-note}
+**Prinsip pelaporan:** kesimpulan tidak boleh melampaui cakupan, kualitas, dan konteks bukti yang tersedia.
+:::
+
+## Referensi dan jejak audit
+
+- Komite Nasional Keselamatan Transportasi (KNKT). *Laporan Akhir KNKT.26.04.03.02*, khususnya Tabel 6–10 dan Lampiran 7.
+- [Laporan EDA lengkap](../reports/Laporan_EDA_KNKT_Bekasi_Timur.md).
+- [Audit transkripsi sumber](../docs/02_data_understanding/source_transcription_audit.md).
+- [Kamus data](../docs/02_data_understanding/data_dictionary.md).
+- [Metodologi](../docs/methodology/methodology.md).
+
+<small class="small">Presentasi ini merupakan ringkasan turunan laporan dan artefak repository. Periksa dokumen sumber untuk konteks lengkap, catatan metodologis, dan batas interpretasi.</small>
