@@ -8,7 +8,7 @@ Sumber acuan adalah Laporan Akhir Investigasi KNKT Nomor KNKT.26.04.03.02, khusu
 
 Dataset repository merupakan transkripsi manual dari tabel yang dicetak dalam PDF, bukan berkas biner logger atau ekspor asli perangkat Data Logger. Jumlah baris per tabel adalah 10, 10, 13, 14, dan 12 (total 59 baris sumber). Satu rekaman identik pada 20:51:43 muncul di Tabel 7 dan Tabel 8; setelah deduplikasi berdasarkan seluruh isi rekaman, CSV analitis memuat 58 rekaman unik × 16 kolom.
 
-Rentang waktu CSV adalah 27/04/2026 20:51:18 sampai 20:52:21. Terdapat gap timestamp 20:51:28–20:51:33; tidak dilakukan interpolasi. Tujuh placeholder `---` pada akselerasi dipertahankan pada CSV mentah. Empat kolom status yang tidak disajikan pada Tabel 9–10 memiliki 26 sel kosong per kolom.
+Rentang waktu CSV adalah 27/04/2026 20:51:18 sampai 20:52:21. Subset Tabel 6–10 tidak memuat timestamp 20:51:28–20:51:33; enam rekaman tersebut tercantum pada Lampiran 7 (Data Logger setelah penyesuaian master time) dalam PDF yang sama. Analisis ini sengaja mempertahankan cakupan Tabel 6–10 dan tidak mencampurkan Lampiran 7 ke CSV. Karena itu, jeda tujuh detik adalah batas cakupan subset, bukan bukti bahwa rekaman tersebut tidak ada di seluruh laporan KNKT. Tidak dilakukan interpolasi. Tujuh placeholder `---` pada akselerasi dipertahankan pada CSV mentah. Empat kolom status yang tidak disajikan pada Tabel 9–10 memiliki 26 sel kosong per kolom.
 
 ## Aturan semantik jarak
 
@@ -17,5 +17,7 @@ Kolom `km` dan `m` merupakan komponen satu besaran jarak tersisa menuju titik he
 ## Keterlacakan dan batas verifikasi
 
 CSV tersedia pada `data/processed/data_logger_knkt_tabel_6_10.csv`. Workbook kerja transkripsi per sumber dan salinan PDF tidak disertakan di repository. Namun, audit dilakukan dengan mencocokkan secara visual seluruh baris dan kolom pada Tabel 6–10 langsung terhadap halaman PDF sumber (halaman PDF 75–78); satu koreksi nilai Load pada 20:51:36 dicatat dalam [audit transkripsi sumber](source_transcription_audit.md). Workbook eksternal bukan prasyarat untuk mereproduksi analisis dari CSV. Setiap koreksi sel harus dicatat dengan nomor tabel, halaman, timestamp, nilai sebelum/sesudah, dan bukti sumber.
+
+Lampiran 7 merupakan kandidat sumber perluasan dataset. Jika cakupan diperluas, seluruh 64 timestamp dan 16 kolom pada lampiran harus diaudit terhadap halaman sumber secara independen sebelum mengganti dataset 58 rekaman.
 
 Tanggal pemeriksaan sumber: 26 November 2026. Simpan checksum SHA-256 untuk setiap berkas dataset yang digunakan pada rilis analisis; jangan menganggap checksum CSV sebagai checksum PDF sumber.
