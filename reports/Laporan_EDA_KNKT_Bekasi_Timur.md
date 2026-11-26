@@ -563,7 +563,7 @@ Ringkasan berikut menggabungkan dua tingkat bukti: (1) nilai pada transkripsi Ta
 | 20:52:09 | Menjelang tabrakan | 53 | 1 | 70 | 0 | Idle | Open | Appl | Akselerasi masih numerik (-0,56 m/s²) |
 | 20:52:11 | Satu detik sebelum tabrakan | 49 | 0 | 71 | 0 | Idle | Open | Appl | Akselerasi -0,58 m/s² |
 | 20:52:12 | Tabrakan | 40 | 0 | 73 | 0 | Off | Open | Appl | Akselerasi placeholder ---; KNKT menyebut titik tabrakan km 28+915 |
-| 20:52:14–20:52:16 | Setelah tabrakan, lokomotif masih bergerak | 21–13 | 0 | 48–45 | 0 | Off | Open | Appl | BC turun sementara dari 73 psi |
+| 20:52:14–20:52:16 | Setelah tabrakan, lokomotif masih bergerak | 21, 17, 13 | 0 | 48, 42, 45 | 0 | Off | Open | Appl | BC turun dari 73 psi; nilai 48, 42, dan 45 psi berurutan |
 | 20:52:19 | Lokomotif berhenti | 0 | 0 | 55 | 0 | Off | Open | Appl | KNKT menyebut titik berhenti km 28+941, 26 m setelah titik tabrakan |
 | 20:52:20–20:52:21 | Setelah berhenti | 0 | 0 | 55 | 0 | Off | Open | Appl | Kecepatan tetap 0 km/jam |
 
@@ -575,7 +575,7 @@ Ringkasan berikut menggabungkan dua tingkat bukti: (1) nilai pada transkripsi Ta
 
 1. **Kecepatan.** Nilai tertinggi adalah 109 km/jam pada 20:51:20. Pada timestamp tabrakan 20:52:12, kecepatan tercatat 40 km/jam; pada 20:52:19–20:52:21 tercatat 0 km/jam. Tabrakan dan berhenti merupakan dua peristiwa berbeda yang terpisah tujuh detik dalam tabel.
 2. **Brake Pipe (BP).** BP turun dari 71 psi pada 20:51:18 menjadi 65 psi pada 20:51:27. Nilainya 49 psi pada 20:51:43–20:51:55, lalu turun dari 43 psi pada 20:51:56 menjadi 0 psi pada 20:52:00. BP tercatat 0 psi pada timestamp tabrakan dan hingga rekaman terakhir.
-3. **Brake Cylinder (BC).** BC tercatat 0 psi pada 20:51:18–20:51:37, naik menjadi 8 psi pada 20:51:39, lalu kembali 0 psi pada 20:51:43–20:51:56. Pada fase emergency, BC naik menjadi 70 psi pada 20:52:00. Nilai maksimum dataset adalah 73 psi pada 20:52:12. Setelah tabrakan BC turun menjadi 42–45 psi pada 20:52:14–20:52:16 dan tercatat 55 psi ketika lokomotif berhenti pada 20:52:19.
+3. **Brake Cylinder (BC).** BC tercatat 0 psi pada 20:51:18–20:51:37, naik menjadi 8 psi pada 20:51:39, lalu kembali 0 psi pada 20:51:43–20:51:56. Pada fase emergency, BC naik menjadi 70 psi pada 20:52:00. Nilai maksimum dataset adalah 73 psi pada 20:52:12. Setelah tabrakan BC tercatat 48 psi pada 20:52:14, 42 psi pada 20:52:15, dan 45 psi pada 20:52:16; nilainya menjadi 55 psi ketika lokomotif berhenti pada 20:52:19.
 4. **Arus motor traksi (Load).** Arus tercatat 168 A pada 20:51:18–20:51:36. Pada 20:51:56 tercatat 104 A dan pada 20:51:57 tercatat 0 A; nilainya tetap 0 A hingga rekaman terakhir. Satuan kolom adalah ampere (A), bukan kW.
 5. **Throttle, PCS, dan IBS.** Throttle berada pada T7 di awal rekaman, turun bertahap ke T5 dan T4, kemudian T1 dan Idle, serta tercatat Off pada 20:52:12. PCS Open tercatat Closed sampai 20:51:55 dan Open mulai 20:51:56. IBS tercatat Rel sampai 20:52:02 dan Appl mulai 20:52:03. Frekuensi kategori merangkum jumlah observasi, bukan durasi status.
 6. **Akselerasi.** Tujuh placeholder --- berturut-turut muncul pada 20:52:12–20:52:18. Nilai tidak dihitung sebagai angka. Nilai numerik kembali tersedia pada 20:52:19 (-0,84 m/s²), 20:52:20 (-0,40 m/s²), dan 20:52:21 (-0,15 m/s²). Penjelasan KNKT mengenai respons sensor terhadap G-Force dicatat sebagai konteks sumber, bukan hasil pengukuran ulang EDA.
