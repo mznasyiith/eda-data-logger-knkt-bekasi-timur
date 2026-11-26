@@ -19,8 +19,7 @@ format:
     height: 900
     margin: 0.06
     title-slide-attributes:
-      data-background-color: "#102D26"
-      data-background-image: ""
+      data-background-color: "#323A70"
     html-math-method: mathjax
     embed-resources: true
     self-contained-math: true
