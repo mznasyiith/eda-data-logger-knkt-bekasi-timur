@@ -58,7 +58,7 @@ def test_local_markdown_and_html_links_resolve():
 
     markdown_files = list(REPO_ROOT.rglob("*.md"))
     broken = []
-    markdown_link = re.compile(r"(?<!!)\\[[^\\]]+\\]\\(([^)]+)\\)")
+    markdown_link = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
     html_link = re.compile(r"""(?:href|src)=["']([^"']+)["']""", re.IGNORECASE)
 
     for source in markdown_files:
