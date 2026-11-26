@@ -173,14 +173,14 @@ Tipe object pada akselerasi dapat dimengerti karena kolom memuat angka dan teks 
 ## 3.4 Ringkasan Statistik Awal
 
 Ringkasan statistik untuk variabel numerik yang memiliki data:
-| Variabel | n numerik | Mean | Median | Modus | Std. deviasi | Minimum | Maksimum |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| m | 26 | 100,81 | 72,50 | 0 | 100,13 | 0 | 301 |
-| Speed (km/h) | 26 | 44,27 | 54,00 | 0 | 27,27 | 0 | 78 |
-| Load (amps) | 26 | 4,00 | 0 | 0 | 20,40 | 0 | 104 |
-| EAB BP (psi) | 26 | 2,15 | 0 | 0 | 8,39 | 0 | 43 |
-| EAB BC (psi) | 26 | 57,19 | 69,50 | 70 | 19,49 | 0 | 73 |
-| Acceleration (m/sec²) | 19 | -0,511 | -0,54 | -0,55 | 0,128 | -0,84 | -0,15 |
+| Variabel | n numerik | Mean | Median | Modus | Std. deviasi | Varians | Q1 | Q3 | Minimum | Maksimum |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| m | 26 | 100,81 | 72,50 | 0 | 100,13 | 10.026,00 | 8,25 | 176,50 | 0 | 301 |
+| Speed (km/h) | 26 | 44,27 | 54,00 | 0 | 27,27 | 743,72 | 18,00 | 66,50 | 0 | 78 |
+| Load (amps) | 26 | 4,00 | 0 | 0 | 20,40 | 416,00 | 0 | 0 | 0 | 104 |
+| EAB BP (psi) | 26 | 2,15 | 0 | 0 | 8,39 | 70,46 | 0 | 1,00 | 0 | 43 |
+| EAB BC (psi) | 26 | 57,19 | 69,50 | 70 | 19,49 | 379,92 | 54,00 | 70,00 | 0 | 73 |
+| Acceleration (m/sec²) | 19 | -0,511 | -0,54 | -0,55 | 0,128 | 0,0164 | -0,55 | -0,49 | -0,84 | -0,15 |
 
 Untuk akselerasi, n numerik adalah 19 karena tujuh nilai `---` tidak dapat diperlakukan sebagai angka. Statistik ini dihitung setelah placeholder dikecualikan pada salinan analisis. Empat kolom yang tidak tersedia tidak memiliki statistik numerik yang dapat dihitung.
 
@@ -273,7 +273,7 @@ Matriks korelasi tidak dijadikan dasar kesimpulan utama. Dataset hanya berisi 26
 
 ---
 
-# BAB 8. PENANGANAN PENENCILAN (HANDLING OUTLIERS)
+# BAB 8. PENANGANAN PENCILAN (HANDLING OUTLIERS)
 
 ## 8.1 Metode Deteksi Pencilan
 
