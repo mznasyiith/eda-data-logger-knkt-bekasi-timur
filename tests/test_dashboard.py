@@ -24,9 +24,7 @@ def test_dashboard_uses_combined_distance_and_excludes_source_components():
 
 def test_dashboard_preserves_the_selected_table_gap_and_breaks_plot_lines():
     df = load_dashboard_data(DATA)
-    plot_data = prepare_timeseries_plot_data(
-        df, ["Speed (km/h)", "distance_to_stop_m"]
-    )
+    plot_data = prepare_timeseries_plot_data(df, ["Speed (km/h)", "distance_to_stop_m"])
     separators = plot_data[plot_data["Nilai"].isna()]
     assert len(separators) == 2
     assert set(separators["Variabel"]) == {
