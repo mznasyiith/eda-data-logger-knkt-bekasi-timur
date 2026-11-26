@@ -17,7 +17,7 @@
 
 Laporan Akhir Investigasi KNKT Nomor KNKT.26.04.03.02 membahas tabrakan antara KA 4B Argo Bromo Anggrek dan KA 5568A Commuter Line di Jalur 1 Stasiun Bekasi Timur pada 27 April 2026. Salah satu sumber informasi teknis dalam laporan adalah rekaman Data Logger lokomotif KA 4B. Data Logger merekam sejumlah parameter operasi, antara lain waktu, jarak, kecepatan, akselerasi, arus motor traksi, tekanan Brake Pipe (BP), tekanan Brake Cylinder (BC), posisi throttle, indikator PCS, dan status Independent Brake System (IBS).
 
-Permasalahan yang dikaji dalam proyek ini bukan persoalan komersial seperti kehilangan pelanggan atau prediksi harga. Permasalahan analitisnya adalah bagaimana merekonstruksi secara terbatas perubahan parameter operasi lokomotif KA 4B pada rentang waktu yang disajikan, khususnya perubahan kecepatan, sistem pengereman, dan kontrol traksi, serta memastikan bahwa data yang ditranskripsikan dari laporan investigasi dapat dibaca, diperiksa, dan dianalisis secara terstruktur. Dalam perspektif investigasi kecelakaan, Data Logger merupakan satu sumber bukti teknis; interpretasinya harus diuji silang dengan kronologi KNKT dan bukti independen lain sebelum digunakan untuk menyimpulkan urutan sebab-akibat.
+Permasalahan yang dikaji dalam proyek ini bukan persoalan komersial seperti kehilangan pelanggan atau prediksi harga. Permasalahan analitisnya adalah bagaimana mendeskripsikan dan menelaah perubahan parameter operasi lokomotif KA 4B pada rentang waktu yang disajikan, khususnya kecepatan, parameter pengereman, dan kontrol traksi, serta memastikan bahwa data yang ditranskripsikan dari laporan investigasi dapat dibaca, diperiksa, dan dianalisis secara terstruktur. Dalam perspektif investigasi kecelakaan, Data Logger merupakan satu sumber bukti teknis; interpretasinya harus diuji silang dengan kronologi KNKT dan bukti independen lain sebelum digunakan untuk menyimpulkan urutan sebab-akibat.
 
 Tujuan EDA adalah:
 1. Mengidentifikasi struktur dan cakupan dataset Data Logger yang digunakan.
@@ -241,6 +241,14 @@ Untuk akselerasi, n numerik adalah 51 karena tujuh nilai `---` tidak dapat diper
 
 Pemeriksaan `isnull().sum()` menemukan 26 nilai kosong pada masing-masing kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, atau 44,83% dari 58 baris per kolom. Keempat kolom tersebut tidak ditampilkan pada Tabel 9–10. Secara terpisah, `Acceleration (m/sec²)` memiliki tujuh placeholder `---` (12,07% dari 58 baris) pada bagian Tabel 10. Placeholder ini bukan null teknis dalam berkas transkripsi mentah, tetapi menandakan data akselerasi tidak tersedia/tidak terbaca sebagaimana ditampilkan pada sumber.
 
+**Gambar 4.1. Nilai tidak tersedia per kolom**
+
+![Missingness per kolom](../outputs/bab_iv/missingness_per_kolom.png)
+
+Grafik membedakan jumlah sel kosong dan placeholder pada transkripsi. Nilai tersebut tidak diimputasi dan tidak diubah menjadi nol.
+
+Sumber: hasil olah penulis dari dataset transkripsi.
+
 ## 4.2 Analisis Penyebab Missing Values
 
 Mekanisme kehilangan data tidak dapat diklasifikasikan secara menyeluruh sebagai MCAR, MAR, atau MNAR hanya dari dataset kecil ini.
@@ -254,14 +262,6 @@ Pemeriksaan dilakukan pada dua tingkat karena terdapat perbedaan antara baris su
 
 Tidak ditemukan duplikasi baris identik pada dataset analitis 58 × 16 setelah proses tersebut. Deduplikasi hanya dilakukan terhadap baris yang seluruh nilai dan timestamp-nya identik; baris dengan timestamp sama tetapi nilai berbeda tidak boleh dihapus otomatis dan harus ditinjau terhadap PDF sumber.
 
-**Gambar 4.1. Nilai tidak tersedia per kolom**
-
-![Missingness per kolom](../outputs/bab_iv/missingness_per_kolom.png)
-
-Grafik membedakan jumlah sel kosong dan placeholder pada transkripsi. Nilai tersebut tidak diimputasi dan tidak diubah menjadi nol.
-
-Sumber: hasil olah penulis dari dataset transkripsi.
-
 ## 4.4 Pemeriksaan Konsistensi dan Kebijakan Penanganan
 
 Pemeriksaan konsistensi meliputi kesesuaian jumlah kolom (16), format tanggal dan waktu, nilai numerik, kategori status, placeholder, serta urutan timestamp. Tanggal ditulis `27/04/2026` dan waktu mengikuti format `HH.MM.SS`; parsing dilakukan pada salinan analisis menggunakan format eksplisit `%d/%m/%Y %H.%M.%S`. Tujuh placeholder `---` pada akselerasi dipertahankan sebagai teks pada data mentah dan dikonversi menjadi missing hanya pada seri numerik analisis. Empat kolom status dengan 26 nilai kosong tetap dipertahankan karena tidak tersedia pada Tabel 9–10.
@@ -274,7 +274,7 @@ Tidak dilakukan imputasi mean, median, modus, KNN Imputer, atau MICE. Pengisian 
 
 ## 5.1 Statistik Deskriptif Variabel Numerik
 
-Tabel pada Bab 3 menyajikan mean, median, modus, standar deviasi, minimum, dan maksimum. Secara umum, distribusi nilai pada beberapa variabel dipengaruhi oleh perubahan keadaan operasi dalam rentang waktu singkat. Karena data merupakan rekaman berurutan setiap satu detik, nilai tidak dapat diperlakukan sebagai sampel acak yang saling independen.
+Tabel pada Bab 3 menyajikan mean, median, modus, standar deviasi, minimum, dan maksimum. Secara umum, distribusi nilai pada beberapa variabel dipengaruhi oleh perubahan keadaan operasi dalam rentang waktu singkat. Karena data merupakan runtun waktu dengan interval yang umumnya satu detik tetapi memiliki celah enam detik, nilai tidak dapat diperlakukan sebagai sampel acak yang saling independen.
 
 Kolom `km` dan `m` dianalisis sebagai dua komponen lokasi sebagaimana dicetak. Kolom `km` bernilai 1 pada sepuluh rekaman Tabel 6 dan 0 pada 48 rekaman berikutnya; perubahan tersebut tidak diubah atau direkonstruksi. Interpretasi lokasi harus mempertimbangkan format koordinat pada sumber.
 
