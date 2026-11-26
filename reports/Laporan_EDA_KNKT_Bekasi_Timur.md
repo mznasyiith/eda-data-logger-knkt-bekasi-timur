@@ -214,6 +214,32 @@ Kelengkapan dihitung dengan memperlakukan sel kosong dan placeholder sebagai nil
 
 Sumber: hasil olah penulis dari dataset transkripsi.
 
+### Visual tambahan: struktur, isi, tipe, dan rentang data
+
+**Gambar 3.2. Scorecard struktur dataset**
+
+![Scorecard struktur dataset](../outputs/bab_iii/scorecard_struktur_dataset.png)
+
+Tujuan gambar ini adalah merangkum ukuran tabel dan komposisi sel. Cara membacanya: baris dan kolom menunjukkan dimensi dataset, sedangkan sel terisi dan sel kosong/placeholder merupakan hitungan sel, bukan jumlah observasi independen. Visual mendukung pemeriksaan bahwa CSV analitis berisi 58 × 16. Batas interpretasinya, agregat ini tidak menjelaskan lokasi setiap nilai kosong; pola rinci dibahas pada Bab IV.
+
+**Gambar 3.3. Cuplikan data mentah**
+
+![Cuplikan data mentah](../outputs/bab_iii/cuplikan_data_mentah.png)
+
+Tujuannya memperlihatkan contoh representasi transkripsi sebelum konversi tipe. Pembaca menelusuri kolom dan nilai per baris, termasuk format waktu dan penanda sumber. Gambar mendukung bahwa nilai dipertahankan sebagai teks pada tahap pembacaan raw. Cuplikan delapan baris bukan bukti bahwa seluruh 58 baris bebas kesalahan; validasi penuh tetap memerlukan pemeriksaan skema dan perbandingan dengan PDF.
+
+**Gambar 3.4. Distribusi tipe data pada salinan analisis**
+
+![Distribusi tipe data](../outputs/bab_iii/distribusi_tipe_data_raw.png)
+
+Tujuan gambar adalah menunjukkan kelompok tipe setelah konversi pada salinan analisis. Cara membaca: tinggi batang menunjukkan jumlah kolom pada setiap tipe. Gambar mendukung pembedaan variabel numerik, waktu, dan kategori. Batasnya, ringkasan tipe tidak memperlihatkan aturan konversi per kolom; pemetaan rinci diberikan pada Bab VI.
+
+**Gambar 3.5. Rentang minimum dan maksimum variabel numerik**
+
+![Rentang minimum maksimum](../outputs/bab_iii/rentang_minimum_maksimum.png)
+
+Tujuan visual adalah memeriksa batas nilai yang benar-benar tercatat. Setiap garis menghubungkan minimum dan maksimum satu variabel; satuan mengikuti nama variabel dan tidak dapat dibandingkan lintas variabel sebagai besaran sejenis. Visual mendukung rentang kecepatan 0–109 km/jam serta rentang numerik lain yang digunakan pada analisis. Batasnya, rentang bukan distribusi, bukan batas aman operasional, dan bukan penilaian kondisi teknis.
+
 ## 3.4 Penanganan Waktu dan Integritas Urutan Rekaman
 
 Kolom `Date` dan `Time` perlu digabung menjadi timestamp pada salinan analisis dengan format yang eksplisit. Pemeriksaan urutan dilakukan setelah parsing, tetapi timestamp hasil parsing tetap merepresentasikan waktu sebagaimana dicetak pada tabel sumber. Belum ada dasar untuk menyatakan bahwa jam Data Logger telah tersinkronisasi dengan jam interlocking, radio, CCTV, atau logger kereta lain. Setiap analisis lintas-sumber nantinya harus mendokumentasikan zona waktu, resolusi timestamp, kemungkinan offset/drift, metode koreksi jam, dan rentang ketidakpastian. Jangan menggeser timestamp agar tampak cocok dengan kronologi tanpa dasar kalibrasi atau bukti sinkronisasi.
@@ -270,6 +296,32 @@ Tidak dilakukan imputasi mean, median, modus, KNN Imputer, atau MICE. Pengisian 
 
 ---
 
+### Visual tambahan: pola missingness dan konsekuensi deduplikasi
+
+**Gambar 4.2. Missingness Matrix pada tingkat rekaman dan kolom**
+
+![Missingness Matrix](../outputs/bab_iv/missingness_matrix.png)
+
+Tujuan matriks adalah memperlihatkan lokasi sel terisi, sel kosong, dan placeholder --- pada seluruh 58 rekaman dan 16 kolom. Cara membaca: sumbu horizontal adalah kolom, sumbu vertikal adalah urutan rekaman; warna membedakan tiga keadaan tersebut. Matriks memperlihatkan bahwa kekosongan empat kolom status berkelompok pada bagian data yang bersumber dari Tabel 9–10, sedangkan tujuh placeholder akselerasi merupakan penanda terpisah. Batas interpretasi: pola visual tidak mengidentifikasi mekanisme probabilistik missingness dan tidak membuktikan kerusakan sensor.
+
+**Gambar 4.3. Ketidaktersediaan empat kolom status**
+
+![Missingness kolom status](../outputs/bab_iv/missingness_kolom_status.png)
+
+Tujuannya menguji apakah kekosongan kolom status tersebar acak atau mengikuti cakupan tabel. Cara membaca: setiap batang menunjukkan 26 sel kosong pada satu kolom. Hasil mendukung penjelasan bahwa DB Excit, Dir Call, DB Set, dan DB Star tidak ditampilkan pada Tabel 9–10. Batasnya, grafik tidak membuktikan status perangkat pada interval tersebut; tidak ada status yang boleh direkonstruksi dari kekosongan.
+
+**Gambar 4.4. Dampak deduplikasi pada jumlah baris**
+
+![Dampak deduplikasi](../outputs/bab_iv/dampak_deduplikasi.png)
+
+Tujuan gambar adalah menjelaskan perubahan 59 baris transkripsi menjadi 58 rekaman unik. Cara membaca: bandingkan jumlah baris sumber dan jumlah rekaman setelah satu duplikasi identik pukul 20:51:43 lintas Tabel 7 dan 8 dihitung satu kali. Gambar mendukung keputusan deduplikasi untuk analisis gabungan, sementara provenance 59 baris tetap dipertahankan pada data per sumber. Batasnya, visual ini tidak menggambarkan penghapusan missing value atau koreksi isi data.
+
+### Keputusan metodologis atas missingness
+
+Tiga keadaan tidak boleh dicampuradukkan. Pertama, sel kosong pada empat kolom status adalah missingness struktural/cakupan sumber: kolom tidak disajikan pada Tabel 9–10. Kedua, --- pada akselerasi adalah placeholder eksplisit dari sumber, bukan sel kosong pada transkripsi mentah; placeholder hanya dikecualikan dari kalkulasi numerik salinan analisis. Ketiga, sel numerik yang benar-benar kosong harus ditelusuri sesuai konteks sumbernya, bukan otomatis dianggap setara dengan dua keadaan sebelumnya.
+
+Berdasarkan data ini, mekanisme MCAR, MAR, maupun MNAR tidak dapat ditetapkan secara sahih. Pengelompokan missingness pada bagian tabel tertentu memberi informasi provenance, tetapi bukan pengujian mekanisme statistik. Tidak dilakukan imputasi karena tidak tersedia dasar untuk merekonstruksi nilai sensor atau status yang tidak disajikan. Mengisi nilai dengan mean/median, interpolasi, atau kategori tebakan akan menambahkan informasi yang tidak berasal dari bukti sumber. Dengan demikian, semua nilai tidak tersedia dipertahankan sebagai keterbatasan analisis.
+
 # BAB V. EKSPLORASI KARAKTERISTIK DATA (EXPLORING DATA CHARACTERISTICS)
 
 ## 5.1 Statistik Deskriptif Variabel Numerik
@@ -313,6 +365,26 @@ Frekuensi kategori pada seluruh 58 rekaman adalah sebagai berikut: `Throttle` te
 
 ---
 
+### Visual tambahan: bentuk distribusi numerik
+
+**Gambar 5.3. Box plot mean dan median**
+
+![Box plot mean median](../outputs/bab_v/boxplot_mean_median.png)
+
+Tujuan gambar adalah membandingkan median, rentang antarkuartil, whisker, dan mean pada variabel numerik. Cara membaca: garis di dalam kotak menunjukkan median, penanda mean menunjukkan rata-rata, dan kotak menunjukkan rentang kuartil. Visual mendukung pemeriksaan perbedaan pusat dan sebaran. Batasnya, box plot tidak mempertahankan urutan waktu dan tidak boleh digunakan sendirian untuk menyimpulkan fase operasi.
+
+**Gambar 5.4. Empirical Cumulative Distribution Function (ECDF)**
+
+![ECDF variabel numerik](../outputs/bab_v/ecdf_variabel_numerik.png)
+
+Tujuan ECDF adalah memperlihatkan proporsi kumulatif observasi pada atau di bawah nilai tertentu tanpa pemilihan bin. Cara membaca: pada suatu nilai sumbu X, sumbu Y menunjukkan proporsi data yang nilainya tidak melebihi nilai tersebut. Visual mendukung pembacaan kuantil dan perbandingan distribusi empiris. Batasnya, ukuran sampel kecil dan urutan temporal membuat ECDF bersifat deskriptif untuk cuplikan kejadian ini, bukan estimasi distribusi populasi.
+
+**Gambar 5.5. Skewness dan excess kurtosis**
+
+![Skewness dan kurtosis](../outputs/bab_v/skewness_kurtosis.png)
+
+Tujuannya merangkum kemiringan dan excess kurtosis variabel numerik. Cara membaca: nol menjadi garis acuan simetri untuk skewness dan acuan excess kurtosis Fisher. Gambar mendukung angka pada tabel momen distribusi, termasuk skewness kecepatan negatif dan akselerasi yang dihitung dari 51 nilai numerik. Batasnya, statistik momen pada sampel kecil tidak membuktikan normalitas atau perilaku populasi.
+
 # BAB VI. TRANSFORMASI DAN REKAYASA FITUR (DATA TRANSFORMATION AND FEATURE ENGINEERING)
 
 ## 6.1 Prinsip Transformasi Data
@@ -342,6 +414,20 @@ Sumber: hasil olah penulis dari timestamp pada transkripsi.
 Penanda fase operasi dapat ditambahkan hanya jika batas fase diambil secara eksplisit dari judul tabel atau uraian KNKT, bukan dibentuk dari tebakan terhadap pola grafik. Pada tahap EDA ini tidak dibuat label target prediksi. Tidak diterapkan transformasi log, akar kuadrat, Box-Cox, Yeo-Johnson, StandardScaler, MinMaxScaler, one-hot encoding, atau ordinal encoding karena belum ada kebutuhan analisis yang membenarkannya. Nilai dan satuan asli dipertahankan. Jika transformasi diperlukan pada penelitian berikutnya, hasil transformasi harus berada pada fitur turunan terpisah dan parameter transformasi harus dipelajari dari data latih saja.
 
 ---
+
+### Visual tambahan: dokumentasi transformasi aktual
+
+**Gambar 6.2. Alur transformasi aktual**
+
+![Alur transformasi aktual](../outputs/bab_vi/alur_transformasi_aktual.png)
+
+Tujuannya menunjukkan urutan pengolahan yang benar-benar diterapkan: raw CSV dipertahankan, salinan analisis dibuat, timestamp diparsing, kolom numerik dikonversi, fitur waktu dihitung, lalu jumlah baris divalidasi. Cara membaca: ikuti alur dari kiri ke kanan. Gambar mendukung bahwa transformasi dilakukan pada salinan, bukan menimpa data mentah, serta tidak mencakup imputasi. Batasnya, diagram merupakan ringkasan proses; detail teknis tetap berada pada kode dan notebook.
+
+**Gambar 6.3. Pemetaan tipe data dan konversi**
+
+![Pemetaan tipe dan konversi](../outputs/bab_vi/pemetaan_tipe_dan_konversi.png)
+
+Tujuan gambar adalah memperlihatkan perlakuan setiap kolom dari pembacaan raw ke salinan analisis. Cara membaca: bandingkan tipe raw dengan tipe/kelompok tujuan. Gambar mendukung kebijakan bahwa tanggal dan waktu digabung menjadi timestamp, variabel terukur dikonversi numerik, dan status dipertahankan sebagai kategori/teks. Batasnya, tabel pemetaan tidak menggantikan validasi nilai, unit, maupun jumlah observasi valid setelah konversi.
 
 # BAB VII. VISUALISASI DAN ANALISIS HUBUNGAN ANTARVARIABEL (DATA VISUALIZATION AND RELATIONSHIP ANALYSIS)
 
@@ -381,6 +467,26 @@ Matriks korelasi tidak dijadikan dasar kesimpulan utama. Dataset berisi 58 rekam
 
 ---
 
+### Visual tambahan: pembacaan temporal dan hubungan parameter
+
+**Gambar 7.5. Multi-panel perubahan parameter terhadap waktu**
+
+![Multi-panel parameter waktu](../outputs/bab_vii/multi_panel_parameter_waktu.png)
+
+Tujuan visual adalah membandingkan kecepatan (km/jam), tekanan BP dan BC (psi), arus (ampere), serta akselerasi (m/s²) pada sumbu waktu yang sama. Cara membaca: setiap panel memiliki skala vertikal dan satuan sendiri; posisi horizontal menunjukkan detik sejak timestamp pertama. Garis diputus pada interval lebih dari satu detik, termasuk gap sumber 20:51:28–20:51:33. Visual mendukung identifikasi perubahan temporal yang berdekatan, bukan perbandingan besar nilai lintas satuan. Batasnya, timestamp belum disinkronkan dengan sumber eksternal dan tidak dilakukan interpolasi.
+
+**Gambar 7.6. Categorical State Timeline**
+
+![Categorical State Timeline](../outputs/bab_vii/categorical_state_timeline.png)
+
+Tujuannya memperlihatkan kategori Throttle, PCS Open, dan IBS pada timestamp yang benar-benar memiliki nilai. Cara membaca: setiap titik adalah satu observasi kategori; garis hanya menghubungkan dua observasi berurutan yang sama kategorinya dan berjarak satu detik. Missing value ditampilkan sebagai gap, bukan kategori operasional. Visual mendukung urutan kategori yang tercatat, tetapi tidak mengukur durasi status secara langsung dan tidak membuktikan bahwa status bertahan di antara dua timestamp.
+
+**Gambar 7.7. Scatter hubungan parameter operasional**
+
+![Scatter hubungan parameter](../outputs/bab_vii/scatter_hubungan_parameter.png)
+
+Tujuan gambar adalah mengeksplorasi pasangan Speed–BP, Speed–BC, dan BP–BC. Cara membaca: satu titik mewakili satu pasangan observasi valid, sedangkan gradasi warna menunjukkan waktu relatif. Visual mendukung inspeksi pola asosiasi dan kemungkinan pengelompokan menurut urutan waktu. Batasnya, scatter tidak mengendalikan fase operasi, autokorelasi, maupun faktor lain; pola tidak membuktikan hubungan sebab-akibat.
+
 # BAB VIII. DETEKSI PENCILAN DAN ANALISIS ANOMALI (OUTLIER AND ANOMALY ANALYSIS)
 
 ## 8.1 Konsep dan Metode Deteksi Pencilan
@@ -394,6 +500,20 @@ Deteksi menggunakan aturan Interquartile Range (IQR), dengan batas bawah Q1 − 
 Tabel hasil perhitungan pagar dan jumlah kandidat pencilan dapat diperiksa pada [ringkasan IQR](../outputs/bab_viii/ringkasan_iqr.csv). Penandaan statistik tidak otomatis berarti kesalahan data atau anomali operasional.
 
 Sumber: hasil olah penulis dari dataset transkripsi.
+
+### Visual tambahan: jumlah kandidat dan konteks temporal
+
+**Gambar 8.2. Jumlah kandidat pencilan IQR**
+
+![Jumlah kandidat IQR](../outputs/bab_viii/jumlah_kandidat_iqr.png)
+
+Tujuan gambar adalah membandingkan jumlah kandidat menurut pagar 1,5 × IQR untuk enam variabel numerik operasional. Cara membaca: panjang batang menunjukkan jumlah observasi di luar pagar; jumlah valid dan batas pagar tetap dirujuk pada CSV ringkasan IQR. Visual mendukung hasil nol kandidat pada enam variabel tersebut. Batasnya, aturan IQR hanya mendeteksi kandidat statistik dan bukan anomali teknis; variabel km dikecualikan dari panel operasional karena IQR nol menghasilkan penandaan mekanis.
+
+**Gambar 8.3. Konteks temporal parameter**
+
+![Konteks temporal parameter](../outputs/bab_viii/konteks_temporal_parameter.png)
+
+Tujuannya menempatkan kecepatan, BP, dan BC dalam urutan waktu untuk meninjau perubahan nilai pada konteksnya. Cara membaca: masing-masing panel menggunakan satuan variabelnya, dan garis terputus saat gap timestamp. Visual mendukung penelaahan apakah nilai yang tampak ekstrem bertepatan dengan perubahan temporal yang tercatat. Batasnya, gambar tidak mengklasifikasikan anomali, tidak menetapkan batas aman, dan tidak menyimpulkan penyebab perubahan.
 
 ## 8.2 Analisis Kontekstual dan Keputusan Perlakuan Pencilan
 
@@ -423,6 +543,20 @@ Temuan di atas merupakan pembacaan deskriptif terhadap tabel. Interpretasi tekni
 Gambar merangkum ukuran dataset, rentang waktu, kecepatan, jeda timestamp, dan placeholder akselerasi. Angka ringkasan diturunkan langsung dari dataset yang digunakan pada generator visual.
 
 Sumber: hasil olah penulis dari transkripsi Tabel 6–10.
+
+### Visual tambahan: keputusan bukti dan scorecard keterbatasan
+
+**Gambar 9.2. Decision Matrix kebutuhan bukti lanjutan**
+
+![Decision Matrix bukti lanjutan](../outputs/bab_ix/decision_matrix_bukti_lanjutan.png)
+
+Tujuan matriks adalah menghubungkan pertanyaan lanjutan dengan data primer yang dibutuhkan dan status ketersediaannya pada dataset ini. Cara membaca: setiap baris memuat satu pertanyaan, sumber bukti yang dibutuhkan, dan apakah data itu tersedia. Gambar mendukung prioritas pengumpulan bukti tambahan tanpa mengasumsikan bahwa bukti tersebut sudah diperoleh. Batasnya, status “tidak tersedia” hanya merujuk pada dataset EDA ini, bukan pernyataan bahwa bukti tersebut tidak ada di institusi lain atau keseluruhan investigasi.
+
+**Gambar 9.3. Scorecard cakupan dan keterbatasan**
+
+![Scorecard keterbatasan](../outputs/bab_ix/scorecard_keterbatasan.png)
+
+Tujuannya merangkum ukuran dataset dan batas utama interpretasi. Cara membaca: setiap angka menunjukkan satu indikator cakupan, seperti 58 rekaman unik, 16 kolom, 59 baris sumber, gap waktu, placeholder akselerasi, dan empat kolom status yang tidak tersedia pada Tabel 9–10. Gambar mendukung ringkasan batas analisis pada Bab IX. Batasnya, indikator tersebut tidak mengukur kualitas investigasi secara keseluruhan atau tingkat keyakinan terhadap penyebab kecelakaan.
 
 ## 9.2 Keterbatasan Analisis
 
