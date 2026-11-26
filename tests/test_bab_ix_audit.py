@@ -235,3 +235,10 @@ def test_all_58_by_16_transcribed_cells_match_golden_snapshot():
     # DataFrame.equals compares every cell and preserves distinctions among
     # empty strings, literal placeholders, numeric text, and categorical text.
     assert actual.equals(expected)
+
+
+
+def test_source_pdf_audit_corrects_load_amps_at_205136():
+    """The PDF's Table 7 row 20:51:36 reports 160 A, not 168 A."""
+    df = load_data().set_index("Time")
+    assert df.loc["20.51.36", "Load (amps)"] == "160"
