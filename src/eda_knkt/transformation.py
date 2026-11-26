@@ -97,3 +97,29 @@ def select_columns(
         raise ValueError("'columns' must contain at least one column.")
     _validate_columns(df, selected)
     return df.loc[:, selected].copy()
+
+
+
+def add_distance_to_stop_feature(
+    df: pd.DataFrame,
+    *,
+    km_column: str = "km",
+    meter_column: str = "m",
+    output_column: str = "distance_to_stop_m",
+) -> pd.DataFrame:
+    """Add remaining distance to final stop in metres from source km/metre parts.
+
+    The source columns are preserved. This transformation is valid only for the
+    KNKT table semantics documented in docs/02_data_understanding/
+    source_validation_distance.md; the result is not absolute track chainage.
+    """
+    _validate_columns(df, [km_column, meter_column])
+    result = df.copy()
+    km = pd.to_numeric(result[km_column], errors="raise")
+    metres = pd.to_numeric(result[meter_column], errors="raise")
+    if (km.dropna() < 0).any() or (metres.dropna() < 0).any():
+        raise ValueError("Distance components must be non-negative.")
+    if (metres.dropna() >= 1000).any():
+        raise ValueError("Meter component must be below 1000.")
+    result[output_column] = km * 1000 + metres
+    return result
