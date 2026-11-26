@@ -33,6 +33,8 @@
 
 58 rekaman unik dikalikan 16 kolom menghasilkan 928 posisi sel yang diperiksa. Kolom kosong struktural dan placeholder literal termasuk dalam cakupan.
 
+**Batas cakupan penting:** audit ini hanya mencakup Tabel 6–10, bukan seluruh rekaman Data Logger dalam PDF. Pemeriksaan teks PDF resmi juga menemukan Lampiran 7 berjudul *Data Logger Lokomotif KA 4B setelah disesuaikan dengan master time*. Lampiran tersebut memuat enam timestamp tambahan 20:51:28–20:51:33 yang tidak muncul dalam subset Tabel 6–10. Karena itu, jeda pada CSV adalah jeda cakupan tabel yang dipilih, bukan data yang tidak ada di seluruh laporan. Enam baris Lampiran 7 belum dimasukkan ke dataset atau diverifikasi sel demi sel dalam audit ini. Perluasan dataset harus menjadi perubahan cakupan tersendiri dengan audit sumber lengkap.
+
 ## Temuan dan koreksi
 
 | Timestamp | Tabel / halaman | Kolom | Nilai di CSV awal | Nilai pada PDF | Tindakan |
