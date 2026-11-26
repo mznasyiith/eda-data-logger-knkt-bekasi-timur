@@ -192,14 +192,14 @@ Matriks tersebut adalah peta kebutuhan bukti, bukan pernyataan bahwa seluruh buk
 
 ## 3.1 Import Library dan Loading Dataset
 
-Library utama adalah Pandas untuk pemuatan dan manipulasi tabel, NumPy untuk operasi numerik, serta Matplotlib/Seaborn untuk visualisasi. Contoh pemuatan Excel:
+Library utama adalah Pandas untuk pemuatan dan manipulasi tabel, NumPy untuk operasi numerik, serta Matplotlib/Seaborn untuk visualisasi. Contoh pemuatan dataset kanonis dari repository (CSV):
 
 ```python
 import pandas as pd
 import numpy as np
 
-file_path = "data_logger_knkt_tabel_6_10_lengkap.xlsx"
-df = pd.read_excel(file_path, sheet_name="Data_Logger_Raw")
+file_path = "data/processed/data_logger_knkt_tabel_6_10.csv"
+df = pd.read_csv(file_path)
 ```
 
 Jika menggunakan CSV:
