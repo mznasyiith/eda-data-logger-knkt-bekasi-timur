@@ -1,0 +1,31 @@
+project:
+  type: default
+  output-dir: dist
+
+format:
+  revealjs:
+    theme: [default, styles/knkt-theme.scss]
+    slide-number: c/t
+    show-slide-number: all
+    hash-type: number
+    transition: fade
+    background-transition: fade
+    controls: true
+    progress: true
+    center: false
+    navigation-mode: linear
+    pdf-separate-fragments: false
+    width: 1600
+    height: 900
+    margin: 0.06
+    title-slide-attributes:
+      data-background-color: "#102D26"
+      data-background-image: ""
+    html-math-method: mathjax
+    embed-resources: true
+    self-contained-math: true
+
+execute:
+  enabled: false
+
+lang: id
