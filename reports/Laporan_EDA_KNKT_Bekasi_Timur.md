@@ -192,11 +192,11 @@ Hasil pembacaan dataset gabungan: `km`, `m`, `Speed (km/h)`, `Load (amps)`, `EAB
 
 Tipe object pada akselerasi dapat dimengerti karena kolom memuat angka dan teks `---`. Tipe tanggal dan waktu belum berupa datetime; parsing dilakukan secara eksplisit pada salinan analisis.
 
-### 3.5 Penanganan Waktu dan Integritas Urutan Rekaman
+### 3.4 Penanganan Waktu dan Integritas Urutan Rekaman
 
 Kolom `Date` dan `Time` perlu digabung menjadi timestamp pada salinan analisis dengan format yang eksplisit. Pemeriksaan urutan dilakukan setelah parsing, tetapi timestamp hasil parsing tetap merepresentasikan waktu sebagaimana dicetak pada tabel sumber. Belum ada dasar untuk menyatakan bahwa jam Data Logger telah tersinkronisasi dengan jam interlocking, radio, CCTV, atau logger kereta lain. Setiap analisis lintas-sumber nantinya harus mendokumentasikan zona waktu, resolusi timestamp, kemungkinan offset/drift, metode koreksi jam, dan rentang ketidakpastian. Jangan menggeser timestamp agar tampak cocok dengan kronologi tanpa dasar kalibrasi atau bukti sinkronisasi.
 
-## 3.4 Ringkasan Statistik Awal
+## 3.5 Ringkasan Statistik Awal
 
 Ringkasan statistik untuk variabel numerik yang memiliki data:
 | Variabel | n | Mean | Median | Modus | Std. deviasi | Varians | Q1 | Q3 | Minimum | Maksimum |
@@ -226,13 +226,17 @@ Mekanisme kehilangan data tidak dapat diklasifikasikan secara menyeluruh sebagai
 - Empat kolom kosong karena tidak ditampilkan pada Tabel 9–10. Kondisi ini lebih tepat disebut tidak tersedia dalam cakupan sumber, bukan missing value observasional yang mekanismenya dapat diuji.
 - Tujuh placeholder akselerasi terkait dengan kondisi tabrakan dan keterbatasan pembacaan sensor sebagaimana diterangkan dalam laporan KNKT. Karena berkaitan dengan peristiwa yang sedang diamati, kehilangan tersebut tidak layak diasumsikan MCAR. Akan tetapi, label MAR/MNAR formal tidak ditetapkan tanpa data sensor dan rancangan pengukuran yang lebih lengkap.
 
-## 4.3 Identifikasi Data Duplikat
+## 4.3 Pemeriksaan Duplikasi dan Kebijakan Deduplicasi
 
-Tidak dilakukan penghapusan baris maupun kolom. Menghapus empat kolom akan menghilangkan informasi tentang struktur skema yang digunakan proyek. Menghapus baris akselerasi dengan placeholder juga berisiko menghilangkan rekaman penting pada saat tabrakan. Ukuran dataset gabungan dipertahankan pada 58 × 16.
+Pemeriksaan dilakukan pada dua tingkat karena terdapat perbedaan antara baris sumber dan rekaman unik. Lima tabel menghasilkan 59 baris transkripsi. Satu baris pada pukul 20:51:43 tercantum identik pada Tabel 7 dan Tabel 8. Untuk analisis gabungan, satu kemunculan duplikat identik tersebut dihitung satu kali sehingga dataset analitis berisi 58 rekaman unik. Keputusan ini tidak menghapus bukti asal: sheet `Data_By_Source` tetap menyimpan 59 baris beserta identitas tabel sumber, sedangkan `Data_Logger_Raw`/CSV analitis memuat 58 rekaman setelah deduplikasi. Dengan demikian, duplikasi lintas tabel tidak disamakan dengan dua kejadian logger yang berbeda.
 
-## 4.4 Pemeriksaan Konsistensi Data
+Tidak ditemukan duplikasi baris identik pada dataset analitis 58 × 16 setelah proses tersebut. Deduplikasi hanya dilakukan terhadap baris yang seluruh nilai dan timestamp-nya identik; baris dengan timestamp sama tetapi nilai berbeda tidak boleh dihapus otomatis dan harus ditinjau terhadap PDF sumber.
 
-Tidak dilakukan imputasi mean, median, modus, KNN Imputer, atau MICE. Pengisian nilai sensor yang tidak terbaca dengan angka statistik akan menghasilkan nilai buatan yang tidak bersumber dari logger. Empat kolom yang tidak disediakan dalam tabel juga tidak boleh diimputasi. Untuk analisis numerik akselerasi, placeholder dikecualikan pada salinan sementara dan jumlah nilai yang dikecualikan dilaporkan secara eksplisit.
+## 4.4 Pemeriksaan Konsistensi dan Kebijakan Penanganan
+
+Pemeriksaan konsistensi meliputi kesesuaian jumlah kolom (16), format tanggal dan waktu, nilai numerik, kategori status, placeholder, serta urutan timestamp. Tanggal ditulis `27/04/2026` dan waktu mengikuti format `HH.MM.SS`; parsing dilakukan pada salinan analisis menggunakan format eksplisit `%d/%m/%Y %H.%M.%S`. Tujuh placeholder `---` pada akselerasi dipertahankan sebagai teks pada data mentah dan dikonversi menjadi missing hanya pada seri numerik analisis. Empat kolom status dengan 26 nilai kosong tetap dipertahankan karena tidak tersedia pada Tabel 9–10.
+
+Tidak dilakukan imputasi mean, median, modus, KNN Imputer, atau MICE. Pengisian nilai sensor yang tidak terbaca dengan angka statistik akan menghasilkan nilai buatan yang tidak bersumber dari logger. Tidak dilakukan interpolasi pada celah waktu 20:51:28–20:51:33. Tidak dilakukan penghapusan baris/kolom, scaling, encoding, atau winsorization pada dataset mentah. Setiap koreksi transkripsi harus disertai bukti pembanding dari tabel PDF dan dicatat sebagai perubahan yang dapat ditelusuri.
 
 ---
 
@@ -244,7 +248,7 @@ Tabel pada Bab 3 menyajikan mean, median, modus, standar deviasi, minimum, dan m
 
 Kolom `km` dan `m` dianalisis sebagai dua komponen lokasi sebagaimana dicetak. Kolom `km` bernilai 1 pada sepuluh rekaman Tabel 6 dan 0 pada 48 rekaman berikutnya; perubahan tersebut tidak diubah atau direkonstruksi. Interpretasi lokasi harus mempertimbangkan format koordinat pada sumber.
 
-## 5.2 Statistik Deskriptif Variabel Kategorikal
+## 5.2 Bentuk Distribusi Variabel Numerik
 
 Nilai skewness dan excess kurtosis pada variabel numerik yang dapat dihitung:
 | Variabel | Skewness | Excess kurtosis |
@@ -261,6 +265,10 @@ Kurtosis yang disajikan adalah excess kurtosis (kurtosis Fisher), sehingga nilai
 
 Ukuran skewness dan kurtosis pada sampel kecil dan berurutan ini tidak cukup untuk menyatakan normalitas. Histogram/KDE dapat membantu inspeksi visual, tetapi uji normalitas formal dan asumsi inferensial tidak menjadi tujuan utama proyek.
 
+## 5.3 Ringkasan Frekuensi Variabel Kategorikal
+
+Frekuensi kategori pada seluruh 58 rekaman adalah sebagai berikut: `Throttle` terdiri atas T5 (17), Idle (13), T7 (11), Off (10), T4 (4), T6 (2), dan T1 (1). `PCS Open` tercatat Closed sebanyak 32 dan Open sebanyak 26. `IBS` tercatat Rel sebanyak 39 dan Appl sebanyak 19. Frekuensi ini merangkum kategori yang tertulis pada tabel sumber; frekuensi tidak menjelaskan durasi keadaan secara langsung karena interval antarrekaman tidak seluruhnya lengkap dan tidak semua status tersedia pada setiap fase.
+
 ---
 
 # BAB VI. TRANSFORMASI DAN REKAYASA FITUR (DATA TRANSFORMATION AND FEATURE ENGINEERING)
@@ -269,17 +277,19 @@ Ukuran skewness dan kurtosis pada sampel kecil dan berurutan ini tidak cukup unt
 
 Tidak diterapkan transformasi log, akar kuadrat, Box-Cox, atau Yeo-Johnson pada dataset sumber. Beberapa variabel menunjukkan kemiringan distribusi, tetapi transformasi tidak diperlukan untuk tujuan deskriptif dan dapat mengurangi keterbacaan satuan operasional. Perlu diluruskan bahwa model linear tidak mensyaratkan setiap fitur harus berdistribusi normal; asumsi normalitas dalam regresi klasik terutama berkaitan dengan residual untuk keperluan inferensi. Jika pemodelan dilakukan pada tahap berikutnya, transformasi hanya dipertimbangkan berdasarkan kebutuhan model, bentuk hubungan, dan diagnostik residual, kemudian diuji pada salinan data.
 
-## 6.2 Konversi Tipe Data
+## 6.2 Konversi dan Validasi Tipe Data
 
-StandardScaler dan MinMaxScaler tidak diterapkan. Scaling relevan untuk algoritma yang sensitif terhadap perbedaan skala, seperti KNN, K-Means, SVM, dan PCA, tetapi bukan prasyarat EDA deskriptif. Nilai asli dalam km/jam, ampere, psi, meter, dan m/s² dipertahankan agar interpretasi domain tetap jelas. Apabila scaling diperlukan pada pemodelan lanjutan, parameter scaler harus dipelajari hanya dari data latih untuk mencegah data leakage.
+Konversi tipe data dilakukan hanya pada salinan analisis. Kolom `Date` dan `Time` digabung dan diparsing menjadi `datetime` dengan format eksplisit `%d/%m/%Y %H.%M.%S`. Kolom `km`, `m`, `Speed (km/h)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)` dikonversi menjadi numerik. Pada `Acceleration (m/sec²)`, penanda `---` terlebih dahulu dipetakan menjadi missing pada salinan analisis, kemudian nilai lainnya dikonversi menjadi numerik. Kolom `Throttle`, `PCS Open`, `IBS`, `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star` dipertahankan sebagai kategori/teks.
+
+Hasil konversi divalidasi dengan membandingkan jumlah baris sebelum dan sesudah konversi, jumlah placeholder yang berubah menjadi missing, jumlah missing struktural, serta rentang nilai sebelum dan sesudah. Konversi tidak boleh mengubah jumlah 58 rekaman atau mengisi nilai yang tidak tersedia.
 
 ## 6.3 Rekayasa Fitur Temporal
 
-Kategori `Throttle`, `PCS Open`, dan `IBS` tetap disimpan sebagai teks. One-hot encoding atau ordinal encoding belum diperlukan karena tidak ada model yang membutuhkan representasi numerik. Jika kelak digunakan, pengkodean harus didasarkan pada makna kategori dan tidak boleh mengasumsikan urutan numerik yang tidak ada.
+Dari timestamp gabungan dibuat fitur `elapsed_seconds`, yaitu selisih detik terhadap timestamp paling awal. Fitur ini berguna untuk sumbu waktu numerik dan pengukuran jarak waktu antarrekaman. Karena terdapat gap 20:51:28–20:51:33, selisih waktu aktual dipertahankan; indeks baris tidak boleh dianggap sebagai detik yang selalu berjarak satu detik. Timestamp sumber tidak digeser dan tidak dinyatakan tersinkronisasi dengan sumber lain.
 
-## 6.4 Rekayasa Fitur Operasional
+## 6.4 Rekayasa Fitur Operasional dan Batas Transformasi
 
-Untuk analisis lanjutan, fitur turunan yang dapat dipertimbangkan adalah timestamp gabungan dari Date dan Time, detik relatif sejak awal cuplikan, serta penanda fase berdasarkan definisi yang bersumber dari laporan. Fitur turunan tersebut harus dibuat pada tabel analisis terpisah dan didokumentasikan. Tidak dibuat fitur rasio atau label kejadian baru dalam dataset sumber pada tahap ini.
+Penanda fase operasi dapat ditambahkan hanya jika batas fase diambil secara eksplisit dari judul tabel atau uraian KNKT, bukan dibentuk dari tebakan terhadap pola grafik. Pada tahap EDA ini tidak dibuat label target prediksi. Tidak diterapkan transformasi log, akar kuadrat, Box-Cox, Yeo-Johnson, StandardScaler, MinMaxScaler, one-hot encoding, atau ordinal encoding karena belum ada kebutuhan analisis yang membenarkannya. Nilai dan satuan asli dipertahankan. Jika transformasi diperlukan pada penelitian berikutnya, hasil transformasi harus berada pada fitur turunan terpisah dan parameter transformasi harus dipelajari dari data latih saja.
 
 ---
 
@@ -294,6 +304,8 @@ Analisis univariat dilakukan dengan histogram/box plot untuk variabel numerik da
 Grafik garis kecepatan terhadap waktu dan grafik tekanan BP/BC terhadap waktu lebih sesuai daripada scatter plot generik karena urutan waktu merupakan konteks utama data. Perbandingan dua tekanan harus memperhatikan satuan yang sama (psi), sedangkan arus motor traksi menggunakan ampere dan kecepatan menggunakan km/jam. Hubungan visual tidak otomatis menunjukkan pengaruh kausal. Untuk rekonstruksi kecelakaan, sumbu waktu harus diperlakukan sebagai kunci pengurutan yang masih memiliki ketidakpastian sumber. Dataset ini hanya memuat logger KA 4B; karena itu, tidak boleh dibuat klaim bahwa data telah disinkronkan dengan KA 5568A, log persinyalan, rekaman radio, CCTV, atau data operasi. Analisis silang baru dapat dilakukan setelah timestamp, sumber jam, offset, drift, dan metode penyelarasan didokumentasikan. Jika tersedia data tambahan, gunakan *timeline evidence matrix* yang mencatat waktu sumber, waktu terkoreksi, ketidakpastian, sumber bukti, dan status verifikasi untuk setiap peristiwa.
 
 ## 7.3 Analisis Korelasi
+
+Notebook analisis menghitung korelasi Spearman secara eksploratif pada variabel `Speed (km/h)`, `Acceleration (m/sec²)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)`, setelah placeholder akselerasi dikecualikan secara numerik. Pasangan variabel dapat memiliki jumlah observasi yang berbeda apabila terdapat missing value; karena itu, jumlah pasangan valid perlu diperiksa bersama matriks korelasi dan tidak boleh diasumsikan selalu 58. Korelasi Spearman mengukur asosiasi monotonik, bukan pengaruh sebab-akibat.
 
 Matriks korelasi tidak dijadikan dasar kesimpulan utama. Dataset berisi 58 rekaman unik yang berurutan dari beberapa fase operasi dalam rentang waktu singkat. Variabel dapat berubah bersama karena dipengaruhi waktu dan fase pengereman. Korelasi Pearson atau Spearman berpotensi dipengaruhi tren waktu, autokorelasi, perubahan status sistem, dan ukuran sampel yang terbatas. Apabila heatmap korelasi ditampilkan, interpretasinya harus eksploratif, disertai jumlah observasi yang digunakan, dan tidak dianggap sebagai bukti sebab-akibat atau multikolinearitas dalam model yang belum dibangun.
 
