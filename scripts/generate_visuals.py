@@ -279,7 +279,7 @@ def chapter_viii_outliers(df: pd.DataFrame, out: Path) -> None:
         low, high = q1 - 1.5 * iqr, q3 + 1.5 * iqr
         count = int(((values < low) | (values > high)).sum())
         summary.append((column, len(values), count, low, high))
-        ax.boxplot(values, vert=True)
+        ax.boxplot(values, orientation="vertical")
         ax.set_title(f"{column}\nKandidat IQR: {count}")
         ax.grid(axis="y", alpha=0.2)
     fig.suptitle("BAB VIII — Box Plot dan Pemeriksaan Pencilan IQR")
@@ -685,20 +685,32 @@ def extended_chapter_vii(df, out):
 
     state_cols=["Throttle","PCS Open","IBS"]
     fig,axes=plt.subplots(3,1,figsize=(13,6.5),sharex=True,constrained_layout=True)
-    for ax,col in zip(axes,state_cols):
-        cats=df[col].fillna("Tidak tersedia").astype(str)
-        levels={v:i for i,v in enumerate(sorted(cats.unique()))}
-        y=np.array([levels[v] for v in cats])
-        for i in range(len(x)):
-            ax.scatter(x[i],y[i],s=28)
-            if i and intervals[i]==1 and cats.iloc[i]==cats.iloc[i-1]:
-                ax.plot([x[i-1],x[i]],[y[i-1],y[i]],lw=2,alpha=.45)
-        ax.set_yticks(list(levels.values()),labels=list(levels.keys()),fontsize=8)
-        ax.set_ylabel(col,fontsize=9)
-        ax.grid(axis="x",alpha=.18)
+    for ax, col in zip(axes, state_cols):
+        observed = df[col].notna()
+        cats = df.loc[observed, col].astype(str)
+        levels = {value: i for i, value in enumerate(sorted(cats.unique()))}
+        observed_positions = np.flatnonzero(observed.to_numpy())
+        for position in observed_positions:
+            category = str(df.iloc[position][col])
+            y_value = levels[category]
+            ax.scatter(x[position], y_value, s=28, label=category)
+            # Connect only adjacent source rows with a one-second interval
+            # and an unchanged observed category. Missing rows remain gaps.
+            if position > 0 and observed.iloc[position - 1]:
+                previous = str(df.iloc[position - 1][col])
+                if intervals[position] == 1 and previous == category:
+                    ax.plot([x[position - 1], x[position]],
+                            [levels[previous], y_value], lw=2, alpha=.45)
+        ax.set_yticks(list(levels.values()), labels=list(levels.keys()), fontsize=8)
+        ax.set_ylabel(col, fontsize=9)
+        ax.grid(axis="x", alpha=.18)
     axes[-1].set_xlabel("Detik sejak rekaman pertama")
-    fig.suptitle("BAB VII — Timeline Kategori Status yang Tercatat",fontsize=14,weight="bold")
-    save(fig,folder/"categorical_state_timeline.png")
+    fig.suptitle("BAB VII — Timeline Observasi Kategori Status", fontsize=14, weight="bold")
+    fig.text(.5, -.015,
+             "Titik = observasi pada timestamp sumber; bukan durasi status. "
+             "Nilai kosong ditampilkan sebagai gap, bukan kategori.",
+             ha="center", fontsize=8)
+    save(fig, folder / "categorical_state_timeline.png")
 
     pairs=[("Speed (km/h)","EAB BP (psi)"),("Speed (km/h)","EAB BC (psi)"),
            ("EAB BP (psi)","EAB BC (psi)")]
