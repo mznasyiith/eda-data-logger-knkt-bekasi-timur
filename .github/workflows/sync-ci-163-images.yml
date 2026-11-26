@@ -46,7 +46,7 @@ jobs:
           test "$(find /tmp/ci163 -type f -name '*.png' | wc -l)" -eq 37
           for rel in "${replacements[@]}"; do
             test -s "/tmp/ci163/$rel"
-            install -D "/tmp/ci163/$rel" "outputs/$rel"
+            install -D -m 644 "/tmp/ci163/$rel" "outputs/$rel"
           done
 
           python - <<'PY'
