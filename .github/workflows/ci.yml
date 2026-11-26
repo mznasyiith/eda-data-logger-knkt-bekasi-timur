@@ -9,7 +9,7 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: false
 permissions:
-  contents: write
+  contents: read
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -26,9 +26,7 @@ jobs:
       - name: Ruff
         run: ruff check src tests scripts --select E4,E7,E9,F
       - name: Format and audit Python scripts
-        run: |
-          black scripts
-          black --check scripts
+        run: black --check scripts
       - name: Execute all notebooks in order
         run: |
           mkdir -p /tmp/eda-executed
