@@ -97,6 +97,8 @@ def test_chapter_ix_reports_master_time_adjustment_and_separate_collision_stop()
     assert "20:52:12" in report and "40" in report
     assert "20:52:19" in report and "55" in report
     assert "20:51:28–20:51:33" in report
+    assert "Lampiran 7" in report
+    assert "batas cakupan subset" in report
     assert "distance_to_stop_m" in report
 
 
