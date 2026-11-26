@@ -72,7 +72,7 @@ Dengan demikian, cakupan laporan ini bukan hanya dua tabel terakhir, melainkan s
 
 Dokumen PDF diperoleh dari situs resmi KNKT. Tabel sumber ditranskripsikan ke lembar kerja Excel. Berkas kerja yang diperiksa bernama `data_logger_knkt_tabel_6_10_lengkap.xlsx`, dengan sheet `Data_Logger_Raw`, `Data_By_Source`, dan `Metadata`. CSV gabungan tersedia pada `data/processed/data_logger_knkt_tabel_6_10.csv`.
 
-Transkripsi tabel merupakan proses ekstraksi manual, sehingga validasi visual terhadap PDF tetap diperlukan. Dataset tidak boleh dianggap sebagai data mentah asli dari perangkat logger; dataset merupakan representasi tabel yang dipublikasikan dalam laporan investigasi. PDF sumber dipertahankan sebagai rujukan dan tidak dimodifikasi.
+Transkripsi tabel merupakan proses ekstraksi manual. Audit visual independen terhadap seluruh baris Tabel 6–10 pada halaman PDF 75–78 telah dilakukan; ditemukan satu kesalahan nilai Load pada 20:51:36 (168 A pada transkripsi awal, 160 A pada PDF) dan dikoreksi. Rincian cakupan, rekonsiliasi, dan koreksi dicatat pada `docs/02_data_understanding/source_transcription_audit.md`. Dataset tidak boleh dianggap sebagai data mentah asli dari perangkat logger; dataset merupakan representasi tabel yang dipublikasikan dalam laporan investigasi. PDF sumber dipertahankan sebagai rujukan dan tidak dimodifikasi.
 
 ## 2.2 Deskripsi dan Eksplorasi Awal Data
 
@@ -110,7 +110,7 @@ Kolom `Acceleration (m/sec²)` memuat tujuh nilai teks `---`. Karena `---` adala
 
 ### Duplikasi
 
-Pemeriksaan duplikasi seluruh baris pada dataset menghasilkan **0 baris duplikat identik**. Pemeriksaan ini tidak membuktikan bahwa transkripsi bebas dari seluruh kemungkinan kesalahan; pencocokan setiap sel dengan gambar tabel PDF tetap merupakan langkah verifikasi yang diperlukan.
+Pemeriksaan duplikasi seluruh baris pada dataset menghasilkan **0 baris duplikat identik**. Audit visual setiap baris dan kolom Tabel 6–10 telah diselesaikan; satu koreksi tercatat pada dokumen audit sumber. Golden snapshot regresi diperbarui setelah pencocokan tersebut.
 
 ### Deteksi pencilan awal
 
@@ -272,7 +272,7 @@ Ringkasan statistik untuk variabel numerik yang memiliki data:
 | distance_to_stop_m | 58 | 472,897 | 378,5 | 0 | 421,531 | 177.688,059 | 100 | 741 | 0 | 1.341 |
 | Speed (km/h) | 58 | 73,638 | 82,5 | 108 | 33,077 | 1.094,060 | 57,5 | 101,75 | 0 | 109 |
 | Acceleration (m/sec²) | 51 | -0,336 | -0,38 | -0,38 | 0,203 | 0,041 | -0,5 | -0,16 | -0,84 | 0,05 |
-| Load (amps) | 58 | 86,345 | 136 | 0 | 76,730 | 5.887,458 | 0 | 152 | 0 | 168 |
+| Load (amps) | 58 | 86,207 | 136 | 0 | 76,587 | 5.865,641 | 0 | 152 | 0 | 168 |
 | EAB BP (psi) | 58 | 31,897 | 49 | 0 | 28,264 | 798,831 | 0 | 51,75 | 0 | 71 |
 | EAB BC (psi) | 58 | 26 | 2 | 0 | 31,191 | 972,877 | 0 | 58 | 0 | 73 |
 
@@ -357,7 +357,7 @@ Nilai skewness dan excess kurtosis pada variabel numerik yang dapat dihitung:
 | distance_to_stop_m | 0,658 | -0,767 |
 | Speed (km/h) | -0,958 | -0,084 |
 | Acceleration (m/sec²) | 0,290 | -0,444 |
-| Load (amps) | -0,216 | -1,937 |
+| Load (amps) | -0,218 | -1,938 |
 | EAB BP (psi) | -0,130 | -1,830 |
 | EAB BC (psi) | 0,503 | -1,660 |
 
@@ -615,7 +615,7 @@ Statistik diverifikasi kembali terhadap CSV analitis. Statistik jarak dihitung d
 | distance_to_stop_m | 58 | 472,897 | 378,5 | 421,531 | 0 | 1.341 |
 | Speed (km/h) | 58 | 73,638 | 82,5 | 33,077 | 0 | 109 |
 | Acceleration (m/sec²) | 51 | -0,336 | -0,38 | 0,203 | -0,84 | 0,05 |
-| Load (amps) | 58 | 86,345 | 136 | 76,730 | 0 | 168 |
+| Load (amps) | 58 | 86,207 | 136 | 76,587 | 0 | 168 |
 | EAB BP (psi) | 58 | 31,897 | 49 | 28,264 | 0 | 71 |
 | EAB BC (psi) | 58 | 26,000 | 2 | 31,191 | 0 | 73 |
 
