@@ -72,17 +72,18 @@ def chapter_i_scope(out: Path) -> None:
     fig, ax = plt.subplots(figsize=(12, 4.5), constrained_layout=True)
     ax.axis("off")
     ax.set_title("BAB I — Ruang Lingkup dan Tujuan EDA", fontsize=16, pad=18)
-    stages = [("Sumber", "Tabel 6–10\\nLaporan KNKT"),
-              ("Dataset", "58 rekaman unik\\n16 kolom"),
-              ("Analisis", "Kualitas • statistik\\ntren • asosiasi"),
-              ("Batas", "Deskriptif\\nbukan kausal")]
+    stages = [("SUMBER", "Tabel 6–10\\nLaporan KNKT"),
+              ("DATASET", "58 rekaman unik\\n16 kolom"),
+              ("ANALISIS", "Kualitas data\\nStatistik dan visual"),
+              ("BATAS", "Deskriptif\\nTidak menyimpulkan sebab")]
     for i, (head, body) in enumerate(stages):
-        x = 0.03 + i * 0.245
-        ax.text(x, 0.65, head, transform=ax.transAxes, fontsize=13,
-                weight="bold", bbox={"boxstyle": "round,pad=0.5", "facecolor": "#e8f1f8"})
-        ax.text(x, 0.38, body, transform=ax.transAxes, fontsize=11, va="center")
+        x = 0.035 + i * 0.245
+        ax.text(x, 0.62, head, transform=ax.transAxes, fontsize=12,
+                weight="bold", bbox={"boxstyle": "round,pad=0.65", "facecolor": "#e8f1f8"})
+        ax.text(x, 0.37, body, transform=ax.transAxes, fontsize=10.5,
+                va="center", linespacing=1.5)
         if i < len(stages) - 1:
-            ax.annotate("", xy=(x + 0.22, 0.57), xytext=(x + 0.16, 0.57),
+            ax.annotate("", xy=(x + 0.215, 0.57), xytext=(x + 0.17, 0.57),
                         xycoords=ax.transAxes, arrowprops={"arrowstyle": "->"})
     ax.text(0.03, 0.08, "Tujuan: mendeskripsikan rekaman yang tersedia, memeriksa kualitasnya, "
             "dan menjaga batas interpretasi bukti.", transform=ax.transAxes, fontsize=10)
@@ -296,18 +297,20 @@ def chapter_ix_findings(df: pd.DataFrame, raw: pd.DataFrame, out: Path) -> None:
     ax.axis("off")
     ax.set_title("BAB IX — Ikhtisar Temuan EDA", fontsize=16, pad=18)
     items = [
-        ("Rekaman unik", f"{len(df)}"),
-        ("Kolom", f"{len(raw.columns)}"),
-        ("Kecepatan", f"{speed.min():.0f}–{speed.max():.0f} km/jam"),
-        ("Rentang waktu", f"{df['Timestamp'].iloc[0]:%H:%M:%S}–{df['Timestamp'].iloc[-1]:%H:%M:%S}"),
-        ("Interval > 1 detik", f"{gap_count} jeda"),
-        ("Placeholder akselerasi", f"{accel_missing} nilai '---'"),
+        ("REKAMAN UNIK", f"{len(df)}"),
+        ("JUMLAH KOLOM", f"{len(raw.columns)}"),
+        ("RENTANG KECEPATAN", f"{speed.min():.0f}–{speed.max():.0f} km/jam"),
+        ("RENTANG WAKTU", f"{df['Timestamp'].iloc[0]:%H:%M:%S} – {df['Timestamp'].iloc[-1]:%H:%M:%S}"),
+        ("JEDA > 1 DETIK", f"{gap_count} interval"),
+        ("PLACEHOLDER AKSELERASI", f"{accel_missing} nilai"),
     ]
     for i, (label, value) in enumerate(items):
         col, row = i % 3, i // 3
-        x0, y0 = 0.04 + col * 0.32, 0.62 - row * 0.43
-        ax.text(x0, y0, label, transform=ax.transAxes, fontsize=11, weight="bold")
-        ax.text(x0, y0 - 0.13, value, transform=ax.transAxes, fontsize=14)
+        x0, y0 = 0.045 + col * 0.32, 0.68 - row * 0.43
+        ax.text(x0, y0, label, transform=ax.transAxes, fontsize=9.5,
+                weight="bold", bbox={"boxstyle": "round,pad=0.45", "facecolor": "#e8f1f8"})
+        ax.text(x0, y0 - 0.16, value, transform=ax.transAxes, fontsize=12,
+                va="center", linespacing=1.4)
     ax.text(
         0.04, 0.04,
         "Deskriptif terhadap transkripsi Tabel 6–10; bukan simulasi fisik, "
