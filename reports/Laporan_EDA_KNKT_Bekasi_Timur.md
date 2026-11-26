@@ -180,7 +180,7 @@ Ringkasan statistik untuk variabel numerik yang memiliki data:
 | EAB BP (psi) | 58 | 31,897 | 49 | 0 | 28,264 | 798,831 | 0 | 51,75 | 0 | 71 |
 | EAB BC (psi) | 58 | 26 | 2 | 0 | 31,191 | 972,877 | 0 | 58 | 0 | 73 |
 
-Untuk akselerasi, n numerik adalah 19 karena tujuh nilai `---` tidak dapat diperlakukan sebagai angka. Statistik ini dihitung setelah placeholder dikecualikan pada salinan analisis. Empat kolom yang tidak tersedia tidak memiliki statistik numerik yang dapat dihitung.
+Untuk akselerasi, n numerik adalah 51 karena tujuh nilai `---` tidak dapat diperlakukan sebagai angka. Statistik dihitung setelah placeholder dikecualikan pada salinan analisis. Empat kolom status merupakan variabel kategorikal, sehingga tidak diringkas dengan statistik numerik.
 
 ---
 
@@ -276,13 +276,7 @@ Matriks korelasi tidak dijadikan dasar kesimpulan utama. Dataset hanya berisi 26
 
 ## 8.1 Metode Deteksi Pencilan
 
-Deteksi awal menggunakan aturan Interquartile Range (IQR), dengan batas bawah Q1 − 1,5 × IQR dan batas atas Q3 + 1,5 × IQR. Hasil untuk beberapa variabel:
-- `Load (amps)`: nilai 104 teridentifikasi di luar batas IQR karena Q1 dan Q3 sama-sama 0.
-- `EAB BP (psi)`: nilai 43 dan 5 teridentifikasi di luar batas IQR.
-- `EAB BC (psi)`: nilai 0, 7, dan 29 teridentifikasi di luar batas IQR.
-- `Acceleration (m/sec²)`: pada 19 nilai numerik, nilai -0,38, -0,84, dan -0,15 teridentifikasi di luar batas IQR.
-
-Hasil ini adalah penanda statistik untuk ditinjau, bukan bukti kesalahan pencatatan. Z-score tidak digunakan sebagai metode utama karena distribusi sejumlah variabel sangat miring dan data berurutan.
+Deteksi menggunakan aturan Interquartile Range (IQR), dengan batas bawah Q1 − 1,5 × IQR dan batas atas Q3 + 1,5 × IQR. Pada 58 rekaman gabungan (51 nilai akselerasi numerik), tidak ditemukan pencilan IQR pada `m`, `Speed (km/h)`, `Acceleration (m/sec²)`, `Load (amps)`, `EAB BP (psi)`, maupun `EAB BC (psi)`. Pada kolom `km`, Q1=Q3=0 sehingga pagar IQR sama dengan nol dan sepuluh nilai 1 terdeteksi secara mekanis. Karena `km` merupakan komponen koordinat diskrit yang hanya bernilai 0 atau 1 pada cuplikan ini, hasil tersebut tidak diperlakukan sebagai pencilan operasional. Z-score tidak digunakan sebagai metode utama karena data runtun waktu ini tidak memenuhi alasan yang cukup untuk mengasumsikan distribusi normal.
 
 ## 8.2 Keputusan Perlakuan terhadap Pencilan
 
