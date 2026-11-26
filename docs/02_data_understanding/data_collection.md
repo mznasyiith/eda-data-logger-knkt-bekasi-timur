@@ -2,7 +2,7 @@
 
 ## Sumber primer
 
-Sumber acuan adalah Laporan Akhir Investigasi KNKT Nomor KNKT.26.04.03.02, khususnya Tabel 6–10 pada halaman tercetak 65–68 (halaman PDF 75–78). Dokumen resmi tersedia melalui [situs KNKT] (https://laman.knkt.go.id/Repo/Files/Laporan/Perkeretaapian/2026/KNKT.26.04.03.02-Final-Report.pdf).
+Sumber acuan adalah Laporan Akhir Investigasi KNKT Nomor KNKT.26.04.03.02, khususnya Tabel 6–10 pada halaman tercetak 65–68 (halaman PDF 75–78). Dokumen resmi tersedia melalui [situs KNKT](https://laman.knkt.go.id/Repo/Files/Laporan/Perkeretaapian/2026/KNKT.26.04.03.02-Final-Report.pdf).
 
 ## Metode dan cakupan
 
