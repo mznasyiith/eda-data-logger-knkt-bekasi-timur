@@ -95,6 +95,7 @@ pytest
 - [Laporan EDA lengkap](reports/Laporan_EDA_KNKT_Bekasi_Timur.md)
 - [Kamus data](docs/02_data_understanding/data_dictionary.md)
 - [Metodologi](docs/methodology/methodology.md)
+- [Matriks penyelarasan sembilan bab, notebook, kode, visualisasi, dan pengujian](docs/REPORT_NOTEBOOK_ALIGNMENT.md)
 - [Log keputusan analisis](docs/decisions/analysis_decisions.md)
 - [Kebijakan hak data](docs/DATA_RIGHTS.md)
 - [Panduan kontribusi](CONTRIBUTING.md)
