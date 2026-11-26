@@ -467,3 +467,8 @@ Komite Nasional Keselamatan Transportasi. (2026). *Laporan akhir investigasi kec
 - Placeholder `---` dipertahankan pada data mentah dan hanya dikecualikan dari kalkulasi numerik akselerasi.
 - Tidak dilakukan imputasi, penghapusan baris, penghapusan kolom, scaling, encoding, atau transformasi terhadap dataset mentah.
 - CSV transkripsi Tabel 6–10 disertakan pada repositori di `data/processed/`; PDF sumber tidak disertakan. Penggunaan ulang dataset harus tetap mencantumkan laporan KNKT sebagai sumber dan memperhatikan ketentuan penggunaan materi sumber.
+
+
+## KATALOG VISUALISASI DAN PANDUAN INTERPRETASI
+
+Untuk menjaga uraian setiap gambar tetap konsisten dan mudah ditelusuri, laporan ini dilengkapi katalog visual per bab yang menjelaskan tujuan, cara membaca, batas interpretasi, dan alasan visual yang tidak relevan tidak dibuat. Lihat [Katalog Visualisasi dan Panduan Interpretasi](../docs/KATALOG_VISUALISASI.md). Katalog mencakup seluruh visual yang dipertahankan dan visual tambahan yang dihasilkan oleh generator.
