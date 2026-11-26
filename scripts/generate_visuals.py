@@ -18,6 +18,8 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 
+from eda_knkt.transformation import add_distance_to_stop_feature
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "data" / "processed" / "data_logger_knkt_tabel_6_10.csv"
 DEFAULT_OUTPUT = ROOT / "outputs"
@@ -60,9 +62,8 @@ def load_data(path: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
         df[column] = pd.to_numeric(
             df[column].replace({"---": np.nan, "": np.nan}), errors="coerce"
         )
-    # Source validation: km and m are components of remaining distance to final stop.
-    # Keep source columns in raw; analyze only their combined value.
-    df["distance_to_stop_m"] = df["km"] * 1000 + df["m"]
+    # Keep source columns in raw; analyze their verified combined distance only.
+    df = add_distance_to_stop_feature(df)
     for column in CATEGORICAL_COLUMNS:
         if column in df.columns:
             df[column] = df[column].replace("", np.nan)
