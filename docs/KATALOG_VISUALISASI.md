@@ -127,6 +127,6 @@ Jalankan secara lokal:
 python scripts/generate_visuals.py
 ```
 
-Atau buka tab **Actions → CI → Run workflow** pada branch `main`. Workflow manual akan menjalankan pemeriksaan, menghasilkan seluruh visual, mengunggah artefak CI, dan menyimpan perubahan pada `outputs/`.
+Atau jalankan workflow CI. Workflow menghasilkan visual dari CSV, lalu mengunggah direktori `outputs/` sebagai artifact. Workflow memiliki izin read-only dan tidak melakukan commit/push; menjalankan workflow tidak mengubah berkas `outputs/` yang terlacak pada branch. Untuk hasil regenerasi dari run terakhir, unduh artifact CI yang ditautkan pada laporan utama.
 
-Semua visual tambahan dihasilkan dari generator yang sama dengan visual sebelumnya. CI menjalankan generator, mengunggah artefak, dan menyimpan output yang dihasilkan pada direktori `outputs/`.
+Semua visual tambahan dihasilkan oleh generator yang sama. Berkas pada `outputs/` di branch adalah snapshot yang dikomit; artifact CI adalah keluaran regenerasi pada commit yang diuji. Keduanya tidak boleh dianggap identik tanpa perbandingan berkas. Untuk reproduksi lokal, jalankan `python scripts/generate_visuals.py` dari root repository.
