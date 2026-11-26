@@ -32,7 +32,7 @@ EAB BC (psi)                58   26.000    2.00   31.191  0.00    73.00
 - DB Star: {'No': 32}
 
 ## Kualitas dan keterbatasan data
-Tujuh placeholder akselerasi tidak dihitung sebagai angka. Empat kolom status memiliki missingness struktural pada Tabel 9–10. Subset Tabel 6–10 tidak memuat 20:51:28–20:51:33; enam rekaman tersebut tercantum pada Lampiran 7 PDF KNKT tetapi belum dimasukkan ke dataset ini. Tidak dilakukan interpolasi. Data merupakan satu kejadian dan satu sumber logger; hasil bersifat deskriptif dan tidak membuktikan hubungan kausal.
+Tujuh placeholder akselerasi tidak dihitung sebagai angka. Empat kolom status kosong pada subset karena tidak dicetak pada Tabel 9–10, meskipun Lampiran 7 memuat nilai status; header DB Start pada Lampiran 7 belum direkonsiliasi dengan DB Star pada Tabel 6–8. Subset Tabel 6–10 tidak memuat 20:51:28–20:51:33; enam rekaman tersebut tercantum pada Lampiran 7 PDF KNKT tetapi belum dimasukkan ke dataset ini. Tidak dilakukan interpolasi. Data merupakan satu kejadian dan satu sumber logger; hasil bersifat deskriptif dan tidak membuktikan hubungan kausal.
 
 ## Keputusan pembersihan dan transformasi
 Data sumber tidak ditimpa. Kolom km dan m dipertahankan; fitur jarak gabungan dihitung pada salinan analisis. Tidak dilakukan imputasi atau winsorization.
