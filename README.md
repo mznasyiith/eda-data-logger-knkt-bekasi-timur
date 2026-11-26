@@ -131,3 +131,14 @@ Kode dan dokumentasi orisinal proyek menggunakan MIT License. Lisensi tersebut t
 
 <!-- visual-generation-trigger -->
 CI meregenerasi visual dan mengunggahnya sebagai artifact. Workflow tidak memperbarui snapshot `outputs/` yang terlacak pada branch secara otomatis.
+
+
+## Presentasi akademik
+
+Sumber presentasi dipelihara dengan **Quarto + reveal.js**. Satu berkas QMD menghasilkan HTML interaktif dan PDF final melalui workflow terpisah.
+
+- [Panduan presentasi dan build](presentations/README.md)
+- [Sumber slide QMD](presentations/eda-knkt-bekasi-timur.qmd)
+- [Workflow build HTML + PDF](.github/workflows/presentation.yml)
+
+Keluaran HTML dan PDF diunggah sebagai artifact GitHub Actions; tidak ada publikasi otomatis atau commit hasil render ke branch. Klaim dalam slide dibatasi pada subset transkripsi Tabel 6–10.
