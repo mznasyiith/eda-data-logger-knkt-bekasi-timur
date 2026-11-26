@@ -6,4 +6,10 @@
 | ADR-002 | Data mentah tidak diubah | Menjaga keterlacakan sumber |
 | ADR-003 | Nilai kosong tidak otomatis menjadi nol | Makna simbol harus dikonfirmasi dari sumber |
 | ADR-004 | Outlier tidak otomatis dihapus | Perlu pemeriksaan konteks operasional |
-| ADR-005 | Struktur 16 kolom masih harus diverifikasi | Menunggu dataset hasil ekstraksi aktual |
+| ADR-005 | Skema 16 kolom telah diverifikasi pada CSV gabungan | Uji integritas memeriksa 58 × 16, nama kolom, placeholder, missingness, duplikasi, dan celah waktu yang diketahui |
+
+| ADR-006 | Tabel 7 dan Tabel 8 memiliki satu rekaman identik pada 20:51:43 | Dipertahankan dua kali pada data per sumber, satu kali pada dataset gabungan; jumlah menjadi 59 baris sumber dan 58 rekaman unik |
+| ADR-007 | Tujuh placeholder `---` pada akselerasi tidak diubah menjadi nol | Placeholder dipetakan menjadi missing hanya pada salinan analisis numerik |
+| ADR-008 | Empat kolom status kosong pada 26 rekaman Tabel 9–10 | Kolom tidak ditampilkan pada dua tabel tersebut; bukan bukti kegagalan sensor |
+| ADR-009 | Timestamp analitis dibentuk dengan format eksplisit `%d/%m/%Y %H.%M.%S` | Hanya menyatukan tanggal dan waktu dalam tabel yang sama; bukan sinkronisasi lintas-sumber |
+| ADR-010 | Tidak melakukan imputasi, scaling, encoding, atau winsorization secara otomatis | Transformasi hanya dilakukan bila ada kebutuhan analitis dan justifikasi domain |
