@@ -6,7 +6,7 @@ Dokumen ini menjelaskan visual yang dihasilkan secara otomatis oleh `scripts/gen
 
 - Data merupakan transkripsi Tabel 6–10 laporan KNKT, bukan ekspor biner perangkat logger.
 - Jumlah data analitis 58 rekaman unik; sumber awal 59 baris.
-- Gap timestamp 20:51:28–20:51:33 tidak diinterpolasi.
+- Subset Tabel 6–10 tidak memuat timestamp 20:51:28–20:51:33; Lampiran 7 PDF KNKT memuat enam rekaman tambahan yang belum dimasukkan. Grafik hanya menggambarkan subset Tabel 6–10 dan tidak menginterpolasi jeda tersebut.
 - Tujuh tanda `---` pada akselerasi adalah placeholder, bukan nol.
 - Empat kolom status kosong pada bagian sumber yang tidak menampilkan kolom tersebut; ini tidak otomatis menunjukkan kerusakan sensor.
 - Korelasi dan perubahan bersama tidak membuktikan sebab-akibat.
