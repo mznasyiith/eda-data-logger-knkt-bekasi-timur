@@ -335,4 +335,4 @@ Komite Nasional Keselamatan Transportasi. (2026). *Laporan akhir investigasi kec
 - File CSV proyek: `data/processed/data_logger_knkt_tabel_6_10.csv`.
 - Placeholder `---` dipertahankan pada data mentah dan hanya dikecualikan dari kalkulasi numerik akselerasi.
 - Tidak dilakukan imputasi, penghapusan baris, penghapusan kolom, scaling, encoding, atau transformasi terhadap dataset mentah.
-- Dataset publik tidak disertakan dalam repositori sebelum status hak distribusi dan ketentuan penggunaan sumber dipastikan. Simpan salinan lokal sesuai ketentuan sumber dan catat checksum serta versi dataset pada saat reproduksi.
+- CSV transkripsi Tabel 6–10 disertakan pada repositori di `data/processed/`; PDF sumber tidak disertakan. Penggunaan ulang dataset harus tetap mencantumkan laporan KNKT sebagai sumber dan memperhatikan ketentuan penggunaan materi sumber.
