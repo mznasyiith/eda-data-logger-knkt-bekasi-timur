@@ -122,6 +122,8 @@ Tanggal tercatat sebagai `27/04/2026`; waktu menggunakan format `HH.MM.SS`. Kolo
 
 ## 2.4 Eksplorasi Visual Awal
 
+**Catatan versi visual pasca-audit sumber.** Seluruh visualisasi telah diregenerasi oleh CI berdasarkan dataset yang sudah dikoreksi. Bundle visual terkini tersedia pada artifact [CI run 45833131413](https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur/actions/runs/45833131413). Workflow hanya mengunggah artifact dan tidak melakukan commit otomatis; karena itu, gunakan bundle tersebut untuk melihat visualisasi terkini. Berkas PNG/HTML yang sudah terlacak di `outputs/` pada branch belum otomatis diganti oleh workflow.
+
 Eksplorasi visual diarahkan pada urutan waktu dan karakteristik parameter operasi. Visualisasi yang relevan untuk dataset ini meliputi:
 - Grafik garis kecepatan terhadap waktu untuk melihat penurunan kecepatan pada cuplikan yang tersedia.
 - Grafik garis tekanan BP dan BC terhadap waktu untuk melihat perubahan tekanan selama pengereman.
