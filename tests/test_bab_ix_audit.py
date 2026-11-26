@@ -242,3 +242,9 @@ def test_source_pdf_audit_corrects_load_amps_at_205136():
     """The PDF's Table 7 row 20:51:36 reports 160 A, not 168 A."""
     df = load_data().set_index("Time")
     assert df.loc["20.51.36", "Load (amps)"] == "160"
+
+def test_report_load_timeline_reflects_corrected_source_value():
+    report = REPORT.read_text(encoding="utf-8")
+    assert "168 A pada 20:51:18–20:51:35" in report
+    assert "20:51:36 nilainya 160 A" in report
+    assert "152 A pada 20:51:37" in report
