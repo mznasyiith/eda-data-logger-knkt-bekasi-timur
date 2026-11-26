@@ -130,7 +130,7 @@ Data relevan untuk memahami perubahan parameter lokomotif pada cuplikan waktu ya
 
 Kebutuhan data tambahan untuk analisis yang lebih luas mencakup Tabel 6–8, keterangan teknis sistem pengereman, kronologi persinyalan dan komunikasi operasional, serta data pendukung lain yang telah diverifikasi dari laporan KNKT. Penambahan data harus menjaga identitas sumber, satuan, urutan waktu, dan jejak transkripsi.
 
-### 2.6 Kerangka Bukti Investigasi dan Kebutuhan Data Lintas-Disiplin
+## 2.6 Kerangka Bukti Investigasi dan Kebutuhan Data Lintas-Disiplin
 
 Agar analisis tidak melampaui bukti yang tersedia, setiap kelompok pertanyaan investigasi dipetakan terhadap sumber data yang diperlukan. Status *tersedia* berarti tercakup dalam dataset yang dianalisis; *konteks dokumen* berarti dapat ditelaah dari bagian lain laporan KNKT tetapi belum menjadi variabel dalam dataset; dan *belum tersedia dalam dataset* berarti tidak boleh disimpulkan dari Data Logger KA 4B saja.
 
@@ -192,7 +192,7 @@ Hasil pembacaan dataset gabungan: `km`, `m`, `Speed (km/h)`, `Load (amps)`, `EAB
 
 Tipe object pada akselerasi dapat dimengerti karena kolom memuat angka dan teks `---`. Tipe tanggal dan waktu belum berupa datetime; parsing dilakukan secara eksplisit pada salinan analisis.
 
-### 3.4 Penanganan Waktu dan Integritas Urutan Rekaman
+## 3.4 Penanganan Waktu dan Integritas Urutan Rekaman
 
 Kolom `Date` dan `Time` perlu digabung menjadi timestamp pada salinan analisis dengan format yang eksplisit. Pemeriksaan urutan dilakukan setelah parsing, tetapi timestamp hasil parsing tetap merepresentasikan waktu sebagaimana dicetak pada tabel sumber. Belum ada dasar untuk menyatakan bahwa jam Data Logger telah tersinkronisasi dengan jam interlocking, radio, CCTV, atau logger kereta lain. Setiap analisis lintas-sumber nantinya harus mendokumentasikan zona waktu, resolusi timestamp, kemungkinan offset/drift, metode koreksi jam, dan rentang ketidakpastian. Jangan menggeser timestamp agar tampak cocok dengan kronologi tanpa dasar kalibrasi atau bukti sinkronisasi.
 
