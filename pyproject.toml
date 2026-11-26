@@ -1,7 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
-
 [project]
 name = "eda-knkt"
 version = "0.1.0"
@@ -9,23 +8,19 @@ description = "Exploratory Data Analysis of KNKT Data Logger records for the Bek
 readme = "README.md"
 requires-python = ">=3.10"
 license = {file = "LICENSE"}
-dependencies = [
-  "numpy>=1.26",
-  "pandas>=2.1",
-  "matplotlib>=3.8",
-  "seaborn>=0.13",
-  "openpyxl>=3.1",
-]
-
+dependencies = ["numpy>=1.26", "pandas>=2.1", "matplotlib>=3.8", "seaborn>=0.13", "openpyxl>=3.1", "plotly>=5.20", "pillow>=10.0"]
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "jupyterlab>=4.0", "ipykernel>=6.29"]
-
+dev = ["pytest>=8.0", "jupyterlab>=4.0", "ipykernel>=6.29", "ruff>=0.6", "black>=24.0"]
 [tool.setuptools]
 package-dir = {"" = "src"}
-
 [tool.setuptools.packages.find]
 where = ["src"]
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+[tool.black]
+line-length = 88
+target-version = ["py310"]
