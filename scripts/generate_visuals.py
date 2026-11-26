@@ -42,6 +42,14 @@ CORRELATION_COLUMNS = [
     "EAB BC (psi)",
 ]
 CATEGORICAL_COLUMNS = ["Throttle", "PCS Open", "IBS"]
+DISPLAY_LABELS = {
+    "distance_to_stop_m": "Jarak tersisa menuju titik henti akhir (m)",
+    "Speed (km/h)": "Kecepatan (km/jam)",
+    "Acceleration (m/sec²)": "Akselerasi (m/s²)",
+    "Load (amps)": "Arus motor traksi (A)",
+    "EAB BP (psi)": "Tekanan Brake Pipe (psi)",
+    "EAB BC (psi)": "Tekanan Brake Cylinder (psi)",
+}
 
 
 def load_data(path: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -210,7 +218,7 @@ def chapter_v_distributions(df: pd.DataFrame, out: Path) -> None:
     for ax, column in zip(axes.flat, numeric):
         values = df[column].dropna()
         ax.hist(values, bins=min(15, max(5, values.nunique())), edgecolor="white")
-        ax.set_title(column)
+        ax.set_title(DISPLAY_LABELS.get(column, column))
         ax.set_ylabel("Frekuensi")
         ax.grid(axis="y", alpha=0.2)
     for ax in axes.flat[len(numeric) :]:
@@ -384,7 +392,7 @@ def chapter_viii_outliers(df: pd.DataFrame, out: Path) -> None:
         count = int(((values < low) | (values > high)).sum())
         summary.append((column, len(values), count, low, high))
         ax.boxplot(values, orientation="vertical")
-        ax.set_title(f"{column}\nKandidat IQR: {count}")
+        ax.set_title(f"{DISPLAY_LABELS.get(column, column)}\nKandidat IQR: {count}")
         ax.grid(axis="y", alpha=0.2)
     fig.suptitle("BAB VIII — Box Plot dan Pemeriksaan Pencilan IQR")
     save(fig, out / "bab_viii" / "boxplot_iqr.png")
@@ -875,7 +883,7 @@ def extended_chapter_v(df, out):
     for ax, col in zip(axes.flat, cols):
         vals = df[col].dropna()
         ax.boxplot(vals, showmeans=True, meanline=True)
-        ax.set_title(col, fontsize=9)
+        ax.set_title(DISPLAY_LABELS.get(col, col), fontsize=9)
         ax.grid(axis="y", alpha=0.2)
     for ax in axes.flat[len(cols) :]:
         ax.remove()
@@ -1103,7 +1111,10 @@ def extended_chapter_viii(df, out):
         columns=["Variabel", "Kandidat IQR", "n valid", "Batas bawah", "Batas atas"],
     )
     fig, ax = plt.subplots(figsize=(9, 4.2), constrained_layout=True)
-    ax.barh(summary["Variabel"], summary["Kandidat IQR"])
+    display_variables = summary["Variabel"].map(
+        lambda value: DISPLAY_LABELS.get(value, value)
+    )
+    ax.barh(display_variables, summary["Kandidat IQR"])
     ax.set_xlabel("Jumlah kandidat menurut aturan IQR")
     ax.set_title("BAB VIII — Jumlah Kandidat Pencilan IQR per Variabel", weight="bold")
     ax.grid(axis="x", alpha=0.2)
