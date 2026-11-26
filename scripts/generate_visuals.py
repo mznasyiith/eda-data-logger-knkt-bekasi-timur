@@ -310,8 +310,9 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
     brake.write_html(folder / "tekanan_bp_bc_interaktif.html", include_plotlyjs="cdn")
 
     corr = df[CORRELATION_COLUMNS].corr(method="spearman", min_periods=3)
+    corr_display = corr.rename(index=DISPLAY_LABELS, columns=DISPLAY_LABELS)
     heat = px.imshow(
-        corr,
+        corr_display,
         text_auto=".2f",
         zmin=-1,
         zmax=1,
@@ -331,15 +332,18 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
     counts.to_csv(folder / "jumlah_pasangan_valid_korelasi.csv")
 
     fig, ax = plt.subplots(figsize=(8.5, 6.5), constrained_layout=True)
-    image = ax.imshow(corr, vmin=-1, vmax=1, cmap="RdBu_r", aspect="auto")
+    image = ax.imshow(corr_display, vmin=-1, vmax=1, cmap="RdBu_r", aspect="auto")
     ax.set_xticks(
-        range(len(corr.columns)), labels=corr.columns, rotation=40, ha="right"
+        range(len(corr_display.columns)),
+        labels=corr_display.columns,
+        rotation=40,
+        ha="right",
     )
-    ax.set_yticks(range(len(corr.index)), labels=corr.index)
+    ax.set_yticks(range(len(corr_display.index)), labels=corr_display.index)
     ax.set_title("Korelasi Spearman — Variabel Operasional Terpilih")
-    for i in range(len(corr.index)):
-        for j in range(len(corr.columns)):
-            value = corr.iloc[i, j]
+    for i in range(len(corr_display.index)):
+        for j in range(len(corr_display.columns)):
+            value = corr_display.iloc[i, j]
             ax.text(j, i, f"{value:.2f}", ha="center", va="center", fontsize=8)
     fig.colorbar(image, ax=ax, label="Koefisien Spearman")
     save(fig, folder / "heatmap_spearman.png")
@@ -1077,9 +1081,12 @@ def extended_chapter_vii(df, out):
         points = ax.scatter(
             valid[a], valid[b], c=valid["Elapsed (s)"], cmap="viridis", s=40
         )
-        ax.set_xlabel(a)
-        ax.set_ylabel(b)
-        ax.set_title(f"{a} vs {b}", fontsize=9)
+        ax.set_xlabel(DISPLAY_LABELS.get(a, a))
+        ax.set_ylabel(DISPLAY_LABELS.get(b, b))
+        ax.set_title(
+            f"{DISPLAY_LABELS.get(a, a)} vs {DISPLAY_LABELS.get(b, b)}",
+            fontsize=9,
+        )
         ax.grid(alpha=0.2)
     fig.colorbar(points, ax=axes, label="Detik sejak rekaman pertama")
     fig.suptitle(
