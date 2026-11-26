@@ -13,3 +13,5 @@
 | ADR-008 | Empat kolom status kosong pada 26 rekaman Tabel 9–10 | Kolom tidak ditampilkan pada dua tabel tersebut; bukan bukti kegagalan sensor |
 | ADR-009 | Timestamp analitis dibentuk dengan format eksplisit `%d/%m/%Y %H.%M.%S` | Hanya menyatukan tanggal dan waktu dalam tabel yang sama; bukan sinkronisasi lintas-sumber |
 | ADR-010 | Tidak melakukan imputasi, scaling, encoding, atau winsorization secara otomatis | Transformasi hanya dilakukan bila ada kebutuhan analitis dan justifikasi domain |
+
+| ADR-011 | `km` dan `m` adalah komponen satu besaran jarak tersisa menuju titik henti akhir; buat `distance_to_stop_m = km * 1000 + m` pada salinan analisis | Didukung Gambar 36 dan Bagian II.3 serta Tabel 6–10 laporan KNKT. Kolom mentah dipertahankan; `km` dan `m` dikeluarkan dari analisis statistik terpisah. Besaran gabungan bukan chainage absolut. Lihat `docs/02_data_understanding/source_validation_distance.md`; beberapa narasi chainage sumber tidak konsisten dan tidak direkonstruksi. |

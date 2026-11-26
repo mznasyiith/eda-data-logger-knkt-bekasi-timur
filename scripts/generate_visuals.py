@@ -18,13 +18,15 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 
+from eda_knkt.transformation import add_distance_to_stop_feature
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "data" / "processed" / "data_logger_knkt_tabel_6_10.csv"
 DEFAULT_OUTPUT = ROOT / "outputs"
 
+SOURCE_DISTANCE_COLUMNS = ["km", "m"]
 NUMERIC_COLUMNS = [
-    "km",
-    "m",
+    "distance_to_stop_m",
     "Speed (km/h)",
     "Acceleration (m/sec²)",
     "Load (amps)",
@@ -32,6 +34,7 @@ NUMERIC_COLUMNS = [
     "EAB BC (psi)",
 ]
 CORRELATION_COLUMNS = [
+    "distance_to_stop_m",
     "Speed (km/h)",
     "Acceleration (m/sec²)",
     "Load (amps)",
@@ -39,12 +42,29 @@ CORRELATION_COLUMNS = [
     "EAB BC (psi)",
 ]
 CATEGORICAL_COLUMNS = ["Throttle", "PCS Open", "IBS"]
+DISPLAY_LABELS = {
+    "distance_to_stop_m": "Jarak tersisa menuju titik henti akhir (m)",
+    "Speed (km/h)": "Kecepatan (km/jam)",
+    "Acceleration (m/sec²)": "Akselerasi (m/s²)",
+    "Load (amps)": "Arus motor traksi (A)",
+    "EAB BP (psi)": "Tekanan Brake Pipe (psi)",
+    "EAB BC (psi)": "Tekanan Brake Cylinder (psi)",
+}
 
 
 def load_data(path: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Return immutable-style raw transcription and a typed analysis copy."""
     raw = pd.read_csv(path, dtype=str, keep_default_na=False)
-    required = {"Date", "Time", "Speed (km/h)", *NUMERIC_COLUMNS}
+    required = {
+        "Date",
+        "Time",
+        "Speed (km/h)",
+        *SOURCE_DISTANCE_COLUMNS,
+        "Acceleration (m/sec²)",
+        "Load (amps)",
+        "EAB BP (psi)",
+        "EAB BC (psi)",
+    }
     missing = required.difference(raw.columns)
     if missing:
         raise ValueError(f"Required columns are missing: {sorted(missing)}")
@@ -55,10 +75,20 @@ def load_data(path: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
         format="%d/%m/%Y %H.%M.%S",
         errors="raise",
     )
-    for column in NUMERIC_COLUMNS:
+    numeric_source_columns = [
+        *SOURCE_DISTANCE_COLUMNS,
+        "Speed (km/h)",
+        "Acceleration (m/sec²)",
+        "Load (amps)",
+        "EAB BP (psi)",
+        "EAB BC (psi)",
+    ]
+    for column in numeric_source_columns:
         df[column] = pd.to_numeric(
             df[column].replace({"---": np.nan, "": np.nan}), errors="coerce"
         )
+    # Keep source columns in raw; analyze their verified combined distance only.
+    df = add_distance_to_stop_feature(df)
     for column in CATEGORICAL_COLUMNS:
         if column in df.columns:
             df[column] = df[column].replace("", np.nan)
@@ -188,7 +218,7 @@ def chapter_v_distributions(df: pd.DataFrame, out: Path) -> None:
     for ax, column in zip(axes.flat, numeric):
         values = df[column].dropna()
         ax.hist(values, bins=min(15, max(5, values.nunique())), edgecolor="white")
-        ax.set_title(column)
+        ax.set_title(DISPLAY_LABELS.get(column, column))
         ax.set_ylabel("Frekuensi")
         ax.grid(axis="y", alpha=0.2)
     for ax in axes.flat[len(numeric) :]:
@@ -253,14 +283,23 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
         y="Speed (km/h)",
         markers=True,
         title="KA 4B — Deret Waktu Kecepatan",
-        hover_data=["Elapsed (s)", "m", "EAB BP (psi)", "EAB BC (psi)"],
+        hover_data=[
+            "Elapsed (s)",
+            "distance_to_stop_m",
+            "EAB BP (psi)",
+            "EAB BC (psi)",
+        ],
     )
     chart.update_layout(
         template="plotly_white",
         xaxis_title="Waktu sumber",
         yaxis_title="Kecepatan (km/jam)",
     )
-    chart.write_html(folder / "deret_waktu_interaktif.html", include_plotlyjs="cdn")
+    chart.write_html(
+        folder / "deret_waktu_interaktif.html",
+        include_plotlyjs="cdn",
+        div_id="eda-deret-waktu-interaktif",
+    )
 
     brake = px.line(
         df,
@@ -272,12 +311,17 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
     brake.update_layout(
         template="plotly_white", xaxis_title="Waktu sumber", yaxis_title="Tekanan (psi)"
     )
-    brake.write_html(folder / "tekanan_bp_bc_interaktif.html", include_plotlyjs="cdn")
+    brake.write_html(
+        folder / "tekanan_bp_bc_interaktif.html",
+        include_plotlyjs="cdn",
+        div_id="eda-tekanan-bp-bc-interaktif",
+    )
 
     corr = df[CORRELATION_COLUMNS].corr(method="spearman", min_periods=3)
+    corr_display = corr.rename(index=DISPLAY_LABELS, columns=DISPLAY_LABELS)
     heat = px.imshow(
-        corr,
-        text_auto=".2f",
+        corr_display,
+        text_auto=".3f",
         zmin=-1,
         zmax=1,
         color_continuous_scale="RdBu_r",
@@ -286,7 +330,11 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
         title="Korelasi Spearman — Variabel Operasional Terpilih",
     )
     heat.update_layout(template="plotly_white")
-    heat.write_html(folder / "heatmap_spearman_interaktif.html", include_plotlyjs="cdn")
+    heat.write_html(
+        folder / "heatmap_spearman_interaktif.html",
+        include_plotlyjs="cdn",
+        div_id="eda-heatmap-spearman-interaktif",
+    )
     counts = pd.DataFrame(
         index=CORRELATION_COLUMNS, columns=CORRELATION_COLUMNS, dtype=int
     )
@@ -296,16 +344,19 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
     counts.to_csv(folder / "jumlah_pasangan_valid_korelasi.csv")
 
     fig, ax = plt.subplots(figsize=(8.5, 6.5), constrained_layout=True)
-    image = ax.imshow(corr, vmin=-1, vmax=1, cmap="RdBu_r", aspect="auto")
+    image = ax.imshow(corr_display, vmin=-1, vmax=1, cmap="RdBu_r", aspect="auto")
     ax.set_xticks(
-        range(len(corr.columns)), labels=corr.columns, rotation=40, ha="right"
+        range(len(corr_display.columns)),
+        labels=corr_display.columns,
+        rotation=40,
+        ha="right",
     )
-    ax.set_yticks(range(len(corr.index)), labels=corr.index)
+    ax.set_yticks(range(len(corr_display.index)), labels=corr_display.index)
     ax.set_title("Korelasi Spearman — Variabel Operasional Terpilih")
-    for i in range(len(corr.index)):
-        for j in range(len(corr.columns)):
-            value = corr.iloc[i, j]
-            ax.text(j, i, f"{value:.2f}", ha="center", va="center", fontsize=8)
+    for i in range(len(corr_display.index)):
+        for j in range(len(corr_display.columns)):
+            value = corr_display.iloc[i, j]
+            ax.text(j, i, f"{value:.3f}", ha="center", va="center", fontsize=8)
     fig.colorbar(image, ax=ax, label="Koefisien Spearman")
     save(fig, folder / "heatmap_spearman.png")
 
@@ -340,7 +391,7 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
 
 def chapter_viii_outliers(df: pd.DataFrame, out: Path) -> None:
     columns = [
-        "m",
+        "distance_to_stop_m",
         "Speed (km/h)",
         "Acceleration (m/sec²)",
         "Load (amps)",
@@ -357,7 +408,7 @@ def chapter_viii_outliers(df: pd.DataFrame, out: Path) -> None:
         count = int(((values < low) | (values > high)).sum())
         summary.append((column, len(values), count, low, high))
         ax.boxplot(values, orientation="vertical")
-        ax.set_title(f"{column}\nKandidat IQR: {count}")
+        ax.set_title(f"{DISPLAY_LABELS.get(column, column)}\nKandidat IQR: {count}")
         ax.grid(axis="y", alpha=0.2)
     fig.suptitle("BAB VIII — Box Plot dan Pemeriksaan Pencilan IQR")
     save(fig, out / "bab_viii" / "boxplot_iqr.png")
@@ -638,7 +689,7 @@ def extended_chapter_ii(df, raw, out):
         ],
         [
             "Apakah ada nilai ekstrem?",
-            "m, Speed, Acceleration, Load, BP, BC",
+            "distance_to_stop_m, Speed, Acceleration, Load, BP, BC",
             "IQR dan konteks waktu",
         ],
         [
@@ -667,7 +718,7 @@ def extended_chapter_ii(df, raw, out):
     ax.axis("off")
     ax.set_title("BAB II — Ringkasan Skema Dataset", fontsize=14, weight="bold")
     groups = [
-        ("Waktu/lokasi", "Date • Time • km • m"),
+        ("Waktu/lokasi", "Date • Time • komponen jarak km+m"),
         ("Dinamika", "Speed • Acceleration • Load"),
         ("Pengereman", "EAB BP • EAB BC"),
         ("Status", "DB Excit • Throttle • PCS Open\nDir Call • DB Set • DB Star • IBS"),
@@ -848,7 +899,7 @@ def extended_chapter_v(df, out):
     for ax, col in zip(axes.flat, cols):
         vals = df[col].dropna()
         ax.boxplot(vals, showmeans=True, meanline=True)
-        ax.set_title(col, fontsize=9)
+        ax.set_title(DISPLAY_LABELS.get(col, col), fontsize=9)
         ax.grid(axis="y", alpha=0.2)
     for ax in axes.flat[len(cols) :]:
         ax.remove()
@@ -1042,9 +1093,12 @@ def extended_chapter_vii(df, out):
         points = ax.scatter(
             valid[a], valid[b], c=valid["Elapsed (s)"], cmap="viridis", s=40
         )
-        ax.set_xlabel(a)
-        ax.set_ylabel(b)
-        ax.set_title(f"{a} vs {b}", fontsize=9)
+        ax.set_xlabel(DISPLAY_LABELS.get(a, a))
+        ax.set_ylabel(DISPLAY_LABELS.get(b, b))
+        ax.set_title(
+            f"{DISPLAY_LABELS.get(a, a)} vs {DISPLAY_LABELS.get(b, b)}",
+            fontsize=9,
+        )
         ax.grid(alpha=0.2)
     fig.colorbar(points, ax=axes, label="Detik sejak rekaman pertama")
     fig.suptitle(
@@ -1057,7 +1111,7 @@ def extended_chapter_viii(df, out):
     folder = out / "bab_viii"
     folder.mkdir(parents=True, exist_ok=True)
     cols = [
-        "m",
+        "distance_to_stop_m",
         "Speed (km/h)",
         "Acceleration (m/sec²)",
         "Load (amps)",
@@ -1076,10 +1130,17 @@ def extended_chapter_viii(df, out):
         columns=["Variabel", "Kandidat IQR", "n valid", "Batas bawah", "Batas atas"],
     )
     fig, ax = plt.subplots(figsize=(9, 4.2), constrained_layout=True)
-    ax.barh(summary["Variabel"], summary["Kandidat IQR"])
+    display_variables = summary["Variabel"].map(
+        lambda value: DISPLAY_LABELS.get(value, value)
+    )
+    ax.barh(display_variables, summary["Kandidat IQR"])
     ax.set_xlabel("Jumlah kandidat menurut aturan IQR")
     ax.set_title("BAB VIII — Jumlah Kandidat Pencilan IQR per Variabel", weight="bold")
     ax.grid(axis="x", alpha=0.2)
+    max_candidates = int(summary["Kandidat IQR"].max())
+    axis_max = max(1, max_candidates + 1)
+    ax.set_xlim(0, axis_max)
+    ax.set_xticks(range(0, axis_max + 1))
     for i, value in enumerate(summary["Kandidat IQR"]):
         ax.text(value + 0.03, i, str(value), va="center")
     save(fig, folder / "jumlah_kandidat_iqr.png")

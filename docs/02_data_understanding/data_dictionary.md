@@ -16,8 +16,8 @@
 |---|---|---|---|---|
 | `Date` | object | Temporal | DD/MM/YYYY | Tanggal yang dicetak pada rekaman Data Logger. |
 | `Time` | object | Temporal | HH.MM.SS | Waktu yang dicetak pada rekaman Data Logger; titik digunakan sebagai pemisah komponen waktu. |
-| `km` | integer | Posisi | km | Komponen kilometer posisi sebagaimana dicetak pada sumber; dipertahankan terpisah dari kolom meter. |
-| `m` | integer | Posisi | m | Komponen meter posisi sebagaimana dicetak pada sumber; tidak digabung menjadi jarak absolut tanpa aturan teknis terverifikasi. |
+| `km` | integer | Posisi/jarak tersisa | km (komponen) | Komponen kilometer dari satu besaran jarak tersisa menuju titik henti akhir. Bukan variabel independen dan bukan chainage absolut. Pertahankan sebagai data sumber; untuk analisis gunakan `distance_to_stop_m`. |
+| `m` | integer | Posisi/jarak tersisa | m (komponen) | Komponen meter dari satu besaran jarak tersisa menuju titik henti akhir. Bukan variabel independen. Untuk analisis gabungkan dengan `km` menjadi `distance_to_stop_m`; jangan analisis `m` secara terpisah. |
 | `Speed (km/h)` | integer | Gerak | km/jam | Kecepatan yang dicatat pada tabel Data Logger. |
 | `Acceleration (m/sec²)` | object | Gerak | m/s² | Akselerasi sebagaimana dicetak; tujuh rekaman berisi placeholder `---` yang tidak boleh diperlakukan sebagai nol. |
 | `Load (amps)` | integer | Traksi/beban | ampere | Nilai arus/beban yang dicatat pada kolom sumber; interpretasi rinci mengikuti keterangan teknis laporan. |
@@ -34,12 +34,18 @@
 ## Catatan kualitas dan transformasi
 
 1. Tujuh nilai `---` pada `Acceleration (m/sec²)` adalah placeholder tekstual dari sumber.
-2. Kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star` masing-masing memiliki 26 nilai kosong karena kolom tersebut tidak ditampilkan pada Tabel 9–10.
+2. Kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star` masing-masing memiliki 26 nilai kosong pada subset Tabel 6–10 karena kolom tersebut tidak ditampilkan pada Tabel 9–10. Lampiran 7 PDF memuat empat kolom status pada tabel Data Logger lengkap; header `DB Start` pada lampiran perlu direkonsiliasi dengan `DB Star` sebelum nilai tersebut digabungkan.
 3. Untuk analisis numerik, akselerasi dapat dikonversi pada salinan kerja menggunakan `pd.to_numeric(errors="coerce")`; CSV sumber tetap dipertahankan.
 4. `Date` dan `Time` dapat digabung menjadi timestamp analitis dengan format eksplisit `%d/%m/%Y %H.%M.%S`. Ini tidak dengan sendirinya membuktikan sinkronisasi dengan sumber waktu lain.
-5. `km` dan `m` tetap terpisah sampai aturan koordinat sumber diverifikasi.
+5. Verifikasi sumber pada `source_validation_distance.md` menunjukkan `km` dan `m` adalah komponen satu besaran jarak tersisa menuju titik henti akhir, bukan dua variabel independen atau chainage absolut. Pada salinan analisis, bentuk `distance_to_stop_m = km * 1000 + m`; data mentah tetap tidak diubah.
 6. Tipe data di atas adalah tipe saat CSV dibaca Pandas pada konfigurasi yang digunakan; tipe dapat berubah jika parameter parser berubah.
 
 ## Referensi sumber
 
 Laporan Akhir Investigasi KNKT Nomor KNKT.26.04.03.02, Tabel 6–10, halaman tercetak 65–68 (halaman PDF 75–78).
+
+## Variabel turunan tervalidasi
+
+| Nama analitis | Rumus | Satuan | Definisi | Batas interpretasi |
+|---|---|---|---|---|
+| `distance_to_stop_m` | `km * 1000 + m` | m | Jarak tersisa menuju titik henti akhir menurut representasi Tabel 6–10 | Bukan chainage absolut, bukan jarak ke titik tabrakan, dan bukan jarak pengereman murni. Konflik beberapa narasi chainage KNKT dicatat dalam `source_validation_distance.md`. |

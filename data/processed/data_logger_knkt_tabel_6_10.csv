@@ -11,7 +11,7 @@ Date,Time,km,m,Speed (km/h),Acceleration (m/sec²),Load (amps),EAB BP (psi),EAB 
 27/04/2026,20.51.27,1,70,107,-0.04,168,65,0,Off,T7,Closed,For,No,No,Rel
 27/04/2026,20.51.34,0,863,105,-0.14,168,62,0,Off,T7,Closed,For,No,No,Rel
 27/04/2026,20.51.35,0,834,104,-0.15,168,60,0,Off,T6,Closed,For,No,No,Rel
-27/04/2026,20.51.36,0,805,104,-0.17,168,57,0,Off,T6,Closed,For,No,No,Rel
+27/04/2026,20.51.36,0,805,104,-0.17,160,57,0,Off,T6,Closed,For,No,No,Rel
 27/04/2026,20.51.37,0,776,103,-0.23,152,55,0,Off,T5,Closed,For,No,No,Rel
 27/04/2026,20.51.38,0,748,102,-0.27,144,52,3,Off,T5,Closed,For,No,No,Rel
 27/04/2026,20.51.39,0,720,101,-0.31,136,51,8,Off,T5,Closed,For,No,No,Rel

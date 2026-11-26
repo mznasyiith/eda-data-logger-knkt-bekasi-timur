@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pytest
 
+from eda_knkt.config import OUTPUTS_DIR
 from eda_knkt.visualization import (
     plot_categorical_counts,
     plot_correlation_heatmap,
@@ -49,3 +50,14 @@ def test_plot_rejects_invalid_column_type_or_name():
         plot_numeric_distribution(df, "category")
     with pytest.raises(KeyError):
         plot_scatter(df, "missing", "category")
+
+
+def test_interactive_html_uses_stable_plotly_div_ids():
+    expected = {
+        "bab_vii/deret_waktu_interaktif.html": "eda-deret-waktu-interaktif",
+        "bab_vii/tekanan_bp_bc_interaktif.html": "eda-tekanan-bp-bc-interaktif",
+        "bab_vii/heatmap_spearman_interaktif.html": "eda-heatmap-spearman-interaktif",
+    }
+    for relative_path, div_id in expected.items():
+        html = (OUTPUTS_DIR / relative_path).read_text(encoding="utf-8")
+        assert f'id="{div_id}"' in html

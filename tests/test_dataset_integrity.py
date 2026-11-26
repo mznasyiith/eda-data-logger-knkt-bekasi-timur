@@ -44,7 +44,7 @@ def test_merged_dataset_has_no_duplicate_rows():
     assert df.duplicated().sum() == 0
 
 
-def test_merged_dataset_retains_known_time_gap_without_interpolation():
+def test_selected_tables_subset_retains_scope_gap_without_interpolation():
     df = pd.read_csv(DATASET)
     timestamps = pd.to_datetime(
         df["Date"] + " " + df["Time"].str.replace(".", ":", regex=False),

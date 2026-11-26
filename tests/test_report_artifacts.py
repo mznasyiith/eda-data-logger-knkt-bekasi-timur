@@ -50,3 +50,27 @@ def test_categorical_timeline_generator_does_not_create_missing_category():
     assert "observed = df[col].notna()" in source
     assert "Nilai kosong ditampilkan sebagai gap" in source
     assert "intervals[position] == 1" in source
+
+def test_local_markdown_and_html_links_resolve():
+    from urllib.parse import unquote, urlsplit
+
+    import re
+
+    markdown_files = list(REPO_ROOT.rglob("*.md"))
+    broken = []
+    markdown_link = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+    html_link = re.compile(r"""(?:href|src)=["']([^"']+)["']""", re.IGNORECASE)
+
+    for source in markdown_files:
+        content = source.read_text(encoding="utf-8")
+        targets = markdown_link.findall(content) + html_link.findall(content)
+        for raw_target in targets:
+            target = raw_target.strip().split(maxsplit=1)[0].strip("<>")
+            parsed = urlsplit(target)
+            if parsed.scheme or parsed.netloc or not parsed.path:
+                continue
+            resolved = (source.parent / unquote(parsed.path)).resolve()
+            if not resolved.exists():
+                broken.append(f"{source.relative_to(REPO_ROOT)} -> {target}")
+
+    assert not broken, "Broken local documentation links: " + "; ".join(broken)

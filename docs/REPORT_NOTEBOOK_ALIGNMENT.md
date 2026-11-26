@@ -6,10 +6,12 @@ Dokumen ini memetakan sembilan bab laporan utama ke notebook, generator, modul a
 
 1. Dataset analitis merupakan transkripsi Tabel 6–10: 58 rekaman unik × 16 kolom dari 59 baris sumber.
 2. Raw CSV dibaca sebagai teks; parsing timestamp dan konversi numerik dilakukan pada salinan analisis.
-3. Empat kolom status yang tidak ditampilkan pada Tabel 9–10 dibedakan dari tujuh placeholder akselerasi `---`.
-4. Tidak ada interpolasi pada gap 20:51:28–20:51:33. Grafik waktu memutus garis pada interval lebih dari satu detik.
-5. Setiap gambar yang dirujuk laporan harus mempunyai file hasil pada `outputs/`.
-6. Klaim kuantitatif harus dapat ditelusuri ke dataset, notebook, generator, tabel sumber KNKT, atau pengujian.
+3. Empat kolom status yang tidak ditampilkan pada Tabel 9–10 dibedakan dari tujuh placeholder akselerasi `---`; Lampiran 7 memuat nilai status pada tabel lengkap, tetapi header `DB Start` perlu direkonsiliasi dengan `DB Star`.
+4. Kolom sumber `km` dan `m` dipertahankan, tetapi analisis jarak menggunakan fitur turunan `distance_to_stop_m = km * 1000 + m` sesuai verifikasi sumber KNKT. Fitur tersebut berarti jarak tersisa menuju titik henti akhir, bukan chainage absolut.
+5. Statistik, distribusi, korelasi, dan IQR tidak boleh memperlakukan `km` dan `m` sebagai variabel independen.
+6. Subset Tabel 6–10 tidak memuat 20:51:28–20:51:33, tetapi Lampiran 7 PDF memuat enam rekaman tersebut. Analisis saat ini sengaja mempertahankan cakupan Tabel 6–10; tidak ada interpolasi atau penggabungan diam-diam.
+7. Setiap gambar yang dirujuk laporan harus mempunyai file hasil pada `outputs/`.
+8. Klaim kuantitatif harus dapat ditelusuri ke dataset, notebook, generator, tabel sumber KNKT, atau pengujian.
 
 ## Matriks bab, notebook, modul, dan pengujian
 
@@ -19,10 +21,10 @@ Dokumen ini memetakan sembilan bab laporan utama ke notebook, generator, modul a
 | II. Memahami data | `notebooks/02_data_understanding.ipynb` | `extended_chapter_ii`; `ingestion.py` | `test_dataset_integrity.py`; `test_validation.py` |
 | III. Memuat dan memeriksa data | `notebooks/03_importing_and_inspecting.ipynb` | `chapter_iii_profile`; `extended_chapter_iii`; `ingestion.py`; `validation.py` | `test_dataset_integrity.py`; `test_validation.py`; `test_notebooks.py` |
 | IV. Penilaian kualitas data | `notebooks/04_handling_missing_data.ipynb` | `chapter_iv_missingness`; `extended_chapter_iv`; `cleaning.py`; `validation.py` | `test_cleaning.py`; `test_dataset_integrity.py`; `test_visualization.py` |
-| V. Eksplorasi karakteristik | `notebooks/05_exploring_characteristics.ipynb` | `chapter_v_distributions`; `extended_chapter_v`; `statistics.py` | `test_statistics.py`; `test_visualization.py` |
-| VI. Transformasi dan rekayasa fitur | `notebooks/06_data_transformation.ipynb` | `chapter_vi_temporal_feature`; `extended_chapter_vi`; `transformation.py` | `test_transformation.py`; `test_notebooks.py` |
+| V. Eksplorasi karakteristik | `notebooks/05_exploring_characteristics.ipynb` | `chapter_v_distributions`; `extended_chapter_v`; `statistics.py`; fitur `distance_to_stop_m` | `test_statistics.py`; `test_visualization.py` |
+| VI. Transformasi dan rekayasa fitur | `notebooks/06_data_transformation.ipynb` | `chapter_vi_temporal_feature`; `extended_chapter_vi`; `transformation.py` (`add_distance_to_stop_feature`) | `test_transformation.py`; `test_notebooks.py` |
 | VII. Visualisasi dan hubungan antarvariabel | `notebooks/07_visualizing_relationships.ipynb` | `chapter_vii_visuals`; `extended_chapter_vii`; `visualization.py`; `statistics.py` | `test_visualization.py`; `test_notebooks.py` |
-| VIII. Pencilan dan anomali | `notebooks/08_handling_outliers.ipynb` | `chapter_viii_outliers`; `extended_chapter_viii`; `statistics.py` | `test_statistics.py`; `test_validation.py` |
+| VIII. Pencilan dan anomali | `notebooks/08_handling_outliers.ipynb` | `chapter_viii_outliers`; `extended_chapter_viii`; `statistics.py`; IQR pada `distance_to_stop_m` | `test_statistics.py`; `test_validation.py` |
 | IX. Temuan dan rekomendasi | `notebooks/09_findings_and_insights.ipynb` | `chapter_ix_findings`; `extended_chapter_ix`; `reporting.py` | `test_reporting.py`; `test_notebooks.py`; `test_bab_ix_audit.py` |
 
 `notebooks/00_project_setup.ipynb` merupakan notebook penyiapan lingkungan, bukan bab laporan.
@@ -83,7 +85,7 @@ Dokumen ini memetakan sembilan bab laporan utama ke notebook, generator, modul a
 | 59 baris sumber, 58 rekaman unik, 16 kolom | Data_By_Source, CSV analitis, `load_data` | `test_dataset_integrity.py` |
 | 26 kosong pada empat kolom status | CSV, `extended_chapter_iv` | `test_dataset_integrity.py` |
 | 7 placeholder akselerasi | CSV, `load_data`, `extended_chapter_iv` | `test_dataset_integrity.py` |
-| Gap 20:51:28–20:51:33 | Timestamp CSV dan interval aktual | `test_dataset_integrity.py`; `test_visualization.py` |
+| Jeda pada subset Tabel 6–10 (20:51:28–20:51:33); Lampiran 7 memuat enam rekaman tambahan | Timestamp CSV, batas cakupan, dan dokumentasi sumber | `test_dataset_integrity.py`; `test_bab_ix_audit.py`; `test_visualization.py` |
 | Statistik deskriptif dan momen | Notebook 05, `statistics.py`, generator | `test_statistics.py` |
 | Perubahan parameter waktu | CSV, Notebook 07, generator, tabel sumber KNKT | `test_visualization.py`; review silang |
 | Kandidat IQR | `outputs/bab_viii/ringkasan_iqr.csv` | `test_statistics.py`; `test_bab_ix_audit.py` |
@@ -123,3 +125,7 @@ Pengujian otomatis memeriksa integritas logika dan file; pengujian tersebut tida
 - [ ] `pytest` lulus.
 - [ ] CI commit final sukses dan log diperiksa.
 - [ ] Laporan, katalog, matriks penyelarasan, dan README menggunakan angka serta nama file yang sama.
+
+## Catatan verifikasi jarak (26 November 2026)
+
+Definisi dan bukti sumber untuk `distance_to_stop_m` didokumentasikan pada `docs/02_data_understanding/source_validation_distance.md`. Pipeline visual (`scripts/generate_visuals.py`) dan notebook 05–09 membentuk fitur tersebut pada salinan analisis. Kolom mentah `km` dan `m` tidak diubah. Generator menggunakan fitur jarak gabungan untuk statistik numerik, visualisasi, korelasi Spearman, dan IQR. Notebook 09 menghasilkan ringkasan temuan dari statistik dan frekuensi yang dihitung, bukan placeholder temuan.

@@ -4,6 +4,7 @@ import pytest
 from eda_knkt.transformation import (
     convert_datetime_columns,
     convert_numeric_columns,
+    add_distance_to_stop_feature,
     select_columns,
     sort_dataframe,
 )
@@ -64,3 +65,24 @@ def test_transformations_reject_invalid_error_mode():
     source = pd.DataFrame({"speed": ["10"]})
     with pytest.raises(ValueError, match="errors"):
         convert_numeric_columns(source, ["speed"], errors="ignore")
+
+
+
+def test_add_distance_to_stop_feature_combines_components_and_preserves_source():
+    source = pd.DataFrame({"km": [1, 0, 0], "m": [341, 26, 0]})
+    result = add_distance_to_stop_feature(source)
+    assert result["distance_to_stop_m"].tolist() == [1341, 26, 0]
+    assert result[["km", "m"]].equals(source[["km", "m"]])
+    assert "distance_to_stop_m" not in source.columns
+
+
+def test_add_distance_to_stop_feature_rejects_invalid_meter_component():
+    source = pd.DataFrame({"km": [0], "m": [1000]})
+    with pytest.raises(ValueError, match="below 1000"):
+        add_distance_to_stop_feature(source)
+
+
+def test_add_distance_to_stop_feature_rejects_negative_components():
+    source = pd.DataFrame({"km": [0], "m": [-1]})
+    with pytest.raises(ValueError, match="non-negative"):
+        add_distance_to_stop_feature(source)

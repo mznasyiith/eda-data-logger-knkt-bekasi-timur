@@ -6,7 +6,7 @@ Dokumen ini menjelaskan visual yang dihasilkan secara otomatis oleh `scripts/gen
 
 - Data merupakan transkripsi Tabel 6–10 laporan KNKT, bukan ekspor biner perangkat logger.
 - Jumlah data analitis 58 rekaman unik; sumber awal 59 baris.
-- Gap timestamp 20:51:28–20:51:33 tidak diinterpolasi.
+- Subset Tabel 6–10 tidak memuat timestamp 20:51:28–20:51:33; Lampiran 7 PDF KNKT memuat enam rekaman tambahan yang belum dimasukkan. Grafik hanya menggambarkan subset Tabel 6–10 dan tidak menginterpolasi jeda tersebut.
 - Tujuh tanda `---` pada akselerasi adalah placeholder, bukan nol.
 - Empat kolom status kosong pada bagian sumber yang tidak menampilkan kolom tersebut; ini tidak otomatis menunjukkan kerusakan sensor.
 - Korelasi dan perubahan bersama tidak membuktikan sebab-akibat.
@@ -58,7 +58,7 @@ Tidak dilakukan uji MCAR/MAR/MNAR, imputasi, KNN imputation, atau penghapusan ba
 ## Bab V — Eksplorasi karakteristik data
 
 ### Visual yang dipertahankan
-- [Distribusi numerik](../outputs/bab_v/distribusi_numerik.png): histogram frekuensi nilai numerik.
+- [Distribusi numerik](../outputs/bab_v/distribusi_numerik.png): histogram frekuensi nilai numerik analitis, termasuk `distance_to_stop_m` (jarak tersisa menuju titik henti akhir). Kolom sumber `km` dan `m` tidak diperlakukan sebagai variabel numerik terpisah.
 - [Frekuensi kategorikal](../outputs/bab_v/frekuensi_kategorikal.png): jumlah rekaman pada kategori Throttle, PCS Open, dan IBS.
 
 ### Visual tambahan
@@ -73,7 +73,7 @@ Tidak dilakukan uji MCAR/MAR/MNAR, imputasi, KNN imputation, atau penghapusan ba
 - [Interval temporal](../outputs/bab_vi/interval_temporal.png): menunjukkan selang waktu aktual antarre­kaman, termasuk interval yang lebih panjang.
 
 ### Visual tambahan
-- [Alur transformasi aktual](../outputs/bab_vi/alur_transformasi_aktual.png): mendokumentasikan pembuatan salinan analisis, parsing waktu, konversi numerik, rekayasa fitur waktu, dan validasi jumlah baris.
+- [Alur transformasi aktual](../outputs/bab_vi/alur_transformasi_aktual.png): mendokumentasikan pembuatan salinan analisis, parsing waktu, konversi numerik, pembentukan `distance_to_stop_m = km * 1000 + m`, rekayasa fitur waktu, dan validasi jumlah baris.
 - [Pemetaan tipe dan konversi](../outputs/bab_vi/pemetaan_tipe_dan_konversi.png): menunjukkan perlakuan setiap kolom dari pembacaan raw menuju tipe pada salinan analisis.
 
 Tidak dibuat visual before-after log transform, scaling, atau encoding karena operasi tersebut tidak diterapkan. Diagram proses di atas menjelaskan transformasi yang benar-benar dilakukan.
@@ -83,7 +83,7 @@ Tidak dibuat visual before-after log transform, scaling, atau encoding karena op
 ### Visual yang dipertahankan
 - [Kecepatan terhadap waktu](../outputs/bab_vii/grafik_kecepatan_waktu.png): menunjukkan perubahan kecepatan sesuai urutan timestamp.
 - [Tekanan BP dan BC](../outputs/bab_vii/tekanan_bp_bc_waktu.png): memperlihatkan dua tekanan pengereman dalam satuan psi.
-- [Heatmap Spearman](../outputs/bab_vii/heatmap_spearman.png): menampilkan asosiasi monotonik antarvariabel numerik terpilih.
+- [Heatmap Spearman](../outputs/bab_vii/heatmap_spearman.png): menampilkan asosiasi monotonik antarvariabel numerik terpilih, termasuk `distance_to_stop_m`; kolom sumber `km` dan `m` tidak dimasukkan terpisah.
 - [Animasi urutan kecepatan](../outputs/bab_vii/animasi_urutan_kecepatan.gif): memperlihatkan urutan titik rekaman, bukan simulasi fisik.
 - [Deret waktu interaktif](../outputs/bab_vii/deret_waktu_interaktif.html), [tekanan interaktif](../outputs/bab_vii/tekanan_bp_bc_interaktif.html), dan [heatmap interaktif](../outputs/bab_vii/heatmap_spearman_interaktif.html): versi interaktif; Plotly JS dimuat dari CDN sehingga koneksi internet diperlukan.
 
@@ -92,7 +92,7 @@ Tidak dibuat visual before-after log transform, scaling, atau encoding karena op
 - [Categorical State Timeline](../outputs/bab_vii/categorical_state_timeline.png): menampilkan titik status Throttle, PCS Open, dan IBS menurut timestamp. Segmen penghubung hanya digambar pada observasi berurutan satu detik dan kategori yang sama.
 - [Scatter hubungan parameter](../outputs/bab_vii/scatter_hubungan_parameter.png): membandingkan Speed–BP, Speed–BC, dan BP–BC. Warna menunjukkan urutan waktu, bukan kelas atau sebab.
 
-Korelasi harus dibaca sebagai eksplorasi asosiasi. Ukuran sampel kecil, urutan waktu, autokorelasi, dan perubahan fase dapat memengaruhi koefisien.
+Korelasi harus dibaca sebagai eksplorasi asosiasi. Ukuran sampel kecil, urutan waktu, autokorelasi, dan perubahan fase dapat memengaruhi koefisien. `distance_to_stop_m` adalah jarak tersisa menuju titik henti akhir, bukan chainage absolut atau jarak pengereman murni.
 
 ## Bab VIII — Deteksi pencilan dan analisis anomali
 
@@ -101,7 +101,7 @@ Korelasi harus dibaca sebagai eksplorasi asosiasi. Ukuran sampel kecil, urutan w
 - [Ringkasan IQR](../outputs/bab_viii/ringkasan_iqr.csv): menyajikan jumlah observasi valid, pagar bawah/atas, dan jumlah kandidat.
 
 ### Visual tambahan
-- [Jumlah kandidat IQR](../outputs/bab_viii/jumlah_kandidat_iqr.png): membandingkan jumlah kandidat statistik per variabel numerik operasional.
+- [Jumlah kandidat IQR](../outputs/bab_viii/jumlah_kandidat_iqr.png): membandingkan jumlah kandidat statistik pada enam variabel analitis: `distance_to_stop_m`, kecepatan, akselerasi, arus, BP, dan BC. Kolom sumber `km` dan `m` tidak diuji terpisah.
 - [Konteks temporal parameter](../outputs/bab_viii/konteks_temporal_parameter.png): menempatkan kecepatan, BP, dan BC pada urutan waktu agar perubahan ekstrem dapat ditinjau dalam konteks. Grafik ini bukan detektor kegagalan.
 
 Tidak dilakukan trimming, winsorization, capping, Z-score control chart, Isolation Forest, atau Mahalanobis distance. Tidak adanya kandidat IQR pada beberapa variabel bukan bukti bahwa seluruh operasi normal atau bebas anomali.
@@ -127,6 +127,6 @@ Jalankan secara lokal:
 python scripts/generate_visuals.py
 ```
 
-Atau buka tab **Actions → CI → Run workflow** pada branch `main`. Workflow manual akan menjalankan pemeriksaan, menghasilkan seluruh visual, mengunggah artefak CI, dan menyimpan perubahan pada `outputs/`.
+Atau jalankan workflow CI. Workflow menghasilkan visual dari CSV, lalu mengunggah direktori `outputs/` sebagai artifact. Workflow memiliki izin read-only dan tidak melakukan commit/push; menjalankan workflow tidak mengubah berkas `outputs/` yang terlacak pada branch. Untuk hasil regenerasi yang tervalidasi, unduh [artifact `eda-visualizations` dari run 45837376001](https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur/actions/runs/45837376001/artifacts/15126266625).
 
-Semua visual tambahan dihasilkan dari generator yang sama dengan visual sebelumnya. CI menjalankan generator, mengunggah artefak, dan menyimpan output yang dihasilkan pada direktori `outputs/`.
+Semua visual tambahan dihasilkan oleh generator yang sama. Berkas pada `outputs/` di branch adalah snapshot yang dikomit; artifact CI adalah keluaran regenerasi pada commit yang diuji. Keduanya tidak boleh dianggap identik tanpa perbandingan berkas. Untuk reproduksi lokal, jalankan `python scripts/generate_visuals.py` dari root repository.
