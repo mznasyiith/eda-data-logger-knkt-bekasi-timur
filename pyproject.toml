@@ -9,7 +9,13 @@ description = "Exploratory Data Analysis of KNKT Data Logger records for the Bek
 readme = "README.md"
 requires-python = ">=3.10"
 license = {file = "LICENSE"}
-dependencies = ["numpy>=1.26", "pandas>=2.1", "matplotlib>=3.8"]
+dependencies = [
+  "numpy>=1.26",
+  "pandas>=2.1",
+  "matplotlib>=3.8",
+  "seaborn>=0.13",
+  "openpyxl>=3.1",
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "jupyterlab>=4.0", "ipykernel>=6.29"]
