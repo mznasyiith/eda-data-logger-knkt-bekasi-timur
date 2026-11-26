@@ -54,6 +54,9 @@ def test_chapter_ix_descriptive_statistics_match_dataset():
     df["distance_to_stop_m"] = df["km"] * 1000 + df["m"]
     assert df["Acceleration (m/sec²)"].notna().sum() == 51
     assert df["distance_to_stop_m"].iloc[0] == 1341
+    assert round(df["distance_to_stop_m"].mean(), 3) == 472.897
+    assert round(df["distance_to_stop_m"].median(), 3) == 378.5
+    assert round(df["distance_to_stop_m"].std(), 3) == 421.531
     assert df.loc[df["Time"] == "20.52.12", "distance_to_stop_m"].iloc[0] == 26
     assert df.loc[df["Time"] == "20.52.19", "distance_to_stop_m"].iloc[0] == 0
     assert round(df["Speed (km/h)"].mean(), 3) == 73.638
@@ -70,6 +73,8 @@ def test_chapter_ix_iqr_summary_matches_recalculation():
         df[column] = pd.to_numeric(df[column].replace("", pd.NA).replace("---", pd.NA))
     df["distance_to_stop_m"] = df["km"] * 1000 + df["m"]
     expected = pd.read_csv(IQR).set_index("variable")
+    assert set(expected.index) == set(variables)
+    assert "km" not in expected.index and "m" not in expected.index
     for column in variables:
         values = df[column].dropna()
         q1, q3 = values.quantile([0.25, 0.75])
