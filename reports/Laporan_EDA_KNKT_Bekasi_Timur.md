@@ -1,5 +1,5 @@
 # LAPORAN EXPLORATORY DATA ANALYSIS (EDA)
-## Rekaman Data Logger Lokomotif KA 4B pada Fase Pengereman hingga Tabrakan di Stasiun Bekasi Timur
+## Rekaman Data Logger Lokomotif KA 4B pada Fase Pengereman, Tabrakan, dan Berhenti di Stasiun Bekasi Timur
 
 **Mata Kuliah:** Exploratory Data Analysis  
 **Program Studi:** Magister Ilmu Komputer, Universitas Amikom Purwokerto  
@@ -70,7 +70,7 @@ Dengan demikian, cakupan laporan ini bukan hanya dua tabel terakhir, melainkan s
 
 ### Akses dan ekstraksi data
 
-Dokumen PDF diperoleh dari situs resmi KNKT. Tabel sumber ditranskripsikan ke lembar kerja Excel. Berkas kerja yang diperiksa bernama `data_logger_knkt_tabel_6_10_lengkap.xlsx`, dengan sheet `Data_Logger_Raw`, `Data_By_Source`, dan `Metadata`. CSV gabungan tersedia pada `data/processed/data_logger_knkt_tabel_6_10.csv`.
+Dokumen PDF diperoleh dari situs resmi KNKT. Tabel sumber ditranskripsikan ke lembar kerja Excel. Dalam tahap transkripsi/audit digunakan workbook kerja eksternal bernama `data_logger_knkt_tabel_6_10_lengkap.xlsx` (sheet `Data_Logger_Raw`, `Data_By_Source`, dan `Metadata`). Workbook tersebut bukan bagian dari repository dan bukan input yang dibutuhkan untuk menjalankan pipeline CI. Dataset yang menjadi input reproduksibel di repository adalah CSV `data/processed/data_logger_knkt_tabel_6_10.csv`; pembaca dapat menjalankan ulang analisis dari CSV tersebut. Workbook eksternal disebut sebagai catatan proses kerja, bukan sebagai artefak yang tersedia untuk diunduh dari repository.
 
 Transkripsi tabel merupakan proses ekstraksi manual. Audit visual independen terhadap seluruh baris Tabel 6–10 pada halaman PDF 75–78 telah dilakukan; ditemukan satu kesalahan nilai Load pada 20:51:36 (168 A pada transkripsi awal, 160 A pada PDF) dan dikoreksi. Rincian cakupan, rekonsiliasi, dan koreksi dicatat pada `docs/02_data_understanding/source_transcription_audit.md`. Dataset tidak boleh dianggap sebagai data mentah asli dari perangkat logger; dataset merupakan representasi tabel yang dipublikasikan dalam laporan investigasi. PDF sumber dipertahankan sebagai rujukan dan tidak dimodifikasi.
 
@@ -122,7 +122,7 @@ Tanggal tercatat sebagai `27/04/2026`; waktu menggunakan format `HH.MM.SS`. Kolo
 
 ## 2.4 Eksplorasi Visual Awal
 
-**Catatan versi visual pasca-audit sumber.** Seluruh visualisasi telah diregenerasi oleh CI berdasarkan dataset yang sudah dikoreksi. Bundle visual terkini tersedia pada artifact [CI run 45833131413](https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur/actions/runs/45833131413). Workflow hanya mengunggah artifact dan tidak melakukan commit otomatis; karena itu, gunakan bundle tersebut untuk melihat visualisasi terkini. Berkas PNG/HTML yang sudah terlacak di `outputs/` pada branch belum otomatis diganti oleh workflow.
+**Provenance dan versi visualisasi.** Workflow CI pada [run 45833581835](https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur/actions/runs/45833581835) menjalankan `scripts/generate_visuals.py` dari CSV yang telah dikoreksi dan mengunggah bundle `eda-visualizations` sebagai artifact. Workflow bersifat read-only: artifact tersebut adalah keluaran regenerasi pada commit yang diuji, sedangkan berkas PNG/HTML yang tertanam dan terlacak di `outputs/` pada branch merupakan snapshot repository dan tidak otomatis diperbarui oleh CI. Untuk membedakan keduanya, gunakan artifact CI sebagai keluaran regenerasi terbaru; jangan menganggap gambar branch telah berubah hanya karena CI sukses. Generator, input CSV, dan langkah eksekusi tercatat di repository sehingga keluaran dapat dibuat ulang dengan `python scripts/generate_visuals.py`.
 
 Eksplorasi visual diarahkan pada urutan waktu dan karakteristik parameter operasi. Visualisasi yang relevan untuk dataset ini meliputi:
 - Grafik garis kecepatan terhadap waktu untuk melihat penurunan kecepatan pada cuplikan yang tersedia.
@@ -681,7 +681,7 @@ Komite Nasional Keselamatan Transportasi. (2026). *Laporan akhir investigasi kec
 
 ## CATATAN REPRODUKSIBILITAS
 
-- Dataset yang dianalisis: `data_logger_knkt_tabel_6_10_lengkap.xlsx`, sheet `Data_Logger_Raw`; CSV repositori: `data/processed/data_logger_knkt_tabel_6_10.csv`.
+- Input reproduksibel di repository: `data/processed/data_logger_knkt_tabel_6_10.csv`. Workbook kerja eksternal `data_logger_knkt_tabel_6_10_lengkap.xlsx` (sheet `Data_Logger_Raw`) merupakan catatan proses transkripsi/audit dan tidak disertakan; workbook tersebut bukan prasyarat untuk menjalankan ulang pipeline.
 - Cakupan sumber: Tabel 6–10, halaman tercetak 65–68.
 - Baris transkripsi dari seluruh tabel: 59; dataset gabungan setelah menghapus satu duplikasi identik lintas Tabel 7–8: 58 baris × 16 kolom.
 - Gap sumber: tidak ada rekaman yang ditampilkan untuk 20:51:28–20:51:33; tidak dilakukan interpolasi.
