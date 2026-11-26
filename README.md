@@ -6,7 +6,7 @@
 
 Proyek akademik **Exploratory Data Analysis (EDA)** terhadap rekaman *Data Logger* yang dirujuk dalam Laporan Investigasi Kecelakaan Perkeretaapian KNKT Nomor **KNKT.26.04.03.02**, mengenai tabrakan KA 4B Argo Bromo Anggrek dan KA 5568A Commuter Line di Stasiun Bekasi Timur pada 27 April 2026.
 
-> **Status:** kerangka proyek / bootstrap. Dataset belum disertakan. Hasil analisis dan jumlah kolom harus diverifikasi menggunakan berkas data aktual sebelum dinyatakan final.
+> **Status:** dataset transkripsi Tabel 6–10 telah ditambahkan sebagai CSV di `data/processed/`. Dataset merupakan transkripsi tabel pada laporan KNKT, bukan ekspor mentah perangkat logger. Rincian cakupan, gap waktu, overlap, dan batas interpretasi dijelaskan pada laporan EDA.
 
 ## Tujuan
 
@@ -24,7 +24,7 @@ Proyek ini berfokus pada EDA, bukan penetapan penyebab kecelakaan, penilaian tan
 
 ```text
 .
-├── data/                 # raw, interim, processed, external (data tidak di-commit)
+├── data/                 # raw, interim, processed, external
 ├── docs/                 # konteks masalah, data, metodologi, keputusan, panduan
 ├── notebooks/            # tahapan kerja EDA berurutan
 ├── outputs/              # grafik, tabel, statistik, validasi
@@ -90,13 +90,13 @@ Fungsi transformasi dan pembersihan mengembalikan salinan data; pemilihan kolom 
 | 08 | Handling outliers |
 | 09 | Findings and insights |
 
-Notebook 00–09 berisi urutan kerja, penjelasan metodologis, dan sel kode yang dapat dijalankan setelah dataset aktual tersedia. Seluruh hasil numerik, interpretasi, serta temuan harus dihasilkan dari data yang telah diverifikasi; repository ini tidak menyertakan dataset.
+Notebook 00–09 berisi urutan kerja, penjelasan metodologis, dan sel kode. Dataset transkripsi gabungan tersedia pada `data/processed/data_logger_knkt_tabel_6_10.csv`. Laporan EDA tersedia pada `reports/Laporan_EDA_KNKT_Bekasi_Timur.md`.
 
 ## Kebijakan data dan hak penggunaan
 
-- Berkas PDF laporan KNKT dan dataset hasil ekstraksi **tidak disertakan** dalam repository ini.
-- Jangan mengunggah data sumber sebelum hak akses dan distribusinya dipastikan.
-- Simpan data lokal pada direktori `data/raw/`; direktori data diabaikan Git melalui `.gitignore`.
+- PDF laporan KNKT tidak disertakan dalam repository; rujuk sumber resmi yang dicantumkan pada laporan.
+- CSV yang disertakan adalah transkripsi terbatas Tabel 6–10 dari laporan publik KNKT. Penggunaan dan redistribusi tetap harus memperhatikan ketentuan sumber.
+- Berkas mentah atau bahan kerja lokal tetap disimpan terpisah dan tidak otomatis di-commit.
 - Jangan memasukkan data pribadi, kredensial, atau informasi yang tidak relevan.
 - Lisensi MIT pada repository hanya ditujukan untuk kode dan dokumentasi orisinal proyek, bukan untuk materi pihak ketiga.
 
