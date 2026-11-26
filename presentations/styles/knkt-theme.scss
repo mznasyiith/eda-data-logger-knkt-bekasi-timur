@@ -1,0 +1,63 @@
+/* KNKT EDA presentation theme: forest / ivory / muted gold */
+$body-bg: #F6F4EC;
+$body-color: #18332C;
+$link-color: #B58A3A;
+$selection-bg: #D8C18A;
+$presentation-heading-color: #163D32;
+$presentation-heading-font: "Aptos Display", "Avenir Next", "Segoe UI", sans-serif;
+$presentation-font: "Aptos", "Segoe UI", sans-serif;
+$code-block-font-size: 0.62em;
+
+.reveal {
+  font-family: $presentation-font;
+  font-size: 30px;
+  color: $body-color;
+}
+.reveal .slides { text-align: left; }
+.reveal h1, .reveal h2, .reveal h3 {
+  font-family: $presentation-heading-font;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+.reveal h1 { font-size: 2.0em; line-height: 1.08; }
+.reveal h2 { font-size: 1.35em; margin-bottom: 0.55em; }
+.reveal h3 { font-size: 0.95em; }
+.reveal p, .reveal li { line-height: 1.35; }
+.reveal strong { color: #9B742D; }
+.reveal blockquote {
+  width: 92%;
+  margin: 0.5em auto;
+  padding: 0.45em 0.8em;
+  border-left: 5px solid #B58A3A;
+  background: rgba(22, 61, 50, 0.06);
+  box-shadow: none;
+  font-style: normal;
+}
+.reveal .subtitle { color: #D9D2C1; font-size: 0.78em; }
+.reveal .slide-number { color: #B58A3A; background: transparent; font-size: 0.55em; }
+.reveal .progress { color: #B58A3A; height: 4px; }
+.reveal .controls { color: #B58A3A; }
+.reveal img {
+  max-height: 62vh;
+  object-fit: contain;
+  border: 0;
+  box-shadow: 0 10px 28px rgba(20, 45, 38, 0.10);
+}
+.reveal .small { font-size: 0.66em; color: #586A62; }
+.reveal .kpi {
+  padding: 0.35em 0.55em;
+  border-top: 3px solid #B58A3A;
+  background: #FFFFFF;
+  border-radius: 8px;
+}
+.reveal .kpi strong { display: block; font-size: 1.55em; color: #163D32; }
+.reveal .columns { gap: 1.1em; }
+.reveal table { font-size: 0.68em; }
+.reveal table th { color: #163D32; }
+.reveal section[data-background-color="#102D26"] { color: #F6F4EC; }
+.reveal section[data-background-color="#102D26"] h1,
+.reveal section[data-background-color="#102D26"] h2 { color: #F6F4EC; }
+.reveal section[data-background-color="#102D26"] strong { color: #E2C47A; }
+@media print {
+  .reveal .slides { transform: none !important; }
+}
