@@ -121,10 +121,12 @@ Confusion matrix, ROC/PR curve, actual-vs-predicted, residual plot, train-test s
 
 ## Reproduksibilitas
 
-Jalankan:
+Jalankan secara lokal:
 
 ```bash
 python scripts/generate_visuals.py
 ```
+
+Atau buka tab **Actions → CI → Run workflow** pada branch `main`. Workflow manual akan menjalankan pemeriksaan, menghasilkan seluruh visual, mengunggah artefak CI, dan menyimpan perubahan pada `outputs/`.
 
 Semua visual tambahan dihasilkan dari generator yang sama dengan visual sebelumnya. CI menjalankan generator, mengunggah artefak, dan menyimpan output yang dihasilkan pada direktori `outputs/`.
