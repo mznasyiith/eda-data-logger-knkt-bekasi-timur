@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this project, please cite it as an academic project repository."
+title: "EDA Data Logger KNKT - Bekasi Timur"
+type: software
+authors:
+  - family-names: Nasyiith
+    given-names: "Muhammad Za'iimun"
+version: 0.1.0
+date-released: 2026-11-26
+repository-code: "https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur"
