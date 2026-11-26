@@ -1,0 +1,74 @@
+name: Presentation — Quarto + reveal.js + PDF
+
+on:
+  push:
+    branches:
+      - main
+      - feat/quarto-revealjs-presentation
+    paths:
+      - "presentations/**"
+      - ".github/workflows/presentation.yml"
+      - "outputs/**"
+      - "reports/Laporan_EDA_KNKT_Bekasi_Timur.md"
+  pull_request:
+    branches: [main]
+    paths:
+      - "presentations/**"
+      - ".github/workflows/presentation.yml"
+      - "outputs/**"
+      - "reports/Laporan_EDA_KNKT_Bekasi_Timur.md"
+  workflow_dispatch:
+
+concurrency:
+  group: presentation-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@8a96df13519ee81fd526f2dfca5962811136661b # v2.2.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "22"
+
+      - name: Install PDF tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes poppler-utils
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Render reveal.js HTML
+        working-directory: presentations
+        run: quarto render eda-knkt-bekasi-timur.qmd
+
+      - name: Export print-ready PDF
+        run: node presentations/scripts/export-pdf.mjs
+
+      - name: Validate deliverables
+        run: python presentations/scripts/validate_outputs.py
+
+      - name: Upload HTML and PDF
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: eda-knkt-presentation
+          path: |
+            presentations/dist/eda-knkt-bekasi-timur.html
+            presentations/dist/eda-knkt-bekasi-timur.pdf
+          if-no-files-found: error
+          retention-days: 30
