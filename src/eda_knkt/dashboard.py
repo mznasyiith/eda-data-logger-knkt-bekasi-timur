@@ -80,9 +80,8 @@ def prepare_timeseries_plot_data(
     ordered = frame.sort_values("Timestamp").reset_index(drop=True)
     rows: list[dict[str, object]] = []
     previous_timestamp = None
-    for row in ordered.itertuples(index=False):
-        values = row._asdict()
-        timestamp = values["Timestamp"]
+    for _, row in ordered.iterrows():
+        timestamp = row["Timestamp"]
         if previous_timestamp is not None:
             interval = (timestamp - previous_timestamp).total_seconds()
             if interval > 1:
@@ -96,7 +95,7 @@ def prepare_timeseries_plot_data(
                         }
                     )
         for column in selected:
-            value = values[column]
+            value = row[column]
             rows.append(
                 {
                     "Timestamp": timestamp,
