@@ -98,7 +98,7 @@ Enam belas kolom pada skema dataset:
 
 Empat kolom, yaitu `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, tersedia pada Tabel 6–8 tetapi tidak ditampilkan pada Tabel 9–10. Karena itu, kolom tersebut terisi pada 32 rekaman dari Tabel 6–8 dan kosong pada 26 rekaman Tabel 9–10. Keberadaan kolom tersebut dipertahankan untuk menjaga skema 16 kolom yang digunakan dalam proyek; nilai tidak direkonstruksi atau diisi dari asumsi.
 
-Secara deskriptif, kecepatan berada pada rentang 0–109 km/jam, nilai kolom `m` pada rentang 0–863, dan kolom `km` bernilai 0 atau 1 sesuai tabel sumber. Nilai `km` dan `m` dipertahankan terpisah sebagaimana dicetak; tidak dilakukan rekonstruksi jarak absolut. Kolom `km` bernilai 1 pada sepuluh rekaman awal Tabel 6 dan 0 pada 48 rekaman berikutnya. Perubahan ini dicatat sebagai karakteristik representasi sumber dan tidak ditafsirkan sebagai kesalahan atau diperbaiki tanpa dokumentasi teknis.
+Kolom sumber `km` dan `m` adalah komponen satu besaran jarak tersisa menuju titik henti akhir. Berdasarkan Gambar 36, uraian Bagian II.3, serta Tabel 6–10 KNKT, keduanya digabung pada salinan analisis menjadi `distance_to_stop_m = km × 1.000 + m`. Besaran ini menurun menuju 0 m ketika lokomotif berhenti; bukan chainage absolut lintas, bukan jarak ke titik tabrakan, dan bukan jarak pengereman murni. Kolom sumber `km` dan `m` tetap dipertahankan tanpa perubahan. Beberapa uraian chainage dalam PDF tidak konsisten satu sama lain; konflik tersebut didokumentasikan tanpa rekonstruksi chainage. Lihat `docs/02_data_understanding/source_validation_distance.md`.
 
 ## 2.3 Peninjauan Kualitas Data (Data Quality Assessment)
 
@@ -114,7 +114,7 @@ Pemeriksaan duplikasi seluruh baris pada dataset menghasilkan **0 baris duplikat
 
 ### Deteksi pencilan awal
 
-Pencilan statistik tidak otomatis merupakan kesalahan. Pada hasil pemeriksaan IQR terhadap enam variabel numerik operasional (`m`, kecepatan, akselerasi numerik, arus, tekanan BP, dan tekanan BC), tidak ditemukan nilai di luar pagar IQR. Kolom `km` menghasilkan sepuluh penandaan mekanis karena Q1 dan Q3 sama-sama 0; hal ini merupakan konsekuensi variabel koordinat diskrit, bukan bukti pencilan operasional. Rincian dijelaskan pada Bab 8.
+Pencilan statistik tidak otomatis merupakan kesalahan. Pemeriksaan IQR dilakukan terhadap enam variabel numerik analitis: `distance_to_stop_m`, kecepatan, akselerasi numerik, arus, tekanan BP, dan tekanan BC. Kolom sumber `km` dan `m` tidak diuji terpisah karena keduanya merupakan komponen satu besaran jarak. Rincian dan batas interpretasi dijelaskan pada Bab VIII.
 
 ### Konsistensi format
 
@@ -125,7 +125,7 @@ Tanggal tercatat sebagai `27/04/2026`; waktu menggunakan format `HH.MM.SS`. Kolo
 Eksplorasi visual diarahkan pada urutan waktu dan karakteristik parameter operasi. Visualisasi yang relevan untuk dataset ini meliputi:
 - Grafik garis kecepatan terhadap waktu untuk melihat penurunan kecepatan pada cuplikan yang tersedia.
 - Grafik garis tekanan BP dan BC terhadap waktu untuk melihat perubahan tekanan selama pengereman.
-- Histogram dan box plot untuk memeriksa distribusi kecepatan, jarak meter, arus motor traksi, tekanan BP/BC, dan akselerasi numerik.
+- Histogram dan box plot untuk memeriksa distribusi jarak tersisa menuju titik henti akhir, kecepatan, arus motor traksi, tekanan BP/BC, dan akselerasi numerik.
 - Diagram batang untuk frekuensi kategori throttle dan IBS.
 
 Visualisasi bersifat deskriptif. Pola yang tampak tidak dapat digunakan sendiri untuk menyatakan penyebab kecelakaan atau menilai tindakan personel.
@@ -269,8 +269,7 @@ Kolom `Date` dan `Time` perlu digabung menjadi timestamp pada salinan analisis d
 Ringkasan statistik untuk variabel numerik yang memiliki data:
 | Variabel | n | Mean | Median | Modus | Std. deviasi | Varians | Q1 | Q3 | Minimum | Maksimum |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| km | 58 | 0,172 | 0 | 0 | 0,381 | 0,145 | 0 | 0 | 0 | 1 |
-| m | 58 | 300,483 | 244,5 | 0 | 256,768 | 65.930,044 | 84 | 478 | 0 | 863 |
+| distance_to_stop_m | 58 | 472,897 | 378,5 | 0 | 421,531 | 177.688,059 | 100 | 741 | 0 | 1.341 |
 | Speed (km/h) | 58 | 73,638 | 82,5 | 108 | 33,077 | 1.094,060 | 57,5 | 101,75 | 0 | 109 |
 | Acceleration (m/sec²) | 51 | -0,336 | -0,38 | -0,38 | 0,203 | 0,041 | -0,5 | -0,16 | -0,84 | 0,05 |
 | Load (amps) | 58 | 86,345 | 136 | 0 | 76,730 | 5.887,458 | 0 | 152 | 0 | 168 |
@@ -348,15 +347,14 @@ Berdasarkan data ini, mekanisme MCAR, MAR, maupun MNAR tidak dapat ditetapkan se
 
 Tabel pada Bab 3 menyajikan mean, median, modus, standar deviasi, minimum, dan maksimum. Secara umum, distribusi nilai pada beberapa variabel dipengaruhi oleh perubahan keadaan operasi dalam rentang waktu singkat. Karena data merupakan runtun waktu dengan interval yang umumnya satu detik tetapi memiliki celah enam detik, nilai tidak dapat diperlakukan sebagai sampel acak yang saling independen.
 
-Kolom `km` dan `m` dianalisis sebagai dua komponen lokasi sebagaimana dicetak. Kolom `km` bernilai 1 pada sepuluh rekaman Tabel 6 dan 0 pada 48 rekaman berikutnya; perubahan tersebut tidak diubah atau direkonstruksi. Interpretasi lokasi harus mempertimbangkan format koordinat pada sumber.
+Kolom `km` dan `m` bukan dua variabel analitis independen. Keduanya digabung menjadi `distance_to_stop_m`, yaitu jarak tersisa menuju titik henti akhir. Kolom sumber dipertahankan untuk keterlacakan. Nilai gabungan bukan chainage absolut; ketidaksesuaian narasi chainage KNKT dicatat dalam dokumen verifikasi sumber.
 
 ## 5.2 Bentuk Distribusi Variabel Numerik
 
 Nilai skewness dan excess kurtosis pada variabel numerik yang dapat dihitung:
 | Variabel | Skewness | Excess kurtosis |
 |---|---:|---:|
-| km | 1,781 | 1,212 |
-| m | 0,656 | -0,698 |
+| distance_to_stop_m | 0,658 | -0,767 |
 | Speed (km/h) | -0,958 | -0,084 |
 | Acceleration (m/sec²) | 0,290 | -0,444 |
 | Load (amps) | -0,216 | -1,937 |
@@ -413,7 +411,7 @@ Tidak diterapkan transformasi log, akar kuadrat, Box-Cox, atau Yeo-Johnson pada 
 
 ## 6.2 Konversi dan Validasi Tipe Data
 
-Konversi tipe data dilakukan hanya pada salinan analisis. Kolom `Date` dan `Time` digabung dan diparsing menjadi `datetime` dengan format eksplisit `%d/%m/%Y %H.%M.%S`. Kolom `km`, `m`, `Speed (km/h)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)` dikonversi menjadi numerik. Pada `Acceleration (m/sec²)`, penanda `---` terlebih dahulu dipetakan menjadi missing pada salinan analisis, kemudian nilai lainnya dikonversi menjadi numerik. Kolom `Throttle`, `PCS Open`, `IBS`, `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star` dipertahankan sebagai kategori/teks.
+Konversi tipe data dilakukan hanya pada salinan analisis. Kolom `Date` dan `Time` digabung dan diparsing menjadi `datetime` dengan format eksplisit `%d/%m/%Y %H.%M.%S`. Kolom sumber `km` dan `m` dikonversi pada salinan analisis, kemudian digabung menjadi `distance_to_stop_m`; hanya besaran gabungan yang digunakan sebagai variabel jarak analitis. Variabel numerik lain yang dikonversi adalah `Speed (km/h)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)`. Pada `Acceleration (m/sec²)`, penanda `---` terlebih dahulu dipetakan menjadi missing pada salinan analisis, kemudian nilai lainnya dikonversi menjadi numerik. Kolom `Throttle`, `PCS Open`, `IBS`, `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star` dipertahankan sebagai kategori/teks.
 
 Hasil konversi divalidasi dengan membandingkan jumlah baris sebelum dan sesudah konversi, jumlah placeholder yang berubah menjadi missing, jumlah missing struktural, serta rentang nilai sebelum dan sesudah. Konversi tidak boleh mengubah jumlah 58 rekaman atau mengisi nilai yang tidak tersedia.
 
@@ -453,7 +451,7 @@ Tujuan gambar adalah memperlihatkan perlakuan setiap kolom dari pembacaan raw ke
 
 ## 7.1 Analisis Univariat (Univariate Analysis)
 
-Analisis univariat dilakukan dengan histogram/box plot untuk variabel numerik dan diagram batang untuk kategori. Variabel yang paling relevan adalah kecepatan, jarak meter, arus motor traksi, tekanan BP, tekanan BC, dan akselerasi numerik. Frekuensi throttle pada 58 baris: T5 17, Idle 13, T7 11, Off 10, T4 4, T6 2, dan T1 1. PCS tercatat Closed pada 32 baris dan Open pada 26 baris. IBS tercatat Rel pada 39 baris dan Appl pada 19 baris. Frekuensi tersebut menggambarkan keseluruhan gabungan Tabel 6–10, bukan hanya Tabel 9–10.
+Analisis univariat dilakukan dengan histogram/box plot untuk variabel numerik dan diagram batang untuk kategori. Variabel yang paling relevan adalah jarak tersisa menuju titik henti akhir (`distance_to_stop_m`), kecepatan, arus motor traksi, tekanan BP, tekanan BC, dan akselerasi numerik. Frekuensi throttle pada 58 baris: T5 17, Idle 13, T7 11, Off 10, T4 4, T6 2, dan T1 1. PCS tercatat Closed pada 32 baris dan Open pada 26 baris. IBS tercatat Rel pada 39 baris dan Appl pada 19 baris. Frekuensi tersebut menggambarkan keseluruhan gabungan Tabel 6–10, bukan hanya Tabel 9–10.
 
 ## 7.2 Analisis Bivariat dan Multivariat (Bivariate and Multivariate Analysis)
 
@@ -481,7 +479,7 @@ Sumber seluruh gambar: hasil olah penulis dari transkripsi Data Logger KA 4B. Gr
 
 ## 7.3 Analisis Korelasi
 
-Notebook analisis menghitung korelasi Spearman secara eksploratif pada variabel `Speed (km/h)`, `Acceleration (m/sec²)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)`, setelah placeholder akselerasi dikecualikan secara numerik. Pasangan variabel dapat memiliki jumlah observasi yang berbeda apabila terdapat missing value; karena itu, jumlah pasangan valid perlu diperiksa bersama matriks korelasi dan tidak boleh diasumsikan selalu 58. Korelasi Spearman mengukur asosiasi monotonik, bukan pengaruh sebab-akibat.
+Notebook analisis menghitung korelasi Spearman secara eksploratif pada `distance_to_stop_m`, `Speed (km/h)`, `Acceleration (m/sec²)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)`. Kolom sumber `km` dan `m` tidak dimasukkan secara terpisah; placeholder akselerasi dikecualikan secara numerik. Pasangan variabel dapat memiliki jumlah observasi yang berbeda apabila terdapat missing value; karena itu, jumlah pasangan valid perlu diperiksa bersama matriks korelasi dan tidak boleh diasumsikan selalu 58. Korelasi Spearman mengukur asosiasi monotonik, bukan pengaruh sebab-akibat.
 
 Matriks korelasi tidak dijadikan dasar kesimpulan utama. Dataset berisi 58 rekaman unik yang berurutan dari beberapa fase operasi dalam rentang waktu singkat. Variabel dapat berubah bersama karena dipengaruhi waktu dan fase pengereman. Korelasi Pearson atau Spearman berpotensi dipengaruhi tren waktu, autokorelasi, perubahan status sistem, dan ukuran sampel yang terbatas. Apabila heatmap korelasi ditampilkan, interpretasinya harus eksploratif, disertai jumlah observasi yang digunakan, dan tidak dianggap sebagai bukti sebab-akibat atau multikolinearitas dalam model yang belum dibangun.
 
@@ -511,7 +509,7 @@ Tujuan gambar adalah mengeksplorasi pasangan Speed–BP, Speed–BC, dan BP–BC
 
 ## 8.1 Konsep dan Metode Deteksi Pencilan
 
-Deteksi menggunakan aturan Interquartile Range (IQR), dengan batas bawah Q1 − 1,5 × IQR dan batas atas Q3 + 1,5 × IQR. Pada 58 rekaman gabungan (51 nilai akselerasi numerik), tidak ditemukan pencilan IQR pada enam variabel numerik operasional: `m`, `Speed (km/h)`, `Acceleration (m/sec²)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)`. Pada kolom `km`, Q1=Q3=0 sehingga IQR=0 dan pagar atas maupun bawah sama dengan nol. Sepuluh nilai `km=1` kemudian ditandai oleh aturan secara mekanis. Karena `km` adalah komponen koordinat diskrit dan pola tersebut mengikuti pembagian tabel sumber, penandaan ini tidak diperlakukan sebagai pencilan operasional. Z-score tidak digunakan sebagai metode utama karena distribusi normal tidak dapat diasumsikan pada cuplikan runtun waktu yang kecil dan berurutan.
+Deteksi menggunakan aturan Interquartile Range (IQR), dengan batas bawah Q1 − 1,5 × IQR dan batas atas Q3 + 1,5 × IQR. Pada 58 rekaman gabungan (51 nilai akselerasi numerik), pemeriksaan dilakukan pada enam variabel analitis: `distance_to_stop_m`, `Speed (km/h)`, `Acceleration (m/sec²)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)`. Tidak ditemukan kandidat di luar pagar IQR. Kolom sumber `km` dan `m` dikeluarkan dari uji IQR karena merupakan komponen besaran jarak yang sama, bukan variabel independen. Z-score tidak digunakan sebagai metode utama karena distribusi normal tidak dapat diasumsikan pada cuplikan runtun waktu yang kecil dan berurutan.
 
 **Gambar 8.1. Box plot variabel numerik dan pemeriksaan IQR**
 
@@ -527,7 +525,7 @@ Sumber: hasil olah penulis dari dataset transkripsi.
 
 ![Jumlah kandidat IQR](../outputs/bab_viii/jumlah_kandidat_iqr.png)
 
-Tujuan gambar adalah membandingkan jumlah kandidat menurut pagar 1,5 × IQR untuk enam variabel numerik operasional. Cara membaca: panjang batang menunjukkan jumlah observasi di luar pagar; jumlah valid dan batas pagar tetap dirujuk pada CSV ringkasan IQR. Visual mendukung hasil nol kandidat pada enam variabel tersebut. Batasnya, aturan IQR hanya mendeteksi kandidat statistik dan bukan anomali teknis; variabel km dikecualikan dari panel operasional karena IQR nol menghasilkan penandaan mekanis.
+Tujuan gambar adalah membandingkan jumlah kandidat menurut pagar 1,5 × IQR untuk enam variabel numerik analitis. Cara membaca: panjang batang menunjukkan jumlah observasi di luar pagar; jumlah valid dan batas pagar tetap dirujuk pada CSV ringkasan IQR. Visual mendukung hasil nol kandidat pada enam variabel tersebut. Batasnya, aturan IQR hanya mendeteksi kandidat statistik dan bukan anomali teknis; kolom sumber `km` dan `m` tidak diuji secara terpisah.
 
 **Gambar 8.3. Konteks temporal parameter**
 
@@ -579,7 +577,7 @@ Ringkasan berikut menggabungkan dua tingkat bukti: (1) nilai pada transkripsi Ta
 4. **Arus motor traksi (Load).** Arus tercatat 168 A pada 20:51:18–20:51:36. Pada 20:51:56 tercatat 104 A dan pada 20:51:57 tercatat 0 A; nilainya tetap 0 A hingga rekaman terakhir. Satuan kolom adalah ampere (A), bukan kW.
 5. **Throttle, PCS, dan IBS.** Throttle berada pada T7 di awal rekaman, turun bertahap ke T5 dan T4, kemudian T1 dan Idle, serta tercatat Off pada 20:52:12. PCS Open tercatat Closed sampai 20:51:55 dan Open mulai 20:51:56. IBS tercatat Rel sampai 20:52:02 dan Appl mulai 20:52:03. Frekuensi kategori merangkum jumlah observasi, bukan durasi status.
 6. **Akselerasi.** Tujuh placeholder --- berturut-turut muncul pada 20:52:12–20:52:18. Nilai tidak dihitung sebagai angka. Nilai numerik kembali tersedia pada 20:52:19 (-0,84 m/s²), 20:52:20 (-0,40 m/s²), dan 20:52:21 (-0,15 m/s²). Penjelasan KNKT mengenai respons sensor terhadap G-Force dicatat sebagai konteks sumber, bukan hasil pengukuran ulang EDA.
-7. **Kolom posisi km dan m.** Kedua kolom dipertahankan terpisah sebagaimana dicetak pada tabel sumber. Nilai m 0–863 tidak boleh dibaca sendirian sebagai jarak tempuh total atau jarak ke titik tabrakan. Pada timestamp tabrakan tabel menunjukkan km=0 dan m=26; pada timestamp berhenti keduanya 0. KNKT menjelaskan lokomotif masih bergerak 26 m setelah tabrakan sebelum berhenti di km 28+941.
+7. **Jarak tersisa menuju titik henti akhir.** Besaran `distance_to_stop_m` menurun dari 1.341 m pada 20:51:18 menjadi 26 m pada timestamp tabrakan 20:52:12, lalu 0 m pada rekaman berhenti 20:52:19. Pada tabel sumber, nilai 26 m tersusun dari `km=0` dan `m=26`; nilai nol saat berhenti tersusun dari `km=0` dan `m=0`. Besaran ini mengikuti definisi jarak tersisa terhadap titik henti akhir, bukan chainage absolut atau jarak pengereman murni.
 
 ### Frekuensi kategori
 
@@ -607,12 +605,11 @@ Empat kolom status terakhir hanya tersedia pada 32 baris Tabel 6–8; 26 sel kos
 
 ### Statistik deskriptif yang diaudit
 
-Statistik diverifikasi kembali terhadap CSV analitis. Simpangan baku kolom m dibulatkan menjadi 256,768 (bukan 256,769). Untuk akselerasi, n=51 karena tujuh placeholder dikecualikan dari perhitungan numerik.
+Statistik diverifikasi kembali terhadap CSV analitis. Statistik jarak dihitung dari `distance_to_stop_m`, bukan dari kolom `m` saja atau `km` dan `m` secara terpisah. Untuk akselerasi, n=51 karena tujuh placeholder dikecualikan dari perhitungan numerik.
 
 | Variabel | n valid | Mean | Median | Std. deviasi | Minimum | Maksimum |
 |---|---:|---:|---:|---:|---:|---:|
-| km | 58 | 0,172 | 0 | 0,381 | 0 | 1 |
-| m | 58 | 300,483 | 244,5 | 256,768 | 0 | 863 |
+| distance_to_stop_m | 58 | 472,897 | 378,5 | 421,531 | 0 | 1.341 |
 | Speed (km/h) | 58 | 73,638 | 82,5 | 33,077 | 0 | 109 |
 | Acceleration (m/sec²) | 51 | -0,336 | -0,38 | 0,203 | -0,84 | 0,05 |
 | Load (amps) | 58 | 86,345 | 136 | 76,730 | 0 | 168 |
@@ -627,14 +624,14 @@ Pagar dihitung dengan Q1 − 1,5 × IQR dan Q3 + 1,5 × IQR menggunakan kuartil 
 
 | Variabel | n valid | Pagar bawah | Pagar atas | Kandidat IQR |
 |---|---:|---:|---:|---:|
-| m | 58 | -507,000 | 1.069,000 | 0 |
+| distance_to_stop_m | 58 | -861,500 | 1.702,500 | 0 |
 | Speed (km/h) | 58 | -8,875 | 168,125 | 0 |
 | Acceleration (m/sec²) | 51 | -1,010 | 0,350 | 0 |
 | Load (amps) | 58 | -228,000 | 380,000 | 0 |
 | EAB BP (psi) | 58 | -77,625 | 129,375 | 0 |
 | EAB BC (psi) | 58 | -87,000 | 145,000 | 0 |
 
-Kolom km tidak dimasukkan dalam tabel enam variabel operasional karena Q1=Q3=0 sehingga IQR=0; sepuluh nilai km=1 ditandai secara mekanis oleh pagar nol. Kolom ini merupakan komponen lokasi diskrit, sehingga penandaan tersebut tidak ditafsirkan sebagai pencilan operasional. Tidak adanya kandidat IQR bukan bukti bahwa seluruh sistem beroperasi normal atau bebas anomali teknis.
+Kolom sumber `km` dan `m` tidak dimasukkan sebagai variabel terpisah karena keduanya membentuk `distance_to_stop_m`. Tidak adanya kandidat IQR bukan bukti bahwa seluruh sistem beroperasi normal atau bebas anomali teknis.
 
 **Gambar 9.1. Ikhtisar temuan EDA**
 
