@@ -262,7 +262,7 @@ Tujuan visual adalah memeriksa batas nilai yang benar-benar tercatat. Setiap gar
 
 ## 3.4 Penanganan Waktu dan Integritas Urutan Rekaman
 
-Kolom `Date` dan `Time` perlu digabung menjadi timestamp pada salinan analisis dengan format yang eksplisit. Pemeriksaan urutan dilakukan setelah parsing, tetapi timestamp hasil parsing tetap merepresentasikan waktu sebagaimana dicetak pada tabel sumber. Belum ada dasar untuk menyatakan bahwa jam Data Logger telah tersinkronisasi dengan jam interlocking, radio, CCTV, atau logger kereta lain. Setiap analisis lintas-sumber nantinya harus mendokumentasikan zona waktu, resolusi timestamp, kemungkinan offset/drift, metode koreksi jam, dan rentang ketidakpastian. Jangan menggeser timestamp agar tampak cocok dengan kronologi tanpa dasar kalibrasi atau bukti sinkronisasi.
+Kolom `Date` dan `Time` perlu digabung menjadi timestamp pada salinan analisis dengan format yang eksplisit. Pemeriksaan urutan dilakukan setelah parsing, tetapi timestamp hasil parsing tetap merepresentasikan waktu sebagaimana dicetak pada tabel sumber. KNKT menetapkan CCTV KA 5568A sebagai master time dan menyesuaikan timestamp logger lokomotif sebesar +2 detik pada event tabrakan. EDA ini tidak melakukan sinkronisasi ulang atau menguji offset/drift seluruh sumber; timestamp dataset tidak boleh dianggap sebagai hasil kalibrasi independen terhadap seluruh logger, radio, interlocking, atau CCTV. Setiap analisis lintas-sumber nantinya harus mendokumentasikan zona waktu, resolusi timestamp, kemungkinan offset/drift, metode koreksi jam, dan rentang ketidakpastian. Jangan menggeser timestamp agar tampak cocok dengan kronologi tanpa dasar kalibrasi atau bukti sinkronisasi.
 
 ## 3.5 Ringkasan Statistik Awal
 
@@ -270,7 +270,7 @@ Ringkasan statistik untuk variabel numerik yang memiliki data:
 | Variabel | n | Mean | Median | Modus | Std. deviasi | Varians | Q1 | Q3 | Minimum | Maksimum |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | km | 58 | 0,172 | 0 | 0 | 0,381 | 0,145 | 0 | 0 | 0 | 1 |
-| m | 58 | 300,483 | 244,5 | 0 | 256,769 | 65.930,044 | 84 | 478 | 0 | 863 |
+| m | 58 | 300,483 | 244,5 | 0 | 256,768 | 65.930,044 | 84 | 478 | 0 | 863 |
 | Speed (km/h) | 58 | 73,638 | 82,5 | 108 | 33,077 | 1.094,060 | 57,5 | 101,75 | 0 | 109 |
 | Acceleration (m/sec²) | 51 | -0,336 | -0,38 | -0,38 | 0,203 | 0,041 | -0,5 | -0,16 | -0,84 | 0,05 |
 | Load (amps) | 58 | 86,345 | 136 | 0 | 76,730 | 5.887,458 | 0 | 152 | 0 | 168 |
@@ -493,7 +493,7 @@ Matriks korelasi tidak dijadikan dasar kesimpulan utama. Dataset berisi 58 rekam
 
 ![Multi-panel parameter waktu](../outputs/bab_vii/multi_panel_parameter_waktu.png)
 
-Tujuan visual adalah membandingkan kecepatan (km/jam), tekanan BP dan BC (psi), arus (ampere), serta akselerasi (m/s²) pada sumbu waktu yang sama. Cara membaca: setiap panel memiliki skala vertikal dan satuan sendiri; posisi horizontal menunjukkan detik sejak timestamp pertama. Garis diputus pada interval lebih dari satu detik, termasuk gap sumber 20:51:28–20:51:33. Visual mendukung identifikasi perubahan temporal yang berdekatan, bukan perbandingan besar nilai lintas satuan. Batasnya, timestamp belum disinkronkan dengan sumber eksternal dan tidak dilakukan interpolasi.
+Tujuan visual adalah membandingkan kecepatan (km/jam), tekanan BP dan BC (psi), arus (ampere), serta akselerasi (m/s²) pada sumbu waktu yang sama. Cara membaca: setiap panel memiliki skala vertikal dan satuan sendiri; posisi horizontal menunjukkan detik sejak timestamp pertama. Garis diputus pada interval lebih dari satu detik, termasuk gap sumber 20:51:28–20:51:33. Visual mendukung identifikasi perubahan temporal yang berdekatan, bukan perbandingan besar nilai lintas satuan. Batasnya, EDA tidak melakukan sinkronisasi ulang secara independen. Timestamp mengikuti Tabel 6–10; KNKT menjelaskan penyesuaian +2 detik untuk logger lokomotif terhadap master time CCTV KA 5568A pada Tabel 5. Tidak dilakukan interpolasi pada gap sumber.
 
 **Gambar 7.6. Categorical State Timeline**
 
@@ -545,38 +545,104 @@ Semua nilai dipertahankan. Nilai ekstrem terjadi dalam cuplikan perubahan keadaa
 
 ## 9.1 Rangkuman Temuan Utama
 
-Berdasarkan 58 rekaman unik Tabel 6–10:
-1. Rekaman mencakup rentang 20:51:18–20:52:21. Tidak semua detik tersedia: tidak ada rekaman yang disajikan untuk 20:51:28–20:51:33.
-2. Kecepatan pada rekaman awal Tabel 6 adalah 108 km/jam (20:51:18); nilai maksimum dalam gabungan adalah 109 km/jam pada 20:51:20. Pada akhir Tabel 10, kecepatan tercatat 0 km/jam pada 20:52:19–20:52:21.
-3. Tekanan BP turun dari 71 psi pada 20:51:18 menjadi 49 psi pada 20:51:43, lalu turun menjadi 0 psi pada 20:52:00 dan sebagian besar tetap 0 psi pada rekaman berikutnya.
-4. Tekanan BC pada lokomotif meningkat hingga 8 psi pada fase awal full service (20:51:39), kemudian tercatat 0 psi pada 20:51:43–20:51:55; pada fase emergency meningkat hingga 70 psi pada 20:52:00 dan maksimum 73 psi pada 20:52:12.
-5. Arus motor traksi tercatat 168 ampere pada awal Tabel 6, turun menjadi 136 ampere pada 20:51:39–20:51:43, dan menjadi 0 ampere sejak 20:51:57.
-6. Throttle berubah dari T7 menuju T5 pada fase full service, T4 menjelang emergency brake, lalu T4/T1/Idle dan Off pada fase emergency. IBS berubah dari Rel menjadi Appl pada 20:52:03 dan tetap Appl dalam rekaman berikutnya.
-7. Pada pukul 20:52:12–20:52:18, tujuh nilai akselerasi berturut-turut ditandai `---`. Laporan KNKT menjelaskan bahwa sensor akselerometer mencatat data kosong/tidak terbaca pada saat tabrakan karena G-Force melampaui batas ukur sensor.
+Ringkasan berikut menggabungkan dua tingkat bukti: (1) nilai pada transkripsi Tabel 6–10 dan (2) penamaan fase serta penjelasan KNKT pada Bab II.3 dan grafik Lampiran 7. Dataset EDA memuat 58 rekaman unik dari 59 baris sumber; satu rekaman 20:51:43 tercantum identik pada Tabel 7 dan 8. Tidak dilakukan interpolasi untuk celah 20:51:28–20:51:33.
 
-Temuan di atas merupakan pembacaan deskriptif terhadap tabel. Interpretasi teknis mengenai sistem pengereman dan kejadian tabrakan harus merujuk pada uraian investigasi KNKT secara keseluruhan.
+### Audit kronologi parameter per timestamp
+
+| Timestamp Tabel 6–10 | Fase/konteks KNKT | Speed (km/jam) | BP (psi) | BC (psi) | Load (A) | Throttle | PCS Open | IBS | Catatan audit |
+|---|---|---:|---:|---:|---:|---|---|---|---|
+| 20:51:18 | Awal minimum reduction pada tabel | 108 | 71 | 0 | 168 | T7 | Closed | Rel | Awal rekaman gabungan |
+| 20:51:27 | Akhir interval minimum reduction | 107 | 65 | 0 | 168 | T7 | Closed | Rel | BP turun 6 psi dari 71 menjadi 65 |
+| 20:51:34 | Peralihan menuju full service | 105 | 62 | 0 | 168 | T7 | Closed | Rel | Timestamp pertama setelah gap; tidak mengisi 20:51:28–33 |
+| 20:51:39 | Full service sedang terbentuk | 101 | 51 | 8 | 136 | T5 | Closed | Rel | BC mencapai 8 psi |
+| 20:51:43 | Awal rentang full service pada Tabel 8/grafik | 95 | 49 | 0 | 136 | T5 | Closed | Rel | BP 49 psi pada awal tabel full service |
+| 20:51:55 | Akhir rentang full service pada tabel | 79 | 49 | 0 | 144 | T4 | Closed | Rel | Baris terakhir Tabel 8 |
+| 20:51:56 | Awal emergency brake (Tabel 9) | 78 | 43 | 0 | 104 | T4 | Open | Rel | BP mulai turun tajam; PCS Open |
+| 20:52:00 | Emergency brake aktif | 70 | 0 | 70 | 0 | Idle | Open | Rel | BP 0 psi, BC 70 psi, arus 0 A |
+| 20:52:03 | IBS pertama kali tercatat Appl | 65 | 0 | 70 | 0 | Idle | Open | Appl | KNKT menyebut aktivasi independent brake pada waktu ini |
+| 20:52:09 | Menjelang tabrakan | 53 | 1 | 70 | 0 | Idle | Open | Appl | Akselerasi masih numerik (-0,56 m/s²) |
+| 20:52:11 | Satu detik sebelum tabrakan | 49 | 0 | 71 | 0 | Idle | Open | Appl | Akselerasi -0,58 m/s² |
+| 20:52:12 | Tabrakan | 40 | 0 | 73 | 0 | Off | Open | Appl | Akselerasi placeholder ---; KNKT menyebut titik tabrakan km 28+915 |
+| 20:52:14–20:52:16 | Setelah tabrakan, lokomotif masih bergerak | 21–13 | 0 | 48–45 | 0 | Off | Open | Appl | BC turun sementara dari 73 psi |
+| 20:52:19 | Lokomotif berhenti | 0 | 0 | 55 | 0 | Off | Open | Appl | KNKT menyebut titik berhenti km 28+941, 26 m setelah titik tabrakan |
+| 20:52:20–20:52:21 | Setelah berhenti | 0 | 0 | 55 | 0 | Off | Open | Appl | Kecepatan tetap 0 km/jam |
+
+**Catatan waktu.** Tabel 5 KNKT menjelaskan bahwa timestamp Data Logger lokomotif saat tabrakan yang semula 20:52:10 disesuaikan menjadi 20:52:12 berdasarkan CCTV KA 5568A sebagai master time, yaitu koreksi +2 detik. Timestamp Tabel 6–10 yang digunakan dalam EDA diperlakukan sebagai waktu sebagaimana disajikan dalam tabel laporan KNKT; koreksi +2 detik tidak diterapkan kembali. Uraian naratif KNKT menyebut fase service brake mulai 20:51:16 dan berakhir 20:51:53, sedangkan tabel/grafik menyajikan rentang waktu yang bergeser +2 detik, sekitar 20:51:18–20:51:55. Perbedaan ini dicatat agar waktu logger awal tidak tercampur dengan waktu rujukan investigasi.
+
+**Batas fase.** Tabel 6 merekam minimum reduction pada 20:51:18–20:51:27. Tabel 7 dan narasi KNKT mendokumentasikan peralihan menuju full service setelah 20:51:34; Tabel 8 memperlihatkan full service pada 20:51:43–20:51:55. Tabel 9 dimulai pada 20:51:56 untuk emergency brake. Grafik KNKT menandai tahap emergency brake + independent brake sekitar 20:52:02, sedangkan status IBS pada tabel pertama kali berubah dari Rel menjadi Appl pada 20:52:03. Perbedaan antara penanda fase grafik dan observasi diskret IBS dipertahankan, bukan diseragamkan.
+
+### Ringkasan temuan yang didukung data
+
+1. **Kecepatan.** Nilai tertinggi adalah 109 km/jam pada 20:51:20. Pada timestamp tabrakan 20:52:12, kecepatan tercatat 40 km/jam; pada 20:52:19–20:52:21 tercatat 0 km/jam. Tabrakan dan berhenti merupakan dua peristiwa berbeda yang terpisah tujuh detik dalam tabel.
+2. **Brake Pipe (BP).** BP turun dari 71 psi pada 20:51:18 menjadi 65 psi pada 20:51:27. Nilainya 49 psi pada 20:51:43–20:51:55, lalu turun dari 43 psi pada 20:51:56 menjadi 0 psi pada 20:52:00. BP tercatat 0 psi pada timestamp tabrakan dan hingga rekaman terakhir.
+3. **Brake Cylinder (BC).** BC tercatat 0 psi pada 20:51:18–20:51:37, naik menjadi 8 psi pada 20:51:39, lalu kembali 0 psi pada 20:51:43–20:51:56. Pada fase emergency, BC naik menjadi 70 psi pada 20:52:00. Nilai maksimum dataset adalah 73 psi pada 20:52:12. Setelah tabrakan BC turun menjadi 42–45 psi pada 20:52:14–20:52:16 dan tercatat 55 psi ketika lokomotif berhenti pada 20:52:19.
+4. **Arus motor traksi (Load).** Arus tercatat 168 A pada 20:51:18–20:51:36. Pada 20:51:56 tercatat 104 A dan pada 20:51:57 tercatat 0 A; nilainya tetap 0 A hingga rekaman terakhir. Satuan kolom adalah ampere (A), bukan kW.
+5. **Throttle, PCS, dan IBS.** Throttle berada pada T7 di awal rekaman, turun bertahap ke T5 dan T4, kemudian T1 dan Idle, serta tercatat Off pada 20:52:12. PCS Open tercatat Closed sampai 20:51:55 dan Open mulai 20:51:56. IBS tercatat Rel sampai 20:52:02 dan Appl mulai 20:52:03. Frekuensi kategori merangkum jumlah observasi, bukan durasi status.
+6. **Akselerasi.** Tujuh placeholder --- berturut-turut muncul pada 20:52:12–20:52:18. Nilai tidak dihitung sebagai angka. Nilai numerik kembali tersedia pada 20:52:19 (-0,84 m/s²), 20:52:20 (-0,40 m/s²), dan 20:52:21 (-0,15 m/s²). Penjelasan KNKT mengenai respons sensor terhadap G-Force dicatat sebagai konteks sumber, bukan hasil pengukuran ulang EDA.
+7. **Kolom posisi km dan m.** Kedua kolom dipertahankan terpisah sebagaimana dicetak pada tabel sumber. Nilai m 0–863 tidak boleh dibaca sendirian sebagai jarak tempuh total atau jarak ke titik tabrakan. Pada timestamp tabrakan tabel menunjukkan km=0 dan m=26; pada timestamp berhenti keduanya 0. KNKT menjelaskan lokomotif masih bergerak 26 m setelah tabrakan sebelum berhenti di km 28+941.
+
+### Frekuensi kategori
+
+Frekuensi kategori untuk 58 rekaman gabungan:
+
+| Variabel | Kategori | Frekuensi | Nilai tersedia |
+|---|---|---:|---:|
+| Throttle | T5 | 17 | 58 |
+| Throttle | Idle | 13 | 58 |
+| Throttle | T7 | 11 | 58 |
+| Throttle | Off | 10 | 58 |
+| Throttle | T4 | 4 | 58 |
+| Throttle | T6 | 2 | 58 |
+| Throttle | T1 | 1 | 58 |
+| PCS Open | Closed | 32 | 58 |
+| PCS Open | Open | 26 | 58 |
+| IBS | Rel | 39 | 58 |
+| IBS | Appl | 19 | 58 |
+| DB Excit | Off | 32 | 32 |
+| Dir Call | For | 32 | 32 |
+| DB Set | No | 32 | 32 |
+| DB Star | No | 32 | 32 |
+
+Empat kolom status terakhir hanya tersedia pada 32 baris Tabel 6–8; 26 sel kosong pada Tabel 9–10 merupakan ketidaktersediaan struktural. Denominator 32 untuk empat kolom tersebut tidak boleh disamakan dengan 58 rekaman keseluruhan.
+
+### Statistik deskriptif yang diaudit
+
+Statistik diverifikasi kembali terhadap CSV analitis. Simpangan baku kolom m dibulatkan menjadi 256,768 (bukan 256,769). Untuk akselerasi, n=51 karena tujuh placeholder dikecualikan dari perhitungan numerik.
+
+| Variabel | n valid | Mean | Median | Std. deviasi | Minimum | Maksimum |
+|---|---:|---:|---:|---:|---:|---:|
+| km | 58 | 0,172 | 0 | 0,381 | 0 | 1 |
+| m | 58 | 300,483 | 244,5 | 256,768 | 0 | 863 |
+| Speed (km/h) | 58 | 73,638 | 82,5 | 33,077 | 0 | 109 |
+| Acceleration (m/sec²) | 51 | -0,336 | -0,38 | 0,203 | -0,84 | 0,05 |
+| Load (amps) | 58 | 86,345 | 136 | 76,730 | 0 | 168 |
+| EAB BP (psi) | 58 | 31,897 | 49 | 28,264 | 0 | 71 |
+| EAB BC (psi) | 58 | 26,000 | 2 | 31,191 | 0 | 73 |
+
+Mean dan simpangan baku adalah ringkasan seluruh rentang, bukan nilai parameter pada fase tertentu. Karena data runtun waktu berasal dari satu kejadian dan memiliki ketergantungan temporal, statistik gabungan tidak digunakan untuk mengestimasi perilaku umum armada atau sistem.
+
+### Hasil audit pencilan IQR
+
+Pagar dihitung dengan Q1 − 1,5 × IQR dan Q3 + 1,5 × IQR menggunakan kuartil Pandas pada salinan analisis. Hasil dari outputs/bab_viii/ringkasan_iqr.csv:
+
+| Variabel | n valid | Pagar bawah | Pagar atas | Kandidat IQR |
+|---|---:|---:|---:|---:|
+| m | 58 | -507,000 | 1.069,000 | 0 |
+| Speed (km/h) | 58 | -8,875 | 168,125 | 0 |
+| Acceleration (m/sec²) | 51 | -1,010 | 0,350 | 0 |
+| Load (amps) | 58 | -228,000 | 380,000 | 0 |
+| EAB BP (psi) | 58 | -77,625 | 129,375 | 0 |
+| EAB BC (psi) | 58 | -87,000 | 145,000 | 0 |
+
+Kolom km tidak dimasukkan dalam tabel enam variabel operasional karena Q1=Q3=0 sehingga IQR=0; sepuluh nilai km=1 ditandai secara mekanis oleh pagar nol. Kolom ini merupakan komponen lokasi diskrit, sehingga penandaan tersebut tidak ditafsirkan sebagai pencilan operasional. Tidak adanya kandidat IQR bukan bukti bahwa seluruh sistem beroperasi normal atau bebas anomali teknis.
 
 **Gambar 9.1. Ikhtisar temuan EDA**
 
 ![Ikhtisar temuan](../outputs/bab_ix/ikhtisar_temuan.png)
 
-Gambar merangkum ukuran dataset, rentang waktu, kecepatan, jeda timestamp, dan placeholder akselerasi. Angka ringkasan diturunkan langsung dari dataset yang digunakan pada generator visual.
+Gambar merangkum ukuran dataset dan nilai cakupan. Nilai per timestamp, satuan, frekuensi kategori, dan hasil IQR dirinci pada tabel audit dan keluaran CSV; gambar ringkasan tidak menggantikan tabel angka.
 
-Sumber: hasil olah penulis dari transkripsi Tabel 6–10.
-
-### Visual tambahan: keputusan bukti dan scorecard keterbatasan
-
-**Gambar 9.2. Decision Matrix kebutuhan bukti lanjutan**
-
-![Decision Matrix bukti lanjutan](../outputs/bab_ix/decision_matrix_bukti_lanjutan.png)
-
-Tujuan matriks adalah menghubungkan pertanyaan lanjutan dengan data primer yang dibutuhkan dan status ketersediaannya pada dataset ini. Cara membaca: setiap baris memuat satu pertanyaan, sumber bukti yang dibutuhkan, dan apakah data itu tersedia. Gambar mendukung prioritas pengumpulan bukti tambahan tanpa mengasumsikan bahwa bukti tersebut sudah diperoleh. Batasnya, status “tidak tersedia” hanya merujuk pada dataset EDA ini, bukan pernyataan bahwa bukti tersebut tidak ada di institusi lain atau keseluruhan investigasi.
-
-**Gambar 9.3. Scorecard cakupan dan keterbatasan**
-
-![Scorecard keterbatasan](../outputs/bab_ix/scorecard_keterbatasan.png)
-
-Tujuannya merangkum ukuran dataset dan batas utama interpretasi. Cara membaca: setiap angka menunjukkan satu indikator cakupan, seperti 58 rekaman unik, 16 kolom, 59 baris sumber, gap waktu, placeholder akselerasi, dan empat kolom status yang tidak tersedia pada Tabel 9–10. Gambar mendukung ringkasan batas analisis pada Bab IX. Batasnya, indikator tersebut tidak mengukur kualitas investigasi secara keseluruhan atau tingkat keyakinan terhadap penyebab kecelakaan.
+Sumber: hasil olah penulis dari transkripsi Tabel 6–10. Batas fase dan keterangan investigasi merujuk pada KNKT Bab II.3, Tabel 5–10, serta grafik Lampiran 7.
 
 ## 9.2 Keterbatasan Analisis
 
