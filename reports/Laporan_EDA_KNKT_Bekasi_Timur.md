@@ -106,7 +106,7 @@ Kolom sumber `km` dan `m` adalah komponen satu besaran jarak tersisa menuju titi
 
 ### Missing values dan placeholder
 
-Pemeriksaan nilai kosong dengan Pandas menunjukkan 26 nilai kosong pada masing-masing kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, yaitu 44,83% dari 58 baris. Keempat kolom tersebut tersedia pada Tabel 6–8, tetapi tidak ditampilkan pada Tabel 9–10. Kondisi ini adalah ketidaktersediaan kolom pada cakupan dua tabel terakhir, bukan bukti bahwa sensor gagal merekam variabel tersebut.
+Pemeriksaan nilai kosong dengan Pandas pada subset Tabel 6–10 menunjukkan 26 nilai kosong pada masing-masing kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, yaitu 44,83% dari 58 baris. Keempat kolom tersebut tersedia pada Tabel 6–8, tetapi tidak ditampilkan pada Tabel 9–10. Lampiran 7 PDF memuat empat kolom status pada tabel Data Logger lengkap; karena itu, kekosongan pada CSV ini merupakan keterbatasan cakupan transkripsi Tabel 6–10, bukan bukti bahwa sensor gagal merekam variabel tersebut. Header `DB Start` pada Lampiran 7 perlu direkonsiliasi dengan `DB Star` sebelum nilai dari lampiran digunakan.
 
 Kolom `Acceleration (m/sec²)` memuat tujuh nilai teks `---`. Karena `---` adalah penanda yang tercantum dalam sumber, nilai tersebut dipertahankan pada dataset mentah. Untuk perhitungan numerik, penanda dapat dipetakan menjadi nilai tidak tersedia pada salinan analisis saja, tanpa mengubah berkas sumber. Laporan KNKT menjelaskan bahwa pada waktu tabrakan, akselerometer mencatat data kosong/tidak terbaca yang dikaitkan dengan G-Force akibat tabrakan yang melampaui batas ukur sensor.
 
