@@ -16,6 +16,6 @@ Kolom `km` dan `m` merupakan komponen satu besaran jarak tersisa menuju titik he
 
 ## Keterlacakan dan batas verifikasi
 
-CSV tersedia pada `data/processed/data_logger_knkt_tabel_6_10.csv`. Workbook transkripsi per sumber dan salinan PDF tidak disertakan di repository pada saat pemeriksaan. Karena itu, 59 baris sumber dapat dihitung dari tabel KNKT dan keputusan deduplikasi didokumentasikan, tetapi audit independen terhadap lembar kerja transkripsi per sumber belum dapat dilakukan hanya dari repository ini. Setiap koreksi sel harus dicatat dengan nomor tabel, halaman, timestamp, nilai sebelum/sesudah, dan bukti sumber.
+CSV tersedia pada `data/processed/data_logger_knkt_tabel_6_10.csv`. Workbook kerja transkripsi per sumber dan salinan PDF tidak disertakan di repository. Namun, audit dilakukan dengan mencocokkan secara visual seluruh baris dan kolom pada Tabel 6–10 langsung terhadap halaman PDF sumber (halaman PDF 75–78); satu koreksi nilai Load pada 20:51:36 dicatat dalam [audit transkripsi sumber](source_transcription_audit.md). Workbook eksternal bukan prasyarat untuk mereproduksi analisis dari CSV. Setiap koreksi sel harus dicatat dengan nomor tabel, halaman, timestamp, nilai sebelum/sesudah, dan bukti sumber.
 
 Tanggal pemeriksaan sumber: 26 November 2026. Simpan checksum SHA-256 untuk setiap berkas dataset yang digunakan pada rilis analisis; jangan menganggap checksum CSV sebagai checksum PDF sumber.
