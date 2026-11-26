@@ -93,7 +93,7 @@ Secara deskriptif, kecepatan berada pada rentang 0–109 km/jam, nilai kolom `m`
 
 ### Missing values dan placeholder
 
-Pemeriksaan nilai kosong dengan Pandas menunjukkan empat kolom kosong 100%: `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`. Empat kolom tersebut memang tidak disajikan dalam Tabel 9–10. Kondisi ini merupakan ketidaktersediaan kolom pada cakupan tabel sumber, bukan bukti bahwa sensor gagal merekam seluruh variabel tersebut.
+Pemeriksaan nilai kosong dengan Pandas menunjukkan 26 nilai kosong pada masing-masing kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, yaitu 44,83% dari 58 baris. Keempat kolom tersebut tersedia pada Tabel 6–8, tetapi tidak ditampilkan pada Tabel 9–10. Kondisi ini adalah ketidaktersediaan kolom pada cakupan dua tabel terakhir, bukan bukti bahwa sensor gagal merekam variabel tersebut.
 
 Kolom `Acceleration (m/sec²)` memuat tujuh nilai teks `---`. Karena `---` adalah penanda yang tercantum dalam sumber, nilai tersebut dipertahankan pada dataset mentah. Untuk perhitungan numerik, penanda dapat dipetakan menjadi nilai tidak tersedia pada salinan analisis saja, tanpa mengubah berkas sumber. Laporan KNKT menjelaskan bahwa pada waktu tabrakan, akselerometer mencatat data kosong/tidak terbaca yang dikaitkan dengan G-Force akibat tabrakan yang melampaui batas ukur sensor.
 
@@ -163,10 +163,7 @@ Hasil pemeriksaan: `df.shape == (58, 16)`. Gunakan `pd.read_csv("data/processed/
 
 ## 3.3 Pemeriksaan Tipe Data dan Informasi Umum
 
-Hasil pembacaan dataset gabungan: kolom numerik `km`, `m`, `Speed (km/h)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)` terbaca integer; akselerasi bertipe object karena placeholder `---`; Date, Time, dan variabel status terbaca object. Empat kolom status kosong pada 26 baris Tabel 9–10.
-- `Date`, `Time`, `Acceleration (m/sec²)`, `Throttle`, `PCS Open`, dan `IBS` terbaca sebagai object.
-- `km`, `m`, `Speed (km/h)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)` terbaca sebagai integer.
-- Empat kolom yang seluruh nilainya kosong terbaca sebagai float karena seluruh isinya null.
+Hasil pembacaan dataset gabungan: `km`, `m`, `Speed (km/h)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)` terbaca integer. `Acceleration (m/sec²)` terbaca object karena memuat angka dan placeholder `---`. `Date`, `Time`, serta variabel status terbaca object. Empat kolom `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star` bertipe object dan memiliki 26 nilai kosong pada baris Tabel 9–10, tetapi berisi data pada 32 baris Tabel 6–8.
 
 Tipe object pada akselerasi dapat dimengerti karena kolom memuat angka dan teks `---`. Tipe tanggal dan waktu belum berupa datetime; parsing dilakukan secara eksplisit pada salinan analisis.
 
@@ -218,7 +215,7 @@ Tidak dilakukan imputasi mean, median, modus, KNN Imputer, atau MICE. Pengisian 
 
 Tabel pada Bab 3 menyajikan mean, median, modus, standar deviasi, minimum, dan maksimum. Secara umum, distribusi nilai pada beberapa variabel dipengaruhi oleh perubahan keadaan operasi dalam rentang waktu singkat. Karena data merupakan rekaman berurutan setiap satu detik, nilai tidak dapat diperlakukan sebagai sampel acak yang saling independen.
 
-Kolom `km` tidak dimasukkan dalam ringkasan interpretatif karena bernilai 0 pada seluruh 26 baris. Kolom `m` dianalisis sebagaimana tercatat, tanpa menggabungkan atau merekonstruksi kilometer perjalanan yang tidak tercantum pada cuplikan tabel.
+Kolom `km` dan `m` dianalisis sebagai dua komponen lokasi sebagaimana dicetak. Kolom `km` bernilai 1 pada sepuluh rekaman Tabel 6 dan 0 pada 48 rekaman berikutnya; perubahan tersebut tidak diubah atau direkonstruksi. Interpretasi lokasi harus mempertimbangkan format koordinat pada sumber.
 
 ## 5.2 Bentuk Distribusi: Skewness dan Kurtosis
 
@@ -233,7 +230,7 @@ Nilai skewness dan excess kurtosis pada variabel numerik yang dapat dihitung:
 | EAB BP (psi) | -0,130 | -1,830 |
 | EAB BC (psi) | 0,503 | -1,660 |
 
-Kurtosis yang disajikan adalah excess kurtosis (kurtosis Fisher), sehingga nilai 0 menjadi acuan distribusi normal secara teoretis. Nilai skewness positif pada arus motor traksi dan BP menunjukkan ekor kanan yang panjang, sejalan dengan banyak nilai rendah/nol dan beberapa nilai lebih tinggi pada cuplikan ini. Akselerasi dihitung hanya dari 51 angka, bukan tujuh placeholder.
+Kurtosis yang disajikan adalah excess kurtosis (kurtosis Fisher), sehingga nilai 0 menjadi acuan distribusi normal secara teoretis. Pada gabungan ini, skewness kecepatan negatif (-0,958), sedangkan skewness akselerasi mendekati nol (0,290). Nilai skewness tidak digunakan untuk menyimpulkan normalitas. Akselerasi dihitung hanya dari 51 angka, bukan tujuh placeholder.
 
 Ukuran skewness dan kurtosis pada sampel kecil dan berurutan ini tidak cukup untuk menyatakan normalitas. Histogram/KDE dapat membantu inspeksi visual, tetapi uji normalitas formal dan asumsi inferensial tidak menjadi tujuan utama proyek.
 
@@ -338,8 +335,10 @@ Komite Nasional Keselamatan Transportasi. (2026). *Laporan akhir investigasi kec
 ## CATATAN REPRODUKSIBILITAS
 
 - Dataset yang dianalisis: `data_logger_knkt_tabel_6_10_lengkap.xlsx`, sheet `Data_Logger_Raw`; CSV repositori: `data/processed/data_logger_knkt_tabel_6_10.csv`.
-- Cakupan sumber: Tabel 9 dan Tabel 10, halaman tercetak 67–68.
-- Ukuran dataset: 26 baris × 16 kolom.
+- Cakupan sumber: Tabel 6–10, halaman tercetak 65–68.
+- Baris transkripsi dari seluruh tabel: 59; dataset gabungan setelah menghapus satu duplikasi identik lintas Tabel 7–8: 58 baris × 16 kolom.
+- Gap sumber: tidak ada rekaman yang ditampilkan untuk 20:51:28–20:51:33; tidak dilakukan interpolasi.
+- File CSV proyek: `data/processed/data_logger_knkt_tabel_6_10.csv`.
 - Placeholder `---` dipertahankan pada data mentah dan hanya dikecualikan dari kalkulasi numerik akselerasi.
 - Tidak dilakukan imputasi, penghapusan baris, penghapusan kolom, scaling, encoding, atau transformasi terhadap dataset mentah.
 - Dataset publik tidak disertakan dalam repositori sebelum status hak distribusi dan ketentuan penggunaan sumber dipastikan. Simpan salinan lokal sesuai ketentuan sumber dan catat checksum serta versi dataset pada saat reproduksi.
