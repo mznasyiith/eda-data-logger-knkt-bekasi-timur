@@ -42,7 +42,7 @@ jobs:
       - name: Ruff
         run: ruff check src tests scripts app.py --select E4,E7,E9,F
       - name: Format and audit Python scripts
-        run: black --diff --check scripts app.py src/eda_knkt/dashboard.py tests/test_dashboard.py
+        run: black --check scripts app.py src/eda_knkt/dashboard.py tests/test_dashboard.py
       - name: Execute all notebooks in order
         run: |
           mkdir -p /tmp/eda-executed
