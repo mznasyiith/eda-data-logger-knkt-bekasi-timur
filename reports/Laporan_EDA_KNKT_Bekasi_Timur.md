@@ -138,6 +138,26 @@ Gambar memperlihatkan timestamp yang benar-benar tercantum. Jeda enam detik anta
 
 Sumber: hasil olah penulis dari transkripsi Tabel 6–10.
 
+### Visual tambahan: asal-usul data, pertanyaan analitis, dan skema
+
+**Gambar 2.2. Pipeline akuisisi dan penyiapan data**
+
+![Pipeline akuisisi data](../outputs/bab_ii/pipeline_akuisisi_data.png)
+
+Tujuan diagram adalah mendokumentasikan alur dari laporan akhir KNKT, pembacaan tabel PDF dan transkripsi manual, validasi, deduplikasi, hingga pembentukan CSV analitis. Cara membaca: ikuti urutan proses dari sumber primer ke dataset. Diagram mendukung provenance bahwa data diperoleh melalui transkripsi, bukan ekspor otomatis perangkat. Batasnya, pipeline tidak membuktikan ketepatan setiap sel; pemeriksaan silang terhadap tabel sumber tetap diperlukan.
+
+**Gambar 2.3. Matriks data terhadap pertanyaan analitis**
+
+![Matriks data ke pertanyaan](../outputs/bab_ii/matriks_data_ke_pertanyaan.png)
+
+Tujuan matriks adalah memperlihatkan hubungan pertanyaan EDA, kolom yang relevan, dan teknik pemeriksaan. Cara membaca: setiap baris memasangkan pertanyaan dengan variabel dan metode yang sesuai. Visual mendukung bahwa pemilihan teknik mengikuti pertanyaan, misalnya missingness untuk kualitas data dan deret waktu untuk perubahan parameter. Batasnya, matriks merupakan rancangan analisis, bukan hasil yang membuktikan hipotesis investigasi.
+
+**Gambar 2.4. Ringkasan skema dataset**
+
+![Ringkasan skema dataset](../outputs/bab_ii/ringkasan_skema_dataset.png)
+
+Tujuan gambar adalah mengelompokkan 16 kolom menurut dimensi waktu/lokasi, dinamika, pengereman, dan status. Cara membaca: kelompok menunjukkan fungsi analitis umum kolom, bukan klasifikasi resmi perangkat. Visual mendukung penelusuran skema dan pemilihan variabel pada bab berikutnya. Batasnya, pengelompokan tidak menambahkan variabel baru dan tidak menyatakan hubungan kausal antarparameter.
+
 ## 2.5 Penyelarasan dengan Kebutuhan Operasional
 
 Data relevan untuk memahami perubahan parameter lokomotif pada cuplikan waktu yang meliputi fase sebelum emergency brake, pengereman darurat, dan saat tabrakan. Dataset gabungan memuat 58 rekaman unik dari Tabel 6–10. Meskipun lebih luas daripada Tabel 9–10 saja, data ini tetap belum cukup untuk menggambarkan keseluruhan rangkaian peristiwa, seluruh sistem pengereman rangkaian, kondisi sarana lain, aspek persinyalan secara lengkap, atau faktor eksternal.
