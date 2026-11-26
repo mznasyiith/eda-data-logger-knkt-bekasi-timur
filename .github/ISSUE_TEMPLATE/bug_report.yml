@@ -1,0 +1,25 @@
+name: Bug report
+description: Laporkan kesalahan kode, data, dokumentasi, atau visualisasi
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Ringkasan masalah
+      description: Jelaskan perilaku aktual dan yang diharapkan.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Langkah reproduksi
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Lingkungan
+      description: Versi Python, OS, commit/branch.
+    validations:
+      required: false
