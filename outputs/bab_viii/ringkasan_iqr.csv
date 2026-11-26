@@ -1,0 +1,7 @@
+variable,n_valid,iqr_outlier_count,lower_fence,upper_fence
+m,58,0,-507.0,1069.0
+Speed (km/h),58,0,-8.875,168.125
+Acceleration (m/sec²),51,0,-1.01,0.35
+Load (amps),58,0,-228.0,380.0
+EAB BP (psi),58,0,-77.625,129.375
+EAB BC (psi),58,0,-87.0,145.0
