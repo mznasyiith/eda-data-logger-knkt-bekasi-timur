@@ -34,7 +34,7 @@ for required in (
     "20:51:28–20:51:33",
     "20:52:12",
     "20:52:19",
-    "amps (A)",
+    "ampere",
     "Acceleration (m/sec²)",
     "58 rekaman unik",
     "73 psi",
@@ -42,7 +42,7 @@ for required in (
     assert required in html_text, f"Required source-aligned content missing: {required}"
 
 assert "distance_to_stop_m" not in html_text, "Unsupported derived distance feature found"
-assert "Load (amps)" in html_text, "Load unit label missing"
+assert "Load (A)" in html_text, "Load unit label missing"
 
 with pdf.open("rb") as stream:
     assert stream.read(5) == b"%PDF-", "Invalid PDF signature"
