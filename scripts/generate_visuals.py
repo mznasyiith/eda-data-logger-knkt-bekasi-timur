@@ -489,10 +489,10 @@ def extended_chapter_iii(df, raw, out):
     ax.set_title("BAB III — Cuplikan Delapan Rekaman Pertama (Data Mentah)",fontsize=13,weight="bold",pad=12)
     save(fig,folder/"cuplikan_data_mentah.png")
 
-    type_counts=raw.dtypes.astype(str).value_counts()
+    type_counts=df[raw.columns].dtypes.astype(str).value_counts()
     fig,ax=plt.subplots(figsize=(7,3.8),constrained_layout=True)
     ax.bar(type_counts.index,type_counts.values)
-    ax.set(title="BAB III — Distribusi Tipe Data pada Pembacaan CSV",ylabel="Jumlah kolom",xlabel="Tipe pembacaan")
+    ax.set(title="BAB III — Distribusi Tipe Data pada Salinan Analisis",ylabel="Jumlah kolom",xlabel="Tipe data setelah konversi")
     ax.grid(axis="y",alpha=.2)
     for i,v in enumerate(type_counts.values): ax.text(i,v+.1,str(v),ha="center")
     save(fig,folder/"distribusi_tipe_data_raw.png")
