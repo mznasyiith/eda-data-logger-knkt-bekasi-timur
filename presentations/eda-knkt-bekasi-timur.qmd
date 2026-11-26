@@ -327,7 +327,7 @@ Jelaskan mengapa satu ukuran tidak cukup. Mean dan median yang berbeda dapat men
 | EAB BP (psi) | 58 | 31,897 | 49 | 28,264 | 0–71 |
 | EAB BC (psi) | 58 | 26,000 | 2 | 31,191 | 0–73 |
 
-**Catatan:** Load adalah arus dalam ampere (A), bukan kW.
+**Catatan:** Load (A) adalah arus dalam ampere, bukan daya (kW).
 
 ::: {.notes}
 Arahkan audiens pada perbedaan jumlah nilai valid akselerasi, yaitu 51, karena tujuh placeholder tidak dihitung. Variabel lain memiliki 58 nilai pada ringkasan ini. Nilai statistik menggambarkan seluruh cuplikan, bukan kondisi pada satu fase tertentu. Satuan Load adalah ampere. Jangan menyebutnya daya atau kilowatt.
@@ -517,7 +517,7 @@ Komunikasi hasil bukan hanya memajang grafik. Pilih temuan yang relevan dengan p
 
 - Dataset analitis: **58 rekaman unik × 16 kolom**.
 - Gap waktu 20:51:28–20:51:33 dipertahankan tanpa interpolasi.
-- Tabrakan tercatat pada 20:52:12 dengan Speed 40 km/jam.
+- Tabrakan tercatat pada 20:52:12 dengan Speed 40 km/jam dan EAB BC 73 psi.
 - Berhenti tercatat pada 20:52:19 dengan Speed 0 km/jam.
 - Acceleration memiliki tujuh placeholder `---` pada 20:52:12–20:52:18.
 
