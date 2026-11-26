@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+from html import unescape
 import subprocess
 
 root = Path(__file__).resolve().parents[1]
@@ -10,7 +11,7 @@ pdf = dist / "eda-knkt-bekasi-timur.pdf"
 assert html.is_file() and html.stat().st_size > 10_000, "HTML missing or unexpectedly small"
 assert pdf.is_file() and pdf.stat().st_size > 10_000, "PDF missing or unexpectedly small"
 
-html_text = html.read_text(encoding="utf-8")
+html_text = unescape(html.read_text(encoding="utf-8"))
 # Reveal.js slide sections are emitted as HTML <section> elements.
 slides = html_text.count("<section")
 assert slides >= 30, f"Expected at least 30 slide sections, found {slides}"
