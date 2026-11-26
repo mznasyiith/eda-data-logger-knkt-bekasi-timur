@@ -90,7 +90,7 @@ Fungsi transformasi dan pembersihan mengembalikan salinan data; pemilihan kolom 
 | 08 | Handling outliers |
 | 09 | Findings and insights |
 
-Notebook awal merupakan kerangka kerja. Seluruh hasil harus diisi dan diperiksa berdasarkan dataset aktual.
+Notebook 00–09 berisi urutan kerja, penjelasan metodologis, dan sel kode yang dapat dijalankan setelah dataset aktual tersedia. Seluruh hasil numerik, interpretasi, serta temuan harus dihasilkan dari data yang telah diverifikasi; repository ini tidak menyertakan dataset.
 
 ## Kebijakan data dan hak penggunaan
 
