@@ -41,7 +41,7 @@ with pdf.open("rb") as stream:
 info = subprocess.run(
     ["pdfinfo", str(pdf)], check=True, capture_output=True, text=True
 ).stdout
-match = re.search(r"^Pages:\\s+(\\d+)", info, re.MULTILINE)
+match = re.search(r"^Pages:\s+(\d+)", info, re.MULTILINE)
 assert match and int(match.group(1)) >= 15, "PDF page count is missing or below 15"
 
 print(
