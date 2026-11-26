@@ -51,8 +51,11 @@ def test_chapter_ix_descriptive_statistics_match_dataset():
         "Load (amps)", "EAB BP (psi)", "EAB BC (psi)"
     ]:
         df[column] = pd.to_numeric(df[column].replace("", pd.NA).replace("---", pd.NA))
+    df["distance_to_stop_m"] = df["km"] * 1000 + df["m"]
     assert df["Acceleration (m/sec²)"].notna().sum() == 51
-    assert round(df["m"].std(), 3) == 256.768
+    assert df["distance_to_stop_m"].iloc[0] == 1341
+    assert df.loc[df["Time"] == "20.52.12", "distance_to_stop_m"].iloc[0] == 26
+    assert df.loc[df["Time"] == "20.52.19", "distance_to_stop_m"].iloc[0] == 0
     assert round(df["Speed (km/h)"].mean(), 3) == 73.638
     assert round(df["EAB BC (psi)"].max(), 3) == 73
 
@@ -60,11 +63,12 @@ def test_chapter_ix_descriptive_statistics_match_dataset():
 def test_chapter_ix_iqr_summary_matches_recalculation():
     df = load_data()
     variables = [
-        "m", "Speed (km/h)", "Acceleration (m/sec²)",
+        "distance_to_stop_m", "Speed (km/h)", "Acceleration (m/sec²)",
         "Load (amps)", "EAB BP (psi)", "EAB BC (psi)"
     ]
-    for column in variables:
+    for column in ["km", "m", "Speed (km/h)", "Acceleration (m/sec²)", "Load (amps)", "EAB BP (psi)", "EAB BC (psi)"]:
         df[column] = pd.to_numeric(df[column].replace("", pd.NA).replace("---", pd.NA))
+    df["distance_to_stop_m"] = df["km"] * 1000 + df["m"]
     expected = pd.read_csv(IQR).set_index("variable")
     for column in variables:
         values = df[column].dropna()
@@ -87,3 +91,4 @@ def test_chapter_ix_reports_master_time_adjustment_and_separate_collision_stop()
     assert "20:52:12" in report and "40" in report
     assert "20:52:19" in report and "55" in report
     assert "20:51:28–20:51:33" in report
+    assert "distance_to_stop_m" in report
