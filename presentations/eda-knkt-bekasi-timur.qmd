@@ -70,7 +70,7 @@ Grafik interval memperlihatkan jeda waktu aktual antartimestamp. Indeks baris ti
 - Placeholder dipertahankan di data mentah; hanya dikecualikan dari hitungan numerik akselerasi.
 - Tidak ada imputasi, interpolasi, penghapusan kolom, atau pengisian nol.
 
-![](../outputs/bab_iv/missingness_matrix.png){fig-alt="Matriks nilai terisi, kosong, dan placeholder"}
+![](../outputs/bab_iv/missingness_matrix.png){fig-alt="Matriks nilai terisi, kosong, dan placeholder" width="78%"}
 
 ::: {.notes}
 Bedakan sel kosong struktural dengan placeholder. Empat kolom status tidak ditampilkan pada Tabel 9 dan 10, sehingga 26 sel kosong per kolom bukan bukti kegagalan sensor atau status tertentu. Tujuh tanda --- merupakan penanda eksplisit untuk akselerasi pada waktu 20:52:12 sampai 20:52:18. Jangan mengganti tanda tersebut dengan nol. Dalam statistik numerik akselerasi, tujuh placeholder dikecualikan sehingga n valid 51.
