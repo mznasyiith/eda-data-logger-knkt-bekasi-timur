@@ -58,6 +58,23 @@ Jalankan notebook secara berurutan menggunakan Jupyter:
 jupyter lab
 ```
 
+## Modul Python
+
+Modul di `src/eda_knkt/` menyediakan fungsi reusable untuk tahapan EDA:
+
+| Modul | Tanggung jawab |
+|---|---|
+| `config.py` | Lokasi direktori proyek dan data |
+| `ingestion.py` | Memuat berkas CSV dan Excel |
+| `validation.py` | Memeriksa dimensi, nama kolom, tipe data, dan nilai hilang |
+| `cleaning.py` | Operasi pembersihan yang eksplisit dan non-destruktif |
+| `transformation.py` | Konversi numerik/datetime, pengurutan, dan pemilihan kolom |
+| `statistics.py` | Statistik deskriptif, ringkasan kategorikal, bentuk distribusi, dan korelasi |
+| `visualization.py` | Histogram, frekuensi kategori, scatter plot, dan heatmap korelasi |
+| `reporting.py` | Ekspor tabel CSV, grafik, dan laporan Markdown |
+
+Fungsi transformasi dan pembersihan mengembalikan salinan data; pemilihan kolom serta aturan konversi harus ditentukan berdasarkan kamus data yang telah diverifikasi. Modul statistik dan visualisasi tidak menetapkan arti atau satuan variabel secara otomatis.
+
 ## Urutan notebook
 
 | Notebook | Tahap |
