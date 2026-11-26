@@ -444,8 +444,11 @@ def extended_chapter_ii(df, raw, out):
     ]
     fig,ax=plt.subplots(figsize=(12,4.2),constrained_layout=True)
     table=ax.table(cellText=mapping[1:],colLabels=mapping[0],loc="center",cellLoc="left")
-    table.auto_set_font_size(False); table.set_fontsize(8.5); table.scale(1,1.7)
-    ax.axis("off"); ax.set_title("BAB II — Matriks Penyelarasan Data dan Pertanyaan",fontsize=14,weight="bold",pad=15)
+    table.auto_set_font_size(False)
+    table.set_fontsize(8.5)
+    table.scale(1,1.7)
+    ax.axis("off")
+    ax.set_title("BAB II — Matriks Penyelarasan Data dan Pertanyaan",fontsize=14,weight="bold",pad=15)
     save(fig,folder/"matriks_data_ke_pertanyaan.png")
 
     fig,ax=plt.subplots(figsize=(12,3.2),constrained_layout=True)
@@ -466,10 +469,12 @@ def extended_chapter_ii(df, raw, out):
 
 
 def extended_chapter_iii(df, raw, out):
-    folder=out/"bab_iii"; folder.mkdir(parents=True,exist_ok=True)
+    folder=out/"bab_iii"
+    folder.mkdir(parents=True,exist_ok=True)
     nrow,ncol=raw.shape
     filled=raw.replace({"":np.nan,"---":np.nan}).notna().sum().sum()
-    fig,ax=plt.subplots(figsize=(10,3.2),constrained_layout=True); ax.axis("off")
+    fig,ax=plt.subplots(figsize=(10,3.2),constrained_layout=True)
+    ax.axis("off")
     ax.set_title("BAB III — Scorecard Struktur Dataset",fontsize=14,weight="bold")
     vals=[("Baris",str(nrow)),("Kolom",str(ncol)),("Sel total",str(nrow*ncol)),
           ("Sel terisi",str(int(filled))),("Sel kosong/placeholder",str(int(nrow*ncol-filled)))]
@@ -485,7 +490,9 @@ def extended_chapter_iii(df, raw, out):
     fig,ax=plt.subplots(figsize=(15,4.2),constrained_layout=True)
     ax.axis("off")
     tbl=ax.table(cellText=preview.values,colLabels=preview.columns,loc="center",cellLoc="center")
-    tbl.auto_set_font_size(False); tbl.set_fontsize(6.7); tbl.scale(1,1.55)
+    tbl.auto_set_font_size(False)
+    tbl.set_fontsize(6.7)
+    tbl.scale(1,1.55)
     ax.set_title("BAB III — Cuplikan Delapan Rekaman Pertama (Data Mentah)",fontsize=13,weight="bold",pad=12)
     save(fig,folder/"cuplikan_data_mentah.png")
 
@@ -504,14 +511,16 @@ def extended_chapter_iii(df, raw, out):
         ax.plot([row["min"],row["max"]],[i,i],marker="o",lw=2)
         ax.text(row["min"],i+.13,f"{row['min']:g}",ha="center",fontsize=8)
         ax.text(row["max"],i+.13,f"{row['max']:g}",ha="center",fontsize=8)
-    ax.set_yticks(range(len(cols)),labels=cols); ax.set_xlabel("Rentang nilai (satuan mengikuti variabel)")
+    ax.set_yticks(range(len(cols)),labels=cols)
+    ax.set_xlabel("Rentang nilai (satuan mengikuti variabel)")
     ax.set_title("BAB III — Rentang Minimum dan Maksimum Variabel Numerik",weight="bold")
     ax.grid(axis="x",alpha=.2)
     save(fig,folder/"rentang_minimum_maksimum.png")
 
 
 def extended_chapter_iv(df, raw, out):
-    folder=out/"bab_iv"; folder.mkdir(parents=True,exist_ok=True)
+    folder=out/"bab_iv"
+    folder.mkdir(parents=True,exist_ok=True)
     columns=list(raw.columns)
     matrix=np.zeros((len(raw),len(columns)),dtype=int)
     for j,col in enumerate(columns):
@@ -528,7 +537,8 @@ def extended_chapter_iv(df, raw, out):
     from matplotlib.patches import Patch
     ax.legend(handles=[Patch(color="#e7f1e9",label="Terisi"),Patch(color="#d7dce2",label="Kosong"),
                        Patch(color="#e5a34b",label="Placeholder ---")],loc="upper left",bbox_to_anchor=(1.01,1))
-    ax.set_xlabel("Kolom dataset"); ax.set_ylabel("Waktu sumber (label tiap 3 rekaman)")
+    ax.set_xlabel("Kolom dataset")
+    ax.set_ylabel("Waktu sumber (label tiap 3 rekaman)")
     save(fig,folder/"missingness_matrix.png")
 
     structural_cols=["DB Excit","Dir Call","DB Set","DB Star"]
@@ -553,13 +563,15 @@ def extended_chapter_iv(df, raw, out):
 
 
 def extended_chapter_v(df, out):
-    folder=out/"bab_v"; folder.mkdir(parents=True,exist_ok=True)
+    folder=out/"bab_v"
+    folder.mkdir(parents=True,exist_ok=True)
     cols=[c for c in NUMERIC_COLUMNS if c in df and df[c].notna().sum()>2]
     fig,axes=plt.subplots(2,4,figsize=(13,7),constrained_layout=True)
     for ax,col in zip(axes.flat,cols):
         vals=df[col].dropna()
         ax.boxplot(vals,showmeans=True,meanline=True)
-        ax.set_title(col,fontsize=9); ax.grid(axis="y",alpha=.2)
+        ax.set_title(col,fontsize=9)
+        ax.grid(axis="y",alpha=.2)
     for ax in axes.flat[len(cols):]: ax.remove()
     fig.suptitle("BAB V — Sebaran Numerik dengan Median dan Mean",fontsize=14,weight="bold")
     save(fig,folder/"boxplot_mean_median.png")
@@ -569,7 +581,9 @@ def extended_chapter_v(df, out):
         vals=np.sort(df[col].dropna().to_numpy())
         y=np.arange(1,len(vals)+1)/len(vals)
         ax.step(vals,y,where="post")
-        ax.set_title(col,fontsize=9); ax.set_ylim(0,1.03); ax.grid(alpha=.2)
+        ax.set_title(col,fontsize=9)
+        ax.set_ylim(0,1.03)
+        ax.grid(alpha=.2)
         ax.set_ylabel("Proporsi kumulatif")
     for ax in axes.flat[len(cols):]: ax.remove()
     fig.suptitle("BAB V — Empirical Cumulative Distribution Function (ECDF)",fontsize=14,weight="bold")
@@ -581,18 +595,24 @@ def extended_chapter_v(df, out):
         moments.append((col,vals.skew(),vals.kurt()))
     m=pd.DataFrame(moments,columns=["Variabel","Skewness","Excess kurtosis"])
     fig,axes=plt.subplots(1,2,figsize=(12,4.5),constrained_layout=True)
-    axes[0].barh(m["Variabel"],m["Skewness"]); axes[0].axvline(0,color="black",lw=.8)
-    axes[0].set_title("Skewness"); axes[0].grid(axis="x",alpha=.2)
-    axes[1].barh(m["Variabel"],m["Excess kurtosis"]); axes[1].axvline(0,color="black",lw=.8)
-    axes[1].set_title("Excess kurtosis"); axes[1].grid(axis="x",alpha=.2)
+    axes[0].barh(m["Variabel"],m["Skewness"])
+    axes[0].axvline(0,color="black",lw=.8)
+    axes[0].set_title("Skewness")
+    axes[0].grid(axis="x",alpha=.2)
+    axes[1].barh(m["Variabel"],m["Excess kurtosis"])
+    axes[1].axvline(0,color="black",lw=.8)
+    axes[1].set_title("Excess kurtosis")
+    axes[1].grid(axis="x",alpha=.2)
     fig.suptitle("BAB V — Ringkasan Bentuk Distribusi",fontsize=14,weight="bold")
     save(fig,folder/"skewness_kurtosis.png")
     m.to_csv(folder/"ringkasan_momen_distribusi.csv",index=False)
 
 
 def extended_chapter_vi(df, raw, out):
-    folder=out/"bab_vi"; folder.mkdir(parents=True,exist_ok=True)
-    fig,ax=plt.subplots(figsize=(11,4.2),constrained_layout=True); ax.axis("off")
+    folder=out/"bab_vi"
+    folder.mkdir(parents=True,exist_ok=True)
+    fig,ax=plt.subplots(figsize=(11,4.2),constrained_layout=True)
+    ax.axis("off")
     ax.set_title("BAB VI — Alur Konversi dan Rekayasa Fitur Aktual",fontsize=14,weight="bold")
     nodes=[
         ("Raw CSV","Teks dipertahankan\ntermasuk ---"),
@@ -622,13 +642,16 @@ def extended_chapter_vi(df, raw, out):
     ax.axis("off")
     tbl=ax.table(cellText=type_rows,colLabels=["Kolom","Tipe raw CSV","Perlakuan salinan analisis"],
                  loc="center",cellLoc="left")
-    tbl.auto_set_font_size(False); tbl.set_fontsize(8); tbl.scale(1,1.35)
+    tbl.auto_set_font_size(False)
+    tbl.set_fontsize(8)
+    tbl.scale(1,1.35)
     ax.set_title("BAB VI — Pemetaan Tipe Data dan Konversi",fontsize=14,weight="bold",pad=12)
     save(fig,folder/"pemetaan_tipe_dan_konversi.png")
 
 
 def extended_chapter_vii(df, out):
-    folder=out/"bab_vii"; folder.mkdir(parents=True,exist_ok=True)
+    folder=out/"bab_vii"
+    folder.mkdir(parents=True,exist_ok=True)
     x=df["Elapsed (s)"].to_numpy()
     intervals=df["Interval (s)"].fillna(1).to_numpy()
     panels=[
@@ -662,7 +685,8 @@ def extended_chapter_vii(df, out):
             if i and intervals[i]==1 and cats.iloc[i]==cats.iloc[i-1]:
                 ax.plot([x[i-1],x[i]],[y[i-1],y[i]],lw=2,alpha=.45)
         ax.set_yticks(list(levels.values()),labels=list(levels.keys()),fontsize=8)
-        ax.set_ylabel(col,fontsize=9); ax.grid(axis="x",alpha=.18)
+        ax.set_ylabel(col,fontsize=9)
+        ax.grid(axis="x",alpha=.18)
     axes[-1].set_xlabel("Detik sejak rekaman pertama")
     fig.suptitle("BAB VII — Timeline Kategori Status yang Tercatat",fontsize=14,weight="bold")
     save(fig,folder/"categorical_state_timeline.png")
@@ -673,18 +697,24 @@ def extended_chapter_vii(df, out):
     for ax,(a,b) in zip(axes,pairs):
         valid=df[[a,b,"Elapsed (s)"]].dropna()
         points=ax.scatter(valid[a],valid[b],c=valid["Elapsed (s)"],cmap="viridis",s=40)
-        ax.set_xlabel(a); ax.set_ylabel(b); ax.set_title(f"{a} vs {b}",fontsize=9); ax.grid(alpha=.2)
+        ax.set_xlabel(a)
+        ax.set_ylabel(b)
+        ax.set_title(f"{a} vs {b}",fontsize=9)
+        ax.grid(alpha=.2)
     fig.colorbar(points,ax=axes,label="Detik sejak rekaman pertama")
     fig.suptitle("BAB VII — Hubungan Bivariat Parameter Operasional",fontsize=14,weight="bold")
     save(fig,folder/"scatter_hubungan_parameter.png")
 
 
 def extended_chapter_viii(df, out):
-    folder=out/"bab_viii"; folder.mkdir(parents=True,exist_ok=True)
+    folder=out/"bab_viii"
+    folder.mkdir(parents=True,exist_ok=True)
     cols=["m","Speed (km/h)","Acceleration (m/sec²)","Load (amps)","EAB BP (psi)","EAB BC (psi)"]
     rows=[]
     for c in cols:
-        v=df[c].dropna(); q1,q3=v.quantile([.25,.75]); iqr=q3-q1
+        v=df[c].dropna()
+        q1,q3=v.quantile([.25,.75])
+        iqr=q3-q1
         lo,hi=q1-1.5*iqr,q3+1.5*iqr
         rows.append((c,int(((v<lo)|(v>hi)).sum()),len(v),lo,hi))
     summary=pd.DataFrame(rows,columns=["Variabel","Kandidat IQR","n valid","Batas bawah","Batas atas"])
@@ -698,9 +728,12 @@ def extended_chapter_viii(df, out):
 
     fig,axes=plt.subplots(3,1,figsize=(13,8),sharex=True,constrained_layout=True)
     for ax,col in zip(axes,["Speed (km/h)","EAB BP (psi)","EAB BC (psi)"]):
-        y=df[col].to_numpy(dtype=float); xx,yy=_break_lines(df["Elapsed (s)"].to_numpy(),y,
+        y=df[col].to_numpy(dtype=float)
+        xx,yy=_break_lines(df["Elapsed (s)"].to_numpy(),y,
             df["Interval (s)"].fillna(1).to_numpy())
-        ax.plot(xx,yy,marker="o",ms=3); ax.set_ylabel(col); ax.grid(alpha=.2)
+        ax.plot(xx,yy,marker="o",ms=3)
+        ax.set_ylabel(col)
+        ax.grid(alpha=.2)
         _panel_title(ax,col)
     axes[-1].set_xlabel("Detik sejak rekaman pertama")
     fig.suptitle("BAB VIII — Konteks Temporal Parameter yang Ditinjau",fontsize=14,weight="bold")
@@ -708,8 +741,10 @@ def extended_chapter_viii(df, out):
 
 
 def extended_chapter_ix(df, raw, out):
-    folder=out/"bab_ix"; folder.mkdir(parents=True,exist_ok=True)
-    fig,ax=plt.subplots(figsize=(11,3.4),constrained_layout=True); ax.axis("off")
+    folder=out/"bab_ix"
+    folder.mkdir(parents=True,exist_ok=True)
+    fig,ax=plt.subplots(figsize=(11,3.4),constrained_layout=True)
+    ax.axis("off")
     ax.set_title("BAB IX — Matriks Kebutuhan Bukti untuk Analisis Lanjutan",fontsize=14,weight="bold")
     rows=[
         ["Pertanyaan lanjutan","Data tambahan yang dibutuhkan","Status dalam dataset ini"],
@@ -720,21 +755,25 @@ def extended_chapter_ix(df, raw, out):
         ["Konteks kejadian","CCTV, kronologi, bukti lapangan","Di luar dataset"],
     ]
     tbl=ax.table(cellText=rows[1:],colLabels=rows[0],loc="center",cellLoc="left")
-    tbl.auto_set_font_size(False); tbl.set_fontsize(8); tbl.scale(1,1.5)
+    tbl.auto_set_font_size(False)
+    tbl.set_fontsize(8)
+    tbl.scale(1,1.5)
     save(fig,folder/"decision_matrix_bukti_lanjutan.png")
 
     fig,ax=plt.subplots(figsize=(12,3.8),constrained_layout=True)
-    ax.axis("off"); ax.set_title("BAB IX — Ringkasan Cakupan dan Keterbatasan",fontsize=14,weight="bold")
+    ax.axis("off")
+    ax.set_title("BAB IX — Ringkasan Cakupan dan Keterbatasan",fontsize=14,weight="bold")
     items=[
         ("58","rekaman unik"),("16","kolom"),("59","baris sumber"),
         ("6 s","rentang timestamp hilang"),("7","placeholder akselerasi"),
         ("4","kolom status tidak tersedia pada Tabel 9–10"),
     ]
-    for i,(v,l) in enumerate(items):
-        x=.035+(i%3)*.32; y=.65-(i//3)*.42
+    for i,(value,label) in enumerate(items):
+        x=.035+(i%3)*.32
+        y=.65-(i//3)*.42
         ax.text(x,y,v,transform=ax.transAxes,fontsize=20,weight="bold",
                 bbox=dict(boxstyle="round,pad=.35",fc="#e8f1f8"))
-        ax.text(x,y-.15,l,transform=ax.transAxes,fontsize=8.5)
+        ax.text(x,y-.15,label,transform=ax.transAxes,fontsize=8.5)
     save(fig,folder/"scorecard_keterbatasan.png")
 
 
