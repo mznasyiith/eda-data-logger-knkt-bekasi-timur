@@ -72,10 +72,10 @@ def chapter_i_scope(out: Path) -> None:
     fig, ax = plt.subplots(figsize=(12, 4.5), constrained_layout=True)
     ax.axis("off")
     ax.set_title("BAB I — Ruang Lingkup dan Tujuan EDA", fontsize=16, pad=18)
-    stages = [("SUMBER", "Tabel 6–10\\nLaporan KNKT"),
-              ("DATASET", "58 rekaman unik\\n16 kolom"),
-              ("ANALISIS", "Kualitas data\\nStatistik dan visual"),
-              ("BATAS", "Deskriptif\\nTidak menyimpulkan sebab")]
+    stages = [("SUMBER", "Tabel 6–10\nLaporan KNKT"),
+              ("DATASET", "58 rekaman unik\n16 kolom"),
+              ("ANALISIS", "Kualitas data\nStatistik dan visual"),
+              ("BATAS", "Deskriptif\nTidak menyimpulkan sebab")]
     for i, (head, body) in enumerate(stages):
         x = 0.035 + i * 0.245
         ax.text(x, 0.62, head, transform=ax.transAxes, fontsize=12,
