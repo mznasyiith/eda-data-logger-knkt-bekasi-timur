@@ -19,7 +19,7 @@ format:
     margin: 0.06
     scrollable: true
     preview-links: auto
-    theme: [default, custom.scss]
+    theme: [default, styles/knkt-theme.scss]
     pdf-separate-fragments: false
 ---
 
