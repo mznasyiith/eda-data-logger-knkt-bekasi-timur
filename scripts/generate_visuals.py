@@ -25,7 +25,11 @@ def load_data(path: Path) -> pd.DataFrame:
     if missing:
         raise ValueError(f"Required columns are missing: {sorted(missing)}")
     df = df.copy()
-    df["Timestamp"] = pd.to_datetime(df["Date"].astype(str) + " " + df["Time"].astype(str), dayfirst=True, errors="coerce")
+    df["Timestamp"] = pd.to_datetime(
+        df["Date"].astype(str) + " " + df["Time"].astype(str),
+        format="%d/%m/%Y %H.%M.%S",
+        errors="coerce",
+    )
     df["Speed (km/h)"] = pd.to_numeric(df["Speed (km/h)"], errors="coerce")
     df = df.dropna(subset=["Timestamp", "Speed (km/h)"]).sort_values("Timestamp")
     if df.empty:
