@@ -26,7 +26,7 @@ Nama `distance_to_stop_m` dipilih agar makna dan satuannya eksplisit. Kolom sumb
 ## Bukti silang dari laporan KNKT
 
 1. Gambar 36, halaman tercetak 63, menampilkan sumbu jarak yang menurun dari sekitar 1,34 km sampai 0,00 km seiring urutan waktu.
-2. Bagian II.3.1, halaman tercetak 64, menyebut rekaman awal pada jarak 1.341 m dari titik berhenti setelah tabrakan di Km 28+941; jarak ke titik tabrakan di Km 28+915 disebut 1.315 m.
+2. Bagian II.3.1, halaman tercetak 64, menyebut rekaman awal pada jarak 1.341 m (dengan chainage tertulis Km 28+600) dari titik berhenti setelah tabrakan di Km 28+941; jarak ke titik tabrakan di Km 28+915 disebut 1.315 m. Chainage Km 28+600 tidak konsisten secara aritmetis dengan dua jarak tersebut: selisih chainage ke Km 28+941 adalah 341 m, sedangkan ke Km 28+915 adalah 315 m. Karena itu, nilai jarak pada tabel dipertahankan sebagai besaran relatif, tetapi chainage absolut tidak direkonstruksi.
 3. Uraian pada halaman tercetak 65 menghubungkan rekaman 20:51:34 dengan jarak 863 m dan lokasi Km 28+078.
 4. Tabel 9, halaman tercetak 67, mencatat 301 m pada 20:51:56.
 5. Tabel 10, halaman tercetak 68, mencatat 26 m pada 20:52:12 saat tabrakan, kemudian 0 m pada 20:52:18 dan seterusnya ketika lokomotif berhenti.
@@ -44,10 +44,10 @@ Contoh pembacaan nilai tabel:
 
 ## Ketidaksesuaian internal yang harus dipertahankan sebagai catatan sumber
 
-Ditemukan ketidaksesuaian pada narasi chainage dalam PDF yang tidak boleh diperbaiki diam-diam:
+Ditemukan beberapa ketidaksesuaian internal pada narasi chainage dalam PDF yang tidak boleh diperbaiki diam-diam:
 
-- Pada halaman tercetak 66, uraian rentang 20:51:43–20:51:55 mengaitkan jarak 611 m dengan chainage Km 28+078. Namun, halaman sebelumnya mengaitkan 863 m pada 20:51:34 dengan Km 28+078. Pasangan 611 m dan Km 28+078 tampak tidak konsisten dengan urutan jarak pada tabel.
-- Pada halaman tercetak 66, laporan menyebut emergency brake diaktifkan di Km 28+588 atau sekitar 275 m sebelum tabrakan di Km 28+915. Namun Tabel 9 pada halaman 67 mencatat jarak tersisa 301 m pada 20:51:56. Dengan jarak tabrakan 26 m dari titik henti akhir, selisih dari titik aktivasi hingga tabrakan adalah 301 - 26 = 275 m, sehingga nilai tabel mendukung jarak 275 m tetapi tidak mendukung chainage Km 28+588 jika titik henti akhir Km 28+941 digunakan.
+- Pada halaman tercetak 66, uraian rentang 20:51:43–20:51:55 mengaitkan jarak 611 m dengan chainage Km 28+078, sedangkan uraian halaman sebelumnya mengaitkan 863 m pada 20:51:34 dengan chainage yang sama. Jika titik henti akhir Km 28+941 digunakan sebagai acuan, jarak 611 m akan mengarah ke Km 28+330, bukan Km 28+078.
+- Pada halaman tercetak 66, laporan menyebut emergency brake diaktifkan di Km 28+588 atau sekitar 275 m sebelum tabrakan di Km 28+915. Namun Tabel 9 pada halaman 67 mencatat jarak tersisa 301 m pada 20:51:56; dengan 26 m pada tabrakan, selisih tabel adalah 275 m. Jika titik henti akhir Km 28+941 dipakai, chainage yang berpadanan dengan jarak tersisa 301 m adalah Km 28+640, bukan Km 28+588. Ini menunjukkan konflik antara chainage naratif dan besaran jarak pada tabel.
 - Karena terdapat konflik narasi chainage, proyek ini hanya akan menggunakan `distance_to_stop_m` sebagai jarak tersisa yang diturunkan dari dua komponen tabel. Jangan membuat variabel chainage absolut hasil rekonstruksi sebelum konflik tersebut diselesaikan dengan bukti primer tambahan atau klarifikasi KNKT.
 
 Catatan ini merupakan dokumentasi atas isi sumber, bukan koreksi terhadap laporan KNKT.
