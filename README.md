@@ -103,7 +103,7 @@ pytest
 <details>
 <summary><strong>Catatan kualitas dan batas interpretasi</strong></summary>
 
-- Empat kolom status memiliki nilai kosong struktural pada bagian tabel yang tidak memuat kolom tersebut.
+- Empat kolom status memiliki 26 sel kosong per kolom pada subset Tabel 6–10 karena Tabel 9–10 tidak mencetaknya; Lampiran 7 memuat kolom tersebut, tetapi header `DB Start` perlu direkonsiliasi dengan `DB Star` sebelum perluasan dataset.
 - Placeholder `---` dipertahankan sebagai informasi tidak tersedia; tidak diimputasi menjadi nol.
 - Pencilan statistik tidak otomatis merupakan anomali operasional atau bukti kegagalan.
 - Korelasi tidak menunjukkan sebab-akibat.
