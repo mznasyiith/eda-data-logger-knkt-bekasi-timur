@@ -29,7 +29,7 @@ Nama `distance_to_stop_m` dipilih agar makna dan satuannya eksplisit. Kolom sumb
 2. Bagian II.3.1, halaman tercetak 64, menyebut rekaman awal pada jarak 1.341 m (dengan chainage tertulis Km 28+600) dari titik berhenti setelah tabrakan di Km 28+941; jarak ke titik tabrakan di Km 28+915 disebut 1.315 m. Chainage Km 28+600 tidak konsisten secara aritmetis dengan dua jarak tersebut: selisih chainage ke Km 28+941 adalah 341 m, sedangkan ke Km 28+915 adalah 315 m. Karena itu, nilai jarak pada tabel dipertahankan sebagai besaran relatif, tetapi chainage absolut tidak direkonstruksi.
 3. Uraian pada halaman tercetak 65 menghubungkan rekaman 20:51:34 dengan jarak 863 m dan lokasi Km 28+078.
 4. Tabel 9, halaman tercetak 67, mencatat 301 m pada 20:51:56.
-5. Tabel 10, halaman tercetak 68, mencatat 26 m pada 20:52:12 saat tabrakan, kemudian 0 m pada 20:52:18 dan seterusnya ketika lokomotif berhenti.
+5. Tabel 10, halaman tercetak 68, mencatat 26 m pada 20:52:12 saat tabrakan, kemudian 0 m mulai 20:52:18. Kecepatan pada 20:52:18 masih 3 km/jam dan pertama kali tercatat 0 km/jam pada 20:52:19; karena itu, nilai jarak 0 m pada 20:52:18 tidak boleh ditafsirkan sebagai bukti bahwa kecepatan sudah nol pada timestamp tersebut.
 6. Uraian halaman tercetak 68 menyebut tabrakan di Km 28+915 dan lokomotif berhenti di Km 28+941, selisih 26 m. Ini konsisten dengan nilai jarak gabungan 26 m pada rekaman tabrakan dan 0 m pada rekaman berhenti.
 
 Contoh pembacaan nilai tabel:
