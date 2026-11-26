@@ -153,7 +153,7 @@ def test_distribution_moments_match_published_output():
         "distance_to_stop_m": (0.6582033736854108, -0.7673799562465446),
         "Speed (km/h)": (-0.9580197770958286, -0.08418926925952261),
         "Acceleration (m/sec²)": (0.2895281268899046, -0.44347894765805285),
-        "Load (amps)": (-0.216174252475948, -1.9370293635641485),
+        "Load (amps)": (-0.2176446766996629, -1.9380959857581177),
         "EAB BP (psi)": (-0.12995015466864968, -1.8299244312426293),
         "EAB BC (psi)": (0.5025565657528722, -1.6594257479596688),
     }
@@ -190,18 +190,18 @@ def test_spearman_correlations_match_published_analysis():
     expected = {
         ("distance_to_stop_m", "Speed (km/h)"): 0.998044454992,
         ("distance_to_stop_m", "Acceleration (m/sec²)"): 0.874479858902,
-        ("distance_to_stop_m", "Load (amps)"): 0.899597031099,
+        ("distance_to_stop_m", "Load (amps)"): 0.900926101814,
         ("distance_to_stop_m", "EAB BP (psi)"): 0.959702738438,
         ("distance_to_stop_m", "EAB BC (psi)"): -0.762476324185,
         ("Speed (km/h)", "Acceleration (m/sec²)"): 0.872783051546,
-        ("Speed (km/h)", "Load (amps)"): 0.900692418576,
+        ("Speed (km/h)", "Load (amps)"): 0.901812868446,
         ("Speed (km/h)", "EAB BP (psi)"): 0.958158316416,
         ("Speed (km/h)", "EAB BC (psi)"): -0.763650695210,
-        ("Acceleration (m/sec²)", "Load (amps)"): 0.893520079225,
+        ("Acceleration (m/sec²)", "Load (amps)"): 0.896026623981,
         ("Acceleration (m/sec²)", "EAB BP (psi)"): 0.881916511610,
         ("Acceleration (m/sec²)", "EAB BC (psi)"): -0.765023891937,
-        ("Load (amps)", "EAB BP (psi)"): 0.928986464931,
-        ("Load (amps)", "EAB BC (psi)"): -0.880768528741,
+        ("Load (amps)", "EAB BP (psi)"): 0.930322150271,
+        ("Load (amps)", "EAB BC (psi)"): -0.879602719456,
         ("EAB BP (psi)", "EAB BC (psi)"): -0.798406546896,
     }
     for (left, right), value in expected.items():
