@@ -35,6 +35,7 @@ st.warning(
     "Data yang ditampilkan adalah transkripsi Tabel 6–10 dalam laporan KNKT, "
     "bukan ekspor mentah perangkat logger. Enam timestamp 20:51:28–20:51:33 "
     "tidak termasuk dalam subset Tabel 6–10, meskipun tercantum pada Lampiran 7. "
+    "Lampiran 7 juga memuat empat kolom status yang kosong pada 26 baris subset ini. "
     "Visualisasi tidak menyinkronkan kedua kereta dan tidak menetapkan sebab kecelakaan."
 )
 
@@ -109,21 +110,24 @@ st.download_button(
 )
 
 st.subheader("Korelasi Spearman")
-if len(DASHBOARD_NUMERIC_COLUMNS) >= 2:
+if len(view) >= 3:
     corr = view[DASHBOARD_NUMERIC_COLUMNS].corr(method="spearman", min_periods=3)
-    heat = px.imshow(
-        corr,
-        text_auto=".2f",
-        zmin=-1,
-        zmax=1,
-        aspect="auto",
-        color_continuous_scale="Viridis",
-        title="Korelasi Spearman antarvariabel analitis",
-    )
-    st.plotly_chart(heat, use_container_width=True)
+    if corr.notna().any().any():
+        heat = px.imshow(
+            corr,
+            text_auto=".2f",
+            zmin=-1,
+            zmax=1,
+            aspect="auto",
+            color_continuous_scale="Viridis",
+            title="Korelasi Spearman antarvariabel analitis",
+        )
+        st.plotly_chart(heat, use_container_width=True)
+    else:
+        st.info("Belum ada pasangan variabel dengan sedikitnya tiga observasi valid.")
     st.caption(
         "km dan m tidak dianalisis terpisah; keduanya digabung sebagai "
         "distance_to_stop_m. Korelasi bersifat deskriptif dan bukan kausal."
     )
 else:
-    st.info("Variabel numerik belum cukup untuk menghitung korelasi.")
+    st.info("Pilih kategori/rentang yang menyisakan sedikitnya tiga rekaman untuk korelasi.")
