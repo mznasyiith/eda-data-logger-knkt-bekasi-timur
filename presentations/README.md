@@ -23,6 +23,10 @@ Keluaran ada di `presentations/dist/`:
 - `eda-knkt-bekasi-timur.html`
 - `eda-knkt-bekasi-timur.pdf`
 
+## Identitas visual: PT KAI Academic
+
+Tema presentasi mengikuti palet yang ditetapkan: biru tua `#323A70`, putih `#FFFFFF`, dan oranye `#ED6B23`, dengan Georgia sebagai tipografi utama. Slide pembuka menggunakan latar biru tua; slide isi menggunakan latar putih. Implementasi tema berada di `styles/knkt-theme.scss` dalam format SCSS untuk Reveal.js.
+
 ## Prinsip pemeliharaan
 
 - Edit konten hanya pada berkas QMD dan tema SCSS.
