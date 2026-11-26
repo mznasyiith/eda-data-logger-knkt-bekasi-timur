@@ -1,5 +1,5 @@
 # LAPORAN EXPLORATORY DATA ANALYSIS (EDA)
-## Rekaman Data Logger Lokomotif KA 4B pada Fase Pengereman, Tabrakan, dan Berhenti di Stasiun Bekasi Timur
+## Rekaman Data Logger Lokomotif KA 4B pada Fase Pengereman hingga Tabrakan dan Berhenti di Stasiun Bekasi Timur
 
 **Mata Kuliah:** Exploratory Data Analysis  
 **Program Studi:** Magister Ilmu Komputer, Universitas Amikom Purwokerto  
