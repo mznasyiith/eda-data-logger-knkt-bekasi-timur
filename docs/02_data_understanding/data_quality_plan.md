@@ -14,10 +14,10 @@ Dokumen ini mencatat pemeriksaan kualitas untuk dataset transkripsi Tabel 6–10
 | Placeholder | Tujuh nilai `---` pada akselerasi | Selesai |
 | Tipe dan satuan | Sesuai kamus data; transformasi pada salinan | Selesai |
 | Rekonsiliasi sumber | Pencocokan visual setiap baris/kolom Tabel 6–10 | Selesai; satu koreksi Load 160 A |
-| Lampiran 7 | Audit seluruh rekaman pada tabel Data Logger setelah penyesuaian master time | Belum dilakukan; di luar cakupan dataset saat ini |
+| Lampiran 7 | Audit 64 timestamp, empat kolom status lengkap, dan header `DB Start` vs `DB Star` | Belum dilakukan; di luar cakupan dataset saat ini |
 
 ## Batas dataset
 
-CSV `data/processed/data_logger_knkt_tabel_6_10.csv` hanya merepresentasikan Tabel 6–10. Lampiran 7 PDF KNKT memuat enam timestamp tambahan 20:51:28–20:51:33. Timestamp tersebut tidak diinterpolasi atau ditambahkan ke CSV ini. Jeda tujuh detik harus disebut sebagai batas cakupan subset Tabel 6–10, bukan sebagai ketiadaan rekaman di seluruh PDF.
+CSV `data/processed/data_logger_knkt_tabel_6_10.csv` hanya merepresentasikan Tabel 6–10. Lampiran 7 PDF KNKT memuat 64 timestamp dan empat kolom status lengkap, termasuk enam timestamp 20:51:28–20:51:33 serta nilai status yang tidak dicetak pada Tabel 9–10. Header `DB Start` pada lampiran perlu direkonsiliasi dengan `DB Star` pada tabel sebelumnya. Data lampiran belum diaudit sel demi sel, sehingga tidak diinterpolasi atau ditambahkan ke CSV ini. Jeda tujuh detik harus disebut sebagai batas cakupan subset Tabel 6–10, bukan sebagai ketiadaan rekaman di seluruh PDF.
 
 Jika cakupan diperluas ke Lampiran 7, lakukan transkripsi dan audit independen atas seluruh 64 timestamp dan 16 kolom, rekonsiliasi perbedaan header, nilai, serta penyesuaian master time, kemudian hitung ulang seluruh statistik, grafik, dan narasi. Jangan menambahkan enam baris hanya berdasarkan cuplikan teks OCR.
