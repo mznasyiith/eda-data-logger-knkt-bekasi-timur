@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
 permissions:
-  contents: read
+  contents: write
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -30,6 +30,16 @@ jobs:
           jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=180 --output-dir /tmp/eda-executed notebooks/*.ipynb
       - name: Generate visual artifacts
         run: python scripts/generate_visuals.py
+      - name: Commit generated visual outputs to repository
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish reproducible EDA visual outputs"
+            git push
+          fi
       - name: Upload visual artifacts
         uses: actions/upload-artifact@v4
         with:
