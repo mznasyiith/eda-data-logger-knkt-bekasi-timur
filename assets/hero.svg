@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+<title id="title">EDA Data Logger KNKT — Bekasi Timur</title>
+<desc id="desc">Ilustrasi abstrak jalur kereta dan gelombang data pada latar gradasi hijau gelap.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#102a23"/><stop offset=".55" stop-color="#176b52"/><stop offset="1" stop-color="#0b3b36"/>
+  </linearGradient>
+  <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#f6d98b"/><stop offset="1" stop-color="#f7fff9"/>
+  </linearGradient>
+  <style>
+    .pulse{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 5s ease-in-out infinite alternate}
+    .glow{animation:fade 3s ease-in-out infinite alternate}
+    @keyframes draw{to{stroke-dashoffset:0}}
+    @keyframes fade{to{opacity:.35}}
+  </style>
+</defs>
+<rect width="1200" height="300" rx="24" fill="url(#bg)"/>
+<g opacity=".14" stroke="#d9f3e5" fill="none">
+  <path d="M0 70H1200M0 150H1200M0 230H1200"/>
+  <path d="M150 0V300M300 0V300M450 0V300M600 0V300M750 0V300M900 0V300M1050 0V300"/>
+</g>
+<g transform="translate(65 42)">
+  <text x="0" y="50" fill="#fff" font-family="Arial,sans-serif" font-size="36" font-weight="700">RAILWAY DATA EXPLORATION</text>
+  <text x="0" y="91" fill="#d6f4e2" font-family="Arial,sans-serif" font-size="22">KNKT · Bekasi Timur · Data Logger KA 4B</text>
+  <path class="pulse" d="M0 155H145L165 155L185 120L207 195L232 145L252 155H340L360 155L380 135L400 180L420 155H535" fill="none" stroke="url(#wave)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<g transform="translate(780 75)" fill="none" stroke="#f6d98b" stroke-width="5" stroke-linecap="round">
+  <path d="M0 130L85 20L170 130M28 130H142M43 155H127"/>
+  <path class="glow" d="M85 20V0M85 20L190 80"/>
+  <circle cx="190" cy="80" r="8" fill="#f6d98b"/>
+</g>
+</svg>
