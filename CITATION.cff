@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this project, please cite it as an academic project repository."
+message: "If you use this software, please cite the repository using the metadata below."
 title: "EDA Data Logger KNKT - Bekasi Timur"
 type: software
 authors:
@@ -8,3 +8,16 @@ authors:
 version: 0.1.0
 date-released: 2026-11-26
 repository-code: "https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur"
+abstract: >-
+  Academic exploratory data analysis project for the transcribed locomotive
+  Data Logger records in Tables 6-10 of KNKT Final Report KNKT.26.04.03.02.
+  The repository documents data provenance, quality checks, descriptive
+  analysis, visualizations, and reproducible workflows. It does not establish
+  accident causation.
+keywords:
+  - exploratory data analysis
+  - railway safety
+  - locomotive data logger
+  - data quality
+  - reproducible research
+license: MIT
