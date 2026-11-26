@@ -6,7 +6,7 @@ Dokumen ini memetakan sembilan bab laporan utama ke notebook, generator, modul a
 
 1. Dataset analitis merupakan transkripsi Tabel 6–10: 58 rekaman unik × 16 kolom dari 59 baris sumber.
 2. Raw CSV dibaca sebagai teks; parsing timestamp dan konversi numerik dilakukan pada salinan analisis.
-3. Empat kolom status yang tidak ditampilkan pada Tabel 9–10 dibedakan dari tujuh placeholder akselerasi `---`.
+3. Empat kolom status yang tidak ditampilkan pada Tabel 9–10 dibedakan dari tujuh placeholder akselerasi `---`; Lampiran 7 memuat nilai status pada tabel lengkap, tetapi header `DB Start` perlu direkonsiliasi dengan `DB Star`.
 4. Kolom sumber `km` dan `m` dipertahankan, tetapi analisis jarak menggunakan fitur turunan `distance_to_stop_m = km * 1000 + m` sesuai verifikasi sumber KNKT. Fitur tersebut berarti jarak tersisa menuju titik henti akhir, bukan chainage absolut.
 5. Statistik, distribusi, korelasi, dan IQR tidak boleh memperlakukan `km` dan `m` sebagai variabel independen.
 6. Subset Tabel 6–10 tidak memuat 20:51:28–20:51:33, tetapi Lampiran 7 PDF memuat enam rekaman tersebut. Analisis saat ini sengaja mempertahankan cakupan Tabel 6–10; tidak ada interpolasi atau penggabungan diam-diam.
