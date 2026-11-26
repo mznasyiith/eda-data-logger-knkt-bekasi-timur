@@ -32,6 +32,7 @@ NUMERIC_COLUMNS = [
     "EAB BC (psi)",
 ]
 CORRELATION_COLUMNS = [
+    "distance_to_stop_m",
     "Speed (km/h)",
     "Acceleration (m/sec²)",
     "Load (amps)",
