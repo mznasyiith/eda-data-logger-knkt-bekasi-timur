@@ -1,4 +1,5 @@
 /* PT KAI Academic — Quarto / reveal.js adaptation */
+/*-- scss:defaults -- */
 $body-bg: #FFFFFF;
 $body-color: #323A70;
 $link-color: #ED6B23;
@@ -8,6 +9,8 @@ $presentation-heading-font: Georgia, "Times New Roman", serif;
 $presentation-font: Georgia, "Times New Roman", serif;
 $code-block-font-size: 0.62em;
 
+
+/*-- scss:rules -- */
 .reveal {
   background: #FFFFFF;
   color: #323A70;
