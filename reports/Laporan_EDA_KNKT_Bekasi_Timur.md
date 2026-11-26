@@ -33,6 +33,12 @@ Proyek ini merupakan **Exploratory Data Analysis (EDA) deskriptif terhadap data 
 
 EDA digunakan untuk memahami data dan membangun pertanyaan analitis lanjutan. Penerapan model Machine Learning bukan sasaran wajib pada tahap ini. Pemaksaan algoritma klasifikasi atau regresi tanpa target yang sahih justru berisiko menghasilkan analisis yang tidak sesuai dengan tujuan penelitian.
 
+**Gambar 1.1. Ruang lingkup dan alur EDA**
+
+![Ruang lingkup EDA](../outputs/bab_i/ruang_lingkup_eda.png)
+
+Sumber: hasil olah penulis berdasarkan cakupan Tabel 6–10 laporan KNKT.
+
 ## 1.3 Metrik Keberhasilan
 
 Karena proyek ini tidak membangun model prediktif, akurasi, precision, recall, F1-score, MAE, dan RMSE belum relevan sebagai metrik keberhasilan. Keberhasilan EDA dinilai melalui kriteria kualitas, keterlacakan, dan reproduksibilitas berikut:
@@ -124,6 +130,14 @@ Eksplorasi visual diarahkan pada urutan waktu dan karakteristik parameter operas
 
 Visualisasi bersifat deskriptif. Pola yang tampak tidak dapat digunakan sendiri untuk menyatakan penyebab kecelakaan atau menilai tindakan personel.
 
+**Gambar 2.1. Cakupan waktu rekaman yang tersedia**
+
+![Cakupan waktu rekaman](../outputs/bab_ii/cakupan_waktu_rekaman.png)
+
+Gambar memperlihatkan timestamp yang benar-benar tercantum. Jeda enam detik antara 20:51:27 dan 20:51:34 dipertahankan sebagai kekosongan sumber, bukan diisi dengan interpolasi.
+
+Sumber: hasil olah penulis dari transkripsi Tabel 6–10.
+
 ## 2.5 Penyelarasan dengan Kebutuhan Operasional
 
 Data relevan untuk memahami perubahan parameter lokomotif pada cuplikan waktu yang meliputi fase sebelum emergency brake, pengereman darurat, dan saat tabrakan. Dataset gabungan memuat 58 rekaman unik dari Tabel 6–10. Meskipun lebih luas daripada Tabel 9–10 saja, data ini tetap belum cukup untuk menggambarkan keseluruhan rangkaian peristiwa, seluruh sistem pengereman rangkaian, kondisi sarana lain, aspek persinyalan secara lengkap, atau faktor eksternal.
@@ -192,6 +206,14 @@ Hasil pembacaan dataset gabungan: `km`, `m`, `Speed (km/h)`, `Load (amps)`, `EAB
 
 Tipe object pada akselerasi dapat dimengerti karena kolom memuat angka dan teks `---`. Tipe tanggal dan waktu belum berupa datetime; parsing dilakukan secara eksplisit pada salinan analisis.
 
+**Gambar 3.1. Kelengkapan kolom dataset**
+
+![Kelengkapan kolom](../outputs/bab_iii/kelengkapan_kolom.png)
+
+Kelengkapan dihitung dengan memperlakukan sel kosong dan placeholder sebagai nilai yang tidak tersedia. Empat kolom status tidak ditampilkan pada Tabel 9–10, sedangkan akselerasi memiliki tujuh placeholder.
+
+Sumber: hasil olah penulis dari dataset transkripsi.
+
 ## 3.4 Penanganan Waktu dan Integritas Urutan Rekaman
 
 Kolom `Date` dan `Time` perlu digabung menjadi timestamp pada salinan analisis dengan format yang eksplisit. Pemeriksaan urutan dilakukan setelah parsing, tetapi timestamp hasil parsing tetap merepresentasikan waktu sebagaimana dicetak pada tabel sumber. Belum ada dasar untuk menyatakan bahwa jam Data Logger telah tersinkronisasi dengan jam interlocking, radio, CCTV, atau logger kereta lain. Setiap analisis lintas-sumber nantinya harus mendokumentasikan zona waktu, resolusi timestamp, kemungkinan offset/drift, metode koreksi jam, dan rentang ketidakpastian. Jangan menggeser timestamp agar tampak cocok dengan kronologi tanpa dasar kalibrasi atau bukti sinkronisasi.
@@ -232,6 +254,14 @@ Pemeriksaan dilakukan pada dua tingkat karena terdapat perbedaan antara baris su
 
 Tidak ditemukan duplikasi baris identik pada dataset analitis 58 × 16 setelah proses tersebut. Deduplikasi hanya dilakukan terhadap baris yang seluruh nilai dan timestamp-nya identik; baris dengan timestamp sama tetapi nilai berbeda tidak boleh dihapus otomatis dan harus ditinjau terhadap PDF sumber.
 
+**Gambar 4.1. Nilai tidak tersedia per kolom**
+
+![Missingness per kolom](../outputs/bab_iv/missingness_per_kolom.png)
+
+Grafik membedakan jumlah sel kosong dan placeholder pada transkripsi. Nilai tersebut tidak diimputasi dan tidak diubah menjadi nol.
+
+Sumber: hasil olah penulis dari dataset transkripsi.
+
 ## 4.4 Pemeriksaan Konsistensi dan Kebijakan Penanganan
 
 Pemeriksaan konsistensi meliputi kesesuaian jumlah kolom (16), format tanggal dan waktu, nilai numerik, kategori status, placeholder, serta urutan timestamp. Tanggal ditulis `27/04/2026` dan waktu mengikuti format `HH.MM.SS`; parsing dilakukan pada salinan analisis menggunakan format eksplisit `%d/%m/%Y %H.%M.%S`. Tujuh placeholder `---` pada akselerasi dipertahankan sebagai teks pada data mentah dan dikonversi menjadi missing hanya pada seri numerik analisis. Empat kolom status dengan 26 nilai kosong tetap dipertahankan karena tidak tersedia pada Tabel 9–10.
@@ -265,6 +295,18 @@ Kurtosis yang disajikan adalah excess kurtosis (kurtosis Fisher), sehingga nilai
 
 Ukuran skewness dan kurtosis pada sampel kecil dan berurutan ini tidak cukup untuk menyatakan normalitas. Histogram/KDE dapat membantu inspeksi visual, tetapi uji normalitas formal dan asumsi inferensial tidak menjadi tujuan utama proyek.
 
+**Gambar 5.1. Distribusi variabel numerik**
+
+![Distribusi numerik](../outputs/bab_v/distribusi_numerik.png)
+
+**Gambar 5.2. Frekuensi variabel kategorikal**
+
+![Frekuensi kategorikal](../outputs/bab_v/frekuensi_kategorikal.png)
+
+Histogram menunjukkan distribusi nilai yang tercatat, bukan distribusi probabilitas populasi. Diagram kategori menggunakan jumlah rekaman; karena interval dan ketersediaan status tidak seragam, jumlah kategori tidak langsung ditafsirkan sebagai durasi.
+
+Sumber: hasil olah penulis dari dataset transkripsi.
+
 ## 5.3 Ringkasan Frekuensi Variabel Kategorikal
 
 Frekuensi kategori pada seluruh 58 rekaman adalah sebagai berikut: `Throttle` terdiri atas T5 (17), Idle (13), T7 (11), Off (10), T4 (4), T6 (2), dan T1 (1). `PCS Open` tercatat Closed sebanyak 32 dan Open sebanyak 26. `IBS` tercatat Rel sebanyak 39 dan Appl sebanyak 19. Frekuensi ini merangkum kategori yang tertulis pada tabel sumber; frekuensi tidak menjelaskan durasi keadaan secara langsung karena interval antarrekaman tidak seluruhnya lengkap dan tidak semua status tersedia pada setiap fase.
@@ -287,6 +329,14 @@ Hasil konversi divalidasi dengan membandingkan jumlah baris sebelum dan sesudah 
 
 Dari timestamp gabungan dibuat fitur `elapsed_seconds`, yaitu selisih detik terhadap timestamp paling awal. Fitur ini berguna untuk sumbu waktu numerik dan pengukuran jarak waktu antarrekaman. Karena terdapat gap 20:51:28–20:51:33, selisih waktu aktual dipertahankan; indeks baris tidak boleh dianggap sebagai detik yang selalu berjarak satu detik. Timestamp sumber tidak digeser dan tidak dinyatakan tersinkronisasi dengan sumber lain.
 
+**Gambar 6.1. Interval aktual antarrekaman**
+
+![Interval temporal](../outputs/bab_vi/interval_temporal.png)
+
+Sumbu waktu turunan menggunakan selisih timestamp aktual. Interval enam detik tampak sebagai gap dan tidak dipadatkan menjadi interval satu detik.
+
+Sumber: hasil olah penulis dari timestamp pada transkripsi.
+
 ## 6.4 Rekayasa Fitur Operasional dan Batas Transformasi
 
 Penanda fase operasi dapat ditambahkan hanya jika batas fase diambil secara eksplisit dari judul tabel atau uraian KNKT, bukan dibentuk dari tebakan terhadap pola grafik. Pada tahap EDA ini tidak dibuat label target prediksi. Tidak diterapkan transformasi log, akar kuadrat, Box-Cox, Yeo-Johnson, StandardScaler, MinMaxScaler, one-hot encoding, atau ordinal encoding karena belum ada kebutuhan analisis yang membenarkannya. Nilai dan satuan asli dipertahankan. Jika transformasi diperlukan pada penelitian berikutnya, hasil transformasi harus berada pada fitur turunan terpisah dan parameter transformasi harus dipelajari dari data latih saja.
@@ -303,6 +353,26 @@ Analisis univariat dilakukan dengan histogram/box plot untuk variabel numerik da
 
 Grafik garis kecepatan terhadap waktu dan grafik tekanan BP/BC terhadap waktu lebih sesuai daripada scatter plot generik karena urutan waktu merupakan konteks utama data. Perbandingan dua tekanan harus memperhatikan satuan yang sama (psi), sedangkan arus motor traksi menggunakan ampere dan kecepatan menggunakan km/jam. Hubungan visual tidak otomatis menunjukkan pengaruh kausal. Untuk rekonstruksi kecelakaan, sumbu waktu harus diperlakukan sebagai kunci pengurutan yang masih memiliki ketidakpastian sumber. Dataset ini hanya memuat logger KA 4B; karena itu, tidak boleh dibuat klaim bahwa data telah disinkronkan dengan KA 5568A, log persinyalan, rekaman radio, CCTV, atau data operasi. Analisis silang baru dapat dilakukan setelah timestamp, sumber jam, offset, drift, dan metode penyelarasan didokumentasikan. Jika tersedia data tambahan, gunakan *timeline evidence matrix* yang mencatat waktu sumber, waktu terkoreksi, ketidakpastian, sumber bukti, dan status verifikasi untuk setiap peristiwa.
 
+**Gambar 7.1. Kecepatan terhadap waktu**
+
+![Grafik kecepatan terhadap waktu](../outputs/bab_vii/grafik_kecepatan_waktu.png)
+
+**Gambar 7.2. Tekanan Brake Pipe dan Brake Cylinder terhadap waktu**
+
+![Tekanan BP dan BC terhadap waktu](../outputs/bab_vii/tekanan_bp_bc_waktu.png)
+
+**Gambar 7.3. Heatmap korelasi Spearman**
+
+![Heatmap Spearman](../outputs/bab_vii/heatmap_spearman.png)
+
+**Gambar 7.4. Animasi urutan rekaman kecepatan**
+
+![Animasi urutan rekaman kecepatan](../outputs/bab_vii/animasi_urutan_kecepatan.gif)
+
+Versi interaktif tersedia pada [deret waktu kecepatan](../outputs/bab_vii/deret_waktu_interaktif.html), [deret waktu tekanan BP/BC](../outputs/bab_vii/tekanan_bp_bc_interaktif.html), dan [heatmap Spearman interaktif](../outputs/bab_vii/heatmap_spearman_interaktif.html). Jumlah pasangan valid untuk setiap koefisien korelasi disediakan pada [jumlah pasangan valid korelasi](../outputs/bab_vii/jumlah_pasangan_valid_korelasi.csv).
+
+Sumber seluruh gambar: hasil olah penulis dari transkripsi Data Logger KA 4B. Grafik dan animasi hanya memvisualisasikan rekaman yang tersedia; animasi bukan simulasi gerak fisik atau rekonstruksi kausal.
+
 ## 7.3 Analisis Korelasi
 
 Notebook analisis menghitung korelasi Spearman secara eksploratif pada variabel `Speed (km/h)`, `Acceleration (m/sec²)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)`, setelah placeholder akselerasi dikecualikan secara numerik. Pasangan variabel dapat memiliki jumlah observasi yang berbeda apabila terdapat missing value; karena itu, jumlah pasangan valid perlu diperiksa bersama matriks korelasi dan tidak boleh diasumsikan selalu 58. Korelasi Spearman mengukur asosiasi monotonik, bukan pengaruh sebab-akibat.
@@ -316,6 +386,14 @@ Matriks korelasi tidak dijadikan dasar kesimpulan utama. Dataset berisi 58 rekam
 ## 8.1 Konsep dan Metode Deteksi Pencilan
 
 Deteksi menggunakan aturan Interquartile Range (IQR), dengan batas bawah Q1 − 1,5 × IQR dan batas atas Q3 + 1,5 × IQR. Pada 58 rekaman gabungan (51 nilai akselerasi numerik), tidak ditemukan pencilan IQR pada enam variabel numerik operasional: `m`, `Speed (km/h)`, `Acceleration (m/sec²)`, `Load (amps)`, `EAB BP (psi)`, dan `EAB BC (psi)`. Pada kolom `km`, Q1=Q3=0 sehingga IQR=0 dan pagar atas maupun bawah sama dengan nol. Sepuluh nilai `km=1` kemudian ditandai oleh aturan secara mekanis. Karena `km` adalah komponen koordinat diskrit dan pola tersebut mengikuti pembagian tabel sumber, penandaan ini tidak diperlakukan sebagai pencilan operasional. Z-score tidak digunakan sebagai metode utama karena distribusi normal tidak dapat diasumsikan pada cuplikan runtun waktu yang kecil dan berurutan.
+
+**Gambar 8.1. Box plot variabel numerik dan pemeriksaan IQR**
+
+![Box plot IQR](../outputs/bab_viii/boxplot_iqr.png)
+
+Tabel hasil perhitungan pagar dan jumlah kandidat pencilan dapat diperiksa pada [ringkasan IQR](../outputs/bab_viii/ringkasan_iqr.csv). Penandaan statistik tidak otomatis berarti kesalahan data atau anomali operasional.
+
+Sumber: hasil olah penulis dari dataset transkripsi.
 
 ## 8.2 Analisis Kontekstual dan Keputusan Perlakuan Pencilan
 
@@ -337,6 +415,14 @@ Berdasarkan 58 rekaman unik Tabel 6–10:
 7. Pada pukul 20:52:12–20:52:18, tujuh nilai akselerasi berturut-turut ditandai `---`. Laporan KNKT menjelaskan bahwa sensor akselerometer mencatat data kosong/tidak terbaca pada saat tabrakan karena G-Force melampaui batas ukur sensor.
 
 Temuan di atas merupakan pembacaan deskriptif terhadap tabel. Interpretasi teknis mengenai sistem pengereman dan kejadian tabrakan harus merujuk pada uraian investigasi KNKT secara keseluruhan.
+
+**Gambar 9.1. Ikhtisar temuan EDA**
+
+![Ikhtisar temuan](../outputs/bab_ix/ikhtisar_temuan.png)
+
+Gambar merangkum ukuran dataset, rentang waktu, kecepatan, jeda timestamp, dan placeholder akselerasi. Angka ringkasan diturunkan langsung dari dataset yang digunakan pada generator visual.
+
+Sumber: hasil olah penulis dari transkripsi Tabel 6–10.
 
 ## 9.2 Keterbatasan Analisis
 
