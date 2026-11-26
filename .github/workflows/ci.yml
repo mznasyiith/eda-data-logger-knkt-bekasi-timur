@@ -24,6 +24,10 @@ jobs:
       - name: Black formatting audit
         continue-on-error: true
         run: black --check scripts
+      - name: Execute all notebooks in order
+        run: |
+          mkdir -p /tmp/eda-executed
+          jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=180 --output-dir /tmp/eda-executed notebooks/*.ipynb
       - name: Generate visual artifacts
         run: python scripts/generate_visuals.py
       - name: Upload visual artifacts
