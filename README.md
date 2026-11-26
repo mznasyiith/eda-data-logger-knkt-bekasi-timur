@@ -1,124 +1,115 @@
-# EDA Data Logger KNKT - Bekasi Timur
+<div align="center">
+
+# EDA Data Logger KNKT — Bekasi Timur
+
+**Analisis eksploratif rekaman Data Logger lokomotif KA 4B berdasarkan Laporan Akhir KNKT KNKT.26.04.03.02**
 
 [![CI](https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur/actions/workflows/ci.yml/badge.svg)](https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur/actions/workflows/ci.yml)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
+[![Citation](https://img.shields.io/badge/Citation-CFF-blue)](CITATION.cff)
 
-Proyek akademik **Exploratory Data Analysis (EDA)** terhadap rekaman *Data Logger* yang dirujuk dalam Laporan Investigasi Kecelakaan Perkeretaapian KNKT Nomor **KNKT.26.04.03.02**, mengenai tabrakan KA 4B Argo Bromo Anggrek dan KA 5568A Commuter Line di Stasiun Bekasi Timur pada 27 April 2026.
+<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Inter&weight=600&size=18&pause=1200&color=2F855A&center=true&vCenter=true&width=720&lines=Reproducible+Railway+Data+Exploration;Evidence-aware+Time-series+Analysis;Transparent+Data+Quality+and+Limitations" alt="Typing SVG" /></a>
 
-> **Status:** dataset transkripsi Tabel 6–10 telah ditambahkan sebagai CSV di `data/processed/`. Dataset merupakan transkripsi tabel pada laporan KNKT, bukan ekspor mentah perangkat logger. Rincian cakupan, gap waktu, overlap, dan batas interpretasi dijelaskan pada laporan EDA.
+</div>
 
-## Tujuan
+> [!IMPORTANT]
+> Repository ini menganalisis transkripsi Tabel 6–10 dari laporan KNKT, bukan file biner atau ekspor mentah perangkat Data Logger. Hasil EDA tidak menetapkan penyebab kecelakaan, kesalahan personel, kegagalan persinyalan, ataupun hubungan kausal.
 
-1. Mendokumentasikan asal-usul, struktur, dan batasan data.
-2. Memeriksa kualitas dan karakteristik rekaman Data Logger.
-3. Melakukan pembersihan dan transformasi secara transparan.
-4. Menghasilkan statistik deskriptif dan visualisasi eksploratif.
-5. Menyajikan temuan yang dapat ditelusuri dan direproduksi.
+## Cerita analisis dalam 5 menit
 
-## Cakupan analisis
+Proyek ini menelaah rekaman parameter operasi lokomotif KA 4B dalam rentang waktu yang dicantumkan pada laporan KNKT. Tujuannya memeriksa kualitas data, memahami perubahan parameter, dan menyiapkan dasar analisis lanjutan yang dapat direproduksi.
 
-Proyek ini berfokus pada EDA, bukan penetapan penyebab kecelakaan, penilaian tanggung jawab, atau pembuktian kausalitas. Analisis dibatasi pada variabel dan rentang rekaman yang benar-benar tersedia. Korelasi tidak ditafsirkan sebagai sebab-akibat.
+| Tahap | Pertanyaan | Keluaran |
+|---|---|---|
+| 1. Memahami masalah | Apa yang dapat dijawab rekaman lokomotif? | Ruang lingkup dan batas analisis |
+| 2. Memahami data | Dari tabel dan variabel apa data berasal? | Metadata, kamus data, provenance |
+| 3. Memeriksa kualitas | Apakah nilai, waktu, dan struktur konsisten? | Laporan validasi dan missingness |
+| 4. Mengeksplorasi | Bagaimana parameter berubah terhadap waktu? | Statistik, grafik, heatmap |
+| 5. Mengomunikasikan | Apa temuan dan bukti tambahan yang diperlukan? | Laporan EDA dan rekomendasi |
+
+## Dataset yang dianalisis
+
+- **58 rekaman unik × 16 kolom** pada dataset gabungan.
+- **59 baris sumber** sebelum penggabungan; satu timestamp 20:51:43 muncul pada dua tabel sumber.
+- Rentang timestamp: **27 April 2026, 20:51:18–20:52:21**.
+- Terdapat celah tujuh detik antara 20:51:27 dan 20:51:34; timestamp 20:51:28–20:51:33 tidak tersedia pada tabel transkripsi.
+- Kolom akselerasi memuat tujuh placeholder `---`, bukan nilai numerik nol.
+
+## Visualisasi
+
+Jalankan generator visual setelah memasang dependensi:
+
+~~~~bash
+pip install -e ".[dev]"
+python scripts/generate_visuals.py
+~~~~
+
+Hasil disimpan pada outputs/: GIF deret waktu kecepatan, PNG beresolusi tinggi, heatmap korelasi Spearman, dan HTML Plotly interaktif. Animasi memperlihatkan urutan rekaman yang tersedia; bukan simulasi fisika atau rekonstruksi sebab kecelakaan.
+
+## Arsitektur dan alur data
+
+Lihat [diagram arsitektur](docs/architecture.md) dan [struktur repository](docs/repository_guide/project_structure.md).
 
 ## Struktur repository
 
-```text
-.
-├── data/                 # raw, interim, processed, external
-├── docs/                 # konteks masalah, data, metodologi, keputusan, panduan
-├── notebooks/            # tahapan kerja EDA berurutan
-├── outputs/              # grafik, tabel, statistik, validasi
-├── reports/              # laporan akademik dan teknis
-├── src/eda_knkt/         # modul Python yang dapat digunakan ulang
-├── tests/                # pengujian otomatis
-├── pyproject.toml
-└── requirements.txt
-```
+~~~~text
+data/          raw, interim, processed, external
+src/eda_knkt/  fungsi analisis reusable
+notebooks/     tahapan EDA dan interpretasi
+scripts/       generator visualisasi
+tests/         pengujian otomatis
+docs/          metodologi, kamus data, keputusan, arsitektur
+reports/       laporan akademik
+outputs/       grafik dan artefak hasil analisis
+~~~~
 
-Rincian: [Panduan struktur repository](docs/repository_guide/project_structure.md).
+## Menjalankan proyek
 
-## Persiapan lingkungan
-
-Disarankan Python 3.10 atau lebih baru.
-
-```bash
+~~~~bash
 git clone https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur.git
 cd eda-data-logger-knkt-bekasi-timur
 python -m venv .venv
-# Windows PowerShell: .venv\\Scripts\\Activate.ps1
+# Windows PowerShell: .venv\Scripts\Activate.ps1
 # Linux/macOS: source .venv/bin/activate
 python -m pip install --upgrade pip
-pip install -r requirements.txt
-pip install -e .
-```
-
-Jalankan notebook secara berurutan menggunakan Jupyter:
-
-```bash
-jupyter lab
-```
-
-## Modul Python
-
-Modul di `src/eda_knkt/` menyediakan fungsi reusable untuk tahapan EDA:
-
-| Modul | Tanggung jawab |
-|---|---|
-| `config.py` | Lokasi direktori proyek dan data |
-| `ingestion.py` | Memuat berkas CSV dan Excel |
-| `validation.py` | Memeriksa dimensi, nama kolom, tipe data, dan nilai hilang |
-| `cleaning.py` | Operasi pembersihan yang eksplisit dan non-destruktif |
-| `transformation.py` | Konversi numerik/datetime, pengurutan, dan pemilihan kolom |
-| `statistics.py` | Statistik deskriptif, ringkasan kategorikal, bentuk distribusi, dan korelasi |
-| `visualization.py` | Histogram, frekuensi kategori, scatter plot, dan heatmap korelasi |
-| `reporting.py` | Ekspor tabel CSV, grafik, dan laporan Markdown |
-
-Fungsi transformasi dan pembersihan mengembalikan salinan data; pemilihan kolom serta aturan konversi harus ditentukan berdasarkan kamus data yang telah diverifikasi. Modul statistik dan visualisasi tidak menetapkan arti atau satuan variabel secara otomatis.
-
-## Urutan notebook
-
-| Notebook | Tahap |
-|---|---|
-| 00 | Project setup |
-| 01 | Problem understanding |
-| 02 | Data understanding |
-| 03 | Importing and inspecting |
-| 04 | Handling missing data |
-| 05 | Exploring characteristics |
-| 06 | Data transformation |
-| 07 | Visualizing relationships |
-| 08 | Handling outliers |
-| 09 | Findings and insights |
-
-Notebook 00–09 berisi urutan kerja, penjelasan metodologis, dan sel kode. Dataset transkripsi gabungan tersedia pada `data/processed/data_logger_knkt_tabel_6_10.csv`. Laporan EDA tersedia pada `reports/Laporan_EDA_KNKT_Bekasi_Timur.md`.
-
-## Kebijakan data dan hak penggunaan
-
-- PDF laporan KNKT tidak disertakan dalam repository; rujuk sumber resmi yang dicantumkan pada laporan.
-- CSV yang disertakan adalah transkripsi terbatas Tabel 6–10 dari laporan publik KNKT. Penggunaan dan redistribusi tetap harus memperhatikan ketentuan sumber.
-- Berkas mentah atau bahan kerja lokal tetap disimpan terpisah dan tidak otomatis di-commit.
-- Jangan memasukkan data pribadi, kredensial, atau informasi yang tidak relevan.
-- Lisensi MIT pada repository hanya ditujukan untuk kode dan dokumentasi orisinal proyek, bukan untuk materi pihak ketiga.
-
-Baca [Kebijakan hak data](docs/DATA_RIGHTS.md) sebelum menambahkan berkas.
-
-## Reproducibility dan kualitas
-
-Setiap perubahan data harus dapat ditelusuri. Data mentah dipertahankan tanpa modifikasi; pembersihan dilakukan pada salinan kerja. Nilai kosong seperti `---` tidak boleh otomatis dianggap nol. Outlier tidak dihapus hanya karena nilainya ekstrem. Keputusan analisis dicatat pada [analysis decisions](docs/decisions/analysis_decisions.md).
-
-## Pengujian
-
-```bash
+pip install -e ".[dev]"
 pytest
-```
+~~~~
 
-## Identitas akademik
+## Dokumentasi
 
-- Penyusun: Muhammad Za'iimun Nasyiith
-- NIM: 26MA41D002
-- Program: Magister Ilmu Komputer
-- Institusi: Universitas Amikom Purwokerto
+- [Laporan EDA lengkap](reports/Laporan_EDA_KNKT_Bekasi_Timur.md)
+- [Kamus data](docs/02_data_understanding/data_dictionary.md)
+- [Metodologi](docs/methodology/methodology.md)
+- [Log keputusan analisis](docs/decisions/analysis_decisions.md)
+- [Kebijakan hak data](docs/DATA_RIGHTS.md)
+- [Panduan kontribusi](CONTRIBUTING.md)
+
+<details>
+<summary><strong>Catatan kualitas dan batas interpretasi</strong></summary>
+
+- Empat kolom status memiliki nilai kosong struktural pada bagian tabel yang tidak memuat kolom tersebut.
+- Placeholder `---` dipertahankan sebagai informasi tidak tersedia; tidak diimputasi menjadi nol.
+- Pencilan statistik tidak otomatis merupakan anomali operasional atau bukti kegagalan.
+- Korelasi tidak menunjukkan sebab-akibat.
+- Belum ada sinkronisasi dengan Data Logger KA 5568A, log persinyalan/interlocking, komunikasi, CCTV, maupun catatan operasi lain dalam dataset ini.
+- ATP/ETCS/CBTC tidak diasumsikan terpasang tanpa dokumen konfigurasi yang membuktikannya.
+
+</details>
+
+## Kontribusi
+
+Baca [CONTRIBUTING.md](CONTRIBUTING.md) dan [kebijakan hak data](docs/DATA_RIGHTS.md). Gunakan template [bug](.github/ISSUE_TEMPLATE/bug_report.yml) atau [fitur](.github/ISSUE_TEMPLATE/feature_request.yml). Jangan mengunggah dokumen terbatas, kredensial, atau data pribadi.
+
+## Sitasi
+
+Gunakan metadata [CITATION.cff](CITATION.cff) melalui tombol **Cite this repository** di GitHub.
+
+## Kontributor
+
+<a href="https://github.com/mznasyiith/eda-data-logger-knkt-bekasi-timur/graphs/contributors"><img src="https://contrib.rocks/image?repo=mznasyiith/eda-data-logger-knkt-bekasi-timur" alt="Daftar kontributor repository" /></a>
 
 ## Lisensi
 
-Kode dan dokumentasi orisinal dilisensikan di bawah MIT License. Ketentuan untuk sumber data pihak ketiga tetap berlaku. Lihat [LICENSE](LICENSE).
+Kode dan dokumentasi orisinal proyek menggunakan MIT License. Lisensi tersebut tidak mengubah hak cipta atau ketentuan penggunaan materi pihak ketiga. Lihat [LICENSE](LICENSE) dan [DATA_RIGHTS.md](docs/DATA_RIGHTS.md).
