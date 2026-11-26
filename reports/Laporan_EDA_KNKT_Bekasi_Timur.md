@@ -1,5 +1,5 @@
 # LAPORAN EXPLORATORY DATA ANALYSIS (EDA)
-## Rekaman Data Logger Lokomotif KA 4B pada Fase Emergency Brake dan Tabrakan di Stasiun Bekasi Timur
+## Rekaman Data Logger Lokomotif KA 4B pada Fase Pengereman hingga Tabrakan di Stasiun Bekasi Timur
 
 **Mata Kuliah:** Exploratory Data Analysis  
 **Program Studi:** Magister Ilmu Komputer, Universitas Amikom Purwokerto  
@@ -545,7 +545,7 @@ Semua nilai dipertahankan. Nilai ekstrem terjadi dalam cuplikan perubahan keadaa
 
 Ringkasan berikut menggabungkan dua tingkat bukti: (1) nilai pada transkripsi Tabel 6–10 dan (2) penamaan fase serta penjelasan KNKT pada Bab II.3 dan grafik Lampiran 7. Dataset EDA memuat 58 rekaman unik dari 59 baris sumber; satu rekaman 20:51:43 tercantum identik pada Tabel 7 dan 8. Tidak dilakukan interpolasi untuk celah 20:51:28–20:51:33.
 
-### Audit kronologi parameter per timestamp
+### Audit kronologi parameter pada timestamp kunci
 
 | Timestamp Tabel 6–10 | Fase/konteks KNKT | Speed (km/jam) | BP (psi) | BC (psi) | Load (A) | Throttle | PCS Open | IBS | Catatan audit |
 |---|---|---:|---:|---:|---:|---|---|---|---|
@@ -561,11 +561,11 @@ Ringkasan berikut menggabungkan dua tingkat bukti: (1) nilai pada transkripsi Ta
 | 20:52:09 | Menjelang tabrakan | 53 | 1 | 70 | 0 | Idle | Open | Appl | Akselerasi masih numerik (-0,56 m/s²) |
 | 20:52:11 | Satu detik sebelum tabrakan | 49 | 0 | 71 | 0 | Idle | Open | Appl | Akselerasi -0,58 m/s² |
 | 20:52:12 | Tabrakan | 40 | 0 | 73 | 0 | Off | Open | Appl | Akselerasi placeholder ---; KNKT menyebut titik tabrakan km 28+915 |
-| 20:52:14–20:52:16 | Setelah tabrakan, lokomotif masih bergerak | 21, 17, 13 | 0 | 48, 42, 45 | 0 | Off | Open | Appl | BC turun dari 73 psi; nilai 48, 42, dan 45 psi berurutan |
+| 20:52:14–20:52:16 | Setelah tabrakan, lokomotif masih bergerak | 21, 17, 13 | 0 | 48, 42, 45 | 0 | Off | Open | Appl | BC turun dari 73 psi; nilai 48, 42, dan 45 psi berurutan |\n| 20:52:18 | Menjelang berhenti | 3 | 0 | 54 | 0 | Off | Open | Appl | `km=0` dan `m=0`; jarak tersisa tercatat 0 m meskipun speed masih 3 km/jam |
 | 20:52:19 | Lokomotif berhenti | 0 | 0 | 55 | 0 | Off | Open | Appl | KNKT menyebut titik berhenti km 28+941, 26 m setelah titik tabrakan |
 | 20:52:20–20:52:21 | Setelah berhenti | 0 | 0 | 55 | 0 | Off | Open | Appl | Kecepatan tetap 0 km/jam |
 
-**Catatan waktu.** Tabel 5 KNKT menjelaskan bahwa timestamp Data Logger lokomotif saat tabrakan yang semula 20:52:10 disesuaikan menjadi 20:52:12 berdasarkan CCTV KA 5568A sebagai master time, yaitu koreksi +2 detik. Timestamp Tabel 6–10 yang digunakan dalam EDA diperlakukan sebagai waktu sebagaimana disajikan dalam tabel laporan KNKT; koreksi +2 detik tidak diterapkan kembali. Uraian naratif KNKT menyebut fase service brake mulai 20:51:16 dan berakhir 20:51:53, sedangkan tabel/grafik menyajikan rentang waktu yang bergeser +2 detik, sekitar 20:51:18–20:51:55. Perbedaan ini dicatat agar waktu logger awal tidak tercampur dengan waktu rujukan investigasi.
+> **Cakupan tabel:** tabel ini menyajikan timestamp kunci untuk menjelaskan perubahan fase dan parameter, bukan daftar lengkap seluruh 58 rekaman. Dataset lengkap tetap berada pada `data/processed/data_logger_knkt_tabel_6_10.csv`; timestamp yang tidak ditampilkan di tabel ringkasan tidak berarti rekamannya dihapus.\n\n**Catatan waktu.** Tabel 5 KNKT menjelaskan bahwa timestamp Data Logger lokomotif saat tabrakan yang semula 20:52:10 disesuaikan menjadi 20:52:12 berdasarkan CCTV KA 5568A sebagai master time, yaitu koreksi +2 detik. Timestamp Tabel 6–10 yang digunakan dalam EDA diperlakukan sebagai waktu sebagaimana disajikan dalam tabel laporan KNKT; koreksi +2 detik tidak diterapkan kembali. Uraian naratif KNKT menyebut fase service brake mulai 20:51:16 dan berakhir 20:51:53, sedangkan tabel/grafik menyajikan rentang waktu yang bergeser +2 detik, sekitar 20:51:18–20:51:55. Perbedaan ini dicatat agar waktu logger awal tidak tercampur dengan waktu rujukan investigasi.
 
 **Batas fase.** Tabel 6 merekam minimum reduction pada 20:51:18–20:51:27. Tabel 7 dan narasi KNKT mendokumentasikan peralihan menuju full service setelah 20:51:34; Tabel 8 memperlihatkan full service pada 20:51:43–20:51:55. Tabel 9 dimulai pada 20:51:56 untuk emergency brake. Grafik KNKT menandai tahap emergency brake + independent brake sekitar 20:52:02, sedangkan status IBS pada tabel pertama kali berubah dari Rel menjadi Appl pada 20:52:03. Perbedaan antara penanda fase grafik dan observasi diskret IBS dipertahankan, bukan diseragamkan.
 
@@ -577,7 +577,7 @@ Ringkasan berikut menggabungkan dua tingkat bukti: (1) nilai pada transkripsi Ta
 4. **Arus motor traksi (Load).** Arus tercatat 168 A pada 20:51:18–20:51:36. Pada 20:51:56 tercatat 104 A dan pada 20:51:57 tercatat 0 A; nilainya tetap 0 A hingga rekaman terakhir. Satuan kolom adalah ampere (A), bukan kW.
 5. **Throttle, PCS, dan IBS.** Throttle berada pada T7 di awal rekaman, turun bertahap ke T5 dan T4, kemudian T1 dan Idle, serta tercatat Off pada 20:52:12. PCS Open tercatat Closed sampai 20:51:55 dan Open mulai 20:51:56. IBS tercatat Rel sampai 20:52:02 dan Appl mulai 20:52:03. Frekuensi kategori merangkum jumlah observasi, bukan durasi status.
 6. **Akselerasi.** Tujuh placeholder --- berturut-turut muncul pada 20:52:12–20:52:18. Nilai tidak dihitung sebagai angka. Nilai numerik kembali tersedia pada 20:52:19 (-0,84 m/s²), 20:52:20 (-0,40 m/s²), dan 20:52:21 (-0,15 m/s²). Penjelasan KNKT mengenai respons sensor terhadap G-Force dicatat sebagai konteks sumber, bukan hasil pengukuran ulang EDA.
-7. **Jarak tersisa menuju titik henti akhir.** Besaran `distance_to_stop_m` menurun dari 1.341 m pada 20:51:18 menjadi 26 m pada timestamp tabrakan 20:52:12, lalu 0 m pada rekaman berhenti 20:52:19. Pada tabel sumber, nilai 26 m tersusun dari `km=0` dan `m=26`; nilai nol saat berhenti tersusun dari `km=0` dan `m=0`. Besaran ini mengikuti definisi jarak tersisa terhadap titik henti akhir, bukan chainage absolut atau jarak pengereman murni.
+7. **Jarak tersisa menuju titik henti akhir.** Besaran `distance_to_stop_m` menurun dari 1.341 m pada 20:51:18 menjadi 26 m pada timestamp tabrakan 20:52:12, lalu 0 m pada rekaman berhenti 20:52:19. Pada tabel sumber, nilai 26 m tersusun dari `km=0` dan `m=26`; nilai nol saat berhenti tersusun dari `km=0` dan `m=0`. Besaran ini mengikuti definisi jarak tersisa terhadap titik henti akhir, bukan chainage absolut atau jarak pengereman murni. Perlu dicatat bahwa pada 20:52:18 jarak tersisa sudah tercatat 0 m, sedangkan kecepatan masih 3 km/jam; kecepatan baru tercatat 0 km/jam pada 20:52:19. Perbedaan dua pembacaan diskret ini dipertahankan sebagaimana tercantum pada tabel sumber dan tidak ditafsirkan sebagai bukti bahwa lokomotif telah berhenti pada 20:52:18.
 
 ### Frekuensi kategori
 
