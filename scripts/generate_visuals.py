@@ -47,7 +47,16 @@ CATEGORICAL_COLUMNS = ["Throttle", "PCS Open", "IBS"]
 def load_data(path: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Return immutable-style raw transcription and a typed analysis copy."""
     raw = pd.read_csv(path, dtype=str, keep_default_na=False)
-    required = {"Date", "Time", "Speed (km/h)", *SOURCE_DISTANCE_COLUMNS, "Acceleration (m/sec²)", "Load (amps)", "EAB BP (psi)", "EAB BC (psi)"}
+    required = {
+        "Date",
+        "Time",
+        "Speed (km/h)",
+        *SOURCE_DISTANCE_COLUMNS,
+        "Acceleration (m/sec²)",
+        "Load (amps)",
+        "EAB BP (psi)",
+        "EAB BC (psi)",
+    }
     missing = required.difference(raw.columns)
     if missing:
         raise ValueError(f"Required columns are missing: {sorted(missing)}")
@@ -58,7 +67,15 @@ def load_data(path: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
         format="%d/%m/%Y %H.%M.%S",
         errors="raise",
     )
-    for column in [*SOURCE_DISTANCE_COLUMNS, "Speed (km/h)", "Acceleration (m/sec²)", "Load (amps)", "EAB BP (psi)", "EAB BC (psi)"]:
+    numeric_source_columns = [
+        *SOURCE_DISTANCE_COLUMNS,
+        "Speed (km/h)",
+        "Acceleration (m/sec²)",
+        "Load (amps)",
+        "EAB BP (psi)",
+        "EAB BC (psi)",
+    ]
+    for column in numeric_source_columns:
         df[column] = pd.to_numeric(
             df[column].replace({"---": np.nan, "": np.nan}), errors="coerce"
         )
@@ -258,7 +275,12 @@ def chapter_vii_visuals(df: pd.DataFrame, out: Path) -> None:
         y="Speed (km/h)",
         markers=True,
         title="KA 4B — Deret Waktu Kecepatan",
-        hover_data=["Elapsed (s)", "distance_to_stop_m", "EAB BP (psi)", "EAB BC (psi)"],
+        hover_data=[
+            "Elapsed (s)",
+            "distance_to_stop_m",
+            "EAB BP (psi)",
+            "EAB BC (psi)",
+        ],
     )
     chart.update_layout(
         template="plotly_white",
