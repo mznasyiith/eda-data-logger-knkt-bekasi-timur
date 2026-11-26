@@ -215,3 +215,23 @@ def test_report_labels_timestamp_table_as_key_timestamps_and_notes_zero_distance
     assert "bukan daftar lengkap seluruh 58 rekaman" in report
     assert "20:52:18" in report and "kecepatan masih 3 km/jam" in report
     assert "Pengereman hingga Tabrakan" in report
+
+
+def test_all_58_by_16_transcribed_cells_match_golden_snapshot():
+    """Lock every source cell, including empty strings and '---' placeholders.
+
+    The fixture is a regression baseline for the checked-in transcription;
+    its provenance still requires independent comparison with KNKT Tables 6–10.
+    """
+    expected_path = (
+        ROOT / "tests" / "fixtures" / "data_logger_knkt_tabel_6_10_expected.csv"
+    )
+    actual = pd.read_csv(DATA, dtype=str, keep_default_na=False)
+    expected = pd.read_csv(expected_path, dtype=str, keep_default_na=False)
+
+    assert actual.shape == (58, 16)
+    assert expected.shape == (58, 16)
+    assert actual.columns.tolist() == expected.columns.tolist()
+    # DataFrame.equals compares every cell and preserves distinctions among
+    # empty strings, literal placeholders, numeric text, and categorical text.
+    assert actual.equals(expected)
