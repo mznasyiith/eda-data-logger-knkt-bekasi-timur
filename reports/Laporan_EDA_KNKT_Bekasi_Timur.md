@@ -7,7 +7,7 @@
 **Sumber utama:** Laporan Akhir Investigasi KNKT Nomor KNKT.26.04.03.02  
 **Tanggal penyusunan:** 26 November 2026
 
-> **Pernyataan ruang lingkup.** Analisis empiris menggunakan transkripsi Tabel 6, 7, 8, 9, dan 10. Terdapat 59 baris sumber; satu rekaman pukul 20:51:43 tercantum identik pada Tabel 7 dan Tabel 8 sehingga dataset gabungan deduplikasi memuat 58 rekaman unik dan 16 kolom. Rentang waktu subset tercatat 20:51:18–20:52:21. Subset Tabel 6–10 tidak memuat 20:51:28–20:51:33; enam timestamp tersebut tercantum pada Lampiran 7 PDF KNKT, tetapi belum dimasukkan dalam dataset analisis ini. Empat kolom pada Tabel 9–10 tidak ditampilkan dan tetap kosong untuk 26 rekaman dari dua tabel tersebut.
+> **Pernyataan ruang lingkup.** Analisis empiris menggunakan transkripsi Tabel 6, 7, 8, 9, dan 10. Terdapat 59 baris sumber; satu rekaman pukul 20:51:43 tercantum identik pada Tabel 7 dan Tabel 8 sehingga dataset gabungan deduplikasi memuat 58 rekaman unik dan 16 kolom. Rentang waktu subset tercatat 20:51:18–20:52:21. Subset Tabel 6–10 tidak memuat 20:51:28–20:51:33; enam timestamp tersebut tercantum pada Lampiran 7 PDF KNKT, tetapi belum dimasukkan dalam dataset analisis ini. Empat kolom pada Tabel 9–10 tidak ditampilkan dan tetap kosong untuk 26 rekaman pada subset ini. Lampiran 7 menampilkan empat kolom status pada tabel Data Logger lengkap; nama kolom `DB Start` di lampiran perlu direkonsiliasi dengan `DB Star` sebelum digabungkan.
 
 ---
 
@@ -98,7 +98,7 @@ Enam belas kolom pada skema dataset:
 15. `DB Star`
 16. `IBS`
 
-Empat kolom, yaitu `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, tersedia pada Tabel 6–8 tetapi tidak ditampilkan pada Tabel 9–10. Karena itu, kolom tersebut terisi pada 32 rekaman dari Tabel 6–8 dan kosong pada 26 rekaman Tabel 9–10. Keberadaan kolom tersebut dipertahankan untuk menjaga skema 16 kolom yang digunakan dalam proyek; nilai tidak direkonstruksi atau diisi dari asumsi.
+Empat kolom, yaitu `DB Excit`, `Dir Call`, `DB Set`, dan `DB Star`, tersedia pada Tabel 6–8 tetapi tidak ditampilkan pada Tabel 9–10. Karena itu, kolom tersebut terisi pada 32 rekaman dari Tabel 6–8 dan kosong pada 26 rekaman Tabel 9–10 di subset ini. Lampiran 7 PDF memuat empat kolom status pada tabel Data Logger lengkap, sehingga kekosongan tersebut merupakan konsekuensi pemilihan Tabel 6–10, bukan bukti nilai tidak direkam. Header `DB Start` pada Lampiran 7 berbeda dari `DB Star` pada Tabel 6–8 dan perlu diverifikasi sebelum penggabungan. Nilai lampiran belum ditambahkan atau diasumsikan pada dataset ini.
 
 Kolom sumber `km` dan `m` adalah komponen satu besaran jarak tersisa menuju titik henti akhir. Berdasarkan Gambar 36, uraian Bagian II.3, serta Tabel 6–10 KNKT, keduanya digabung pada salinan analisis menjadi `distance_to_stop_m = km × 1.000 + m`. Besaran ini menurun menuju 0 m ketika lokomotif berhenti; bukan chainage absolut lintas, bukan jarak ke titik tabrakan, dan bukan jarak pengereman murni. Kolom sumber `km` dan `m` tetap dipertahankan tanpa perubahan. Beberapa uraian chainage dalam PDF tidak konsisten satu sama lain; konflik tersebut didokumentasikan tanpa rekonstruksi chainage. Lihat `docs/02_data_understanding/source_validation_distance.md`.
 
@@ -302,7 +302,7 @@ Sumber: hasil olah penulis dari dataset transkripsi.
 
 Mekanisme kehilangan data tidak dapat diklasifikasikan secara menyeluruh sebagai MCAR, MAR, atau MNAR hanya dari dataset kecil ini.
 
-- Empat kolom kosong karena tidak ditampilkan pada Tabel 9–10. Kondisi ini lebih tepat disebut tidak tersedia dalam cakupan sumber, bukan missing value observasional yang mekanismenya dapat diuji.
+- Empat kolom kosong pada subset karena tidak ditampilkan pada Tabel 9–10. Lampiran 7 menyediakan empat kolom status pada tabel lengkap, tetapi nilai tersebut belum ditranskripsikan ke dataset ini; ini adalah missingness akibat cakupan ekstraksi, bukan bukti kegagalan sensor.
 - Tujuh placeholder akselerasi terkait dengan kondisi tabrakan dan keterbatasan pembacaan sensor sebagaimana diterangkan dalam laporan KNKT. Karena berkaitan dengan peristiwa yang sedang diamati, kehilangan tersebut tidak layak diasumsikan MCAR. Akan tetapi, label MAR/MNAR formal tidak ditetapkan tanpa data sensor dan rancangan pengukuran yang lebih lengkap.
 
 ## 4.3 Pemeriksaan Duplikasi dan Kebijakan Deduplicasi
