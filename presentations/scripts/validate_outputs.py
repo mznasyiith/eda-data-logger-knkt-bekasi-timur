@@ -18,8 +18,11 @@ class PresentationHTMLParser(HTMLParser):
         self.slide_parts = []
         self._current_slide_parts = None
         self.visible_parts = []
+        self._ignored_depth = 0
 
     def handle_starttag(self, tag, attrs):
+        if tag in ("script", "style"):
+            self._ignored_depth += 1
         attributes = dict(attrs)
         classes = set((attributes.get("class") or "").split())
         if tag == "section":
@@ -32,12 +35,16 @@ class PresentationHTMLParser(HTMLParser):
             self.notes_count += 1
 
     def handle_endtag(self, tag):
+        if tag in ("script", "style") and self._ignored_depth:
+            self._ignored_depth -= 1
         if tag == "section" and self._section_depth:
             self._section_depth -= 1
             if self._section_depth == 0:
                 self._current_slide_parts = None
 
     def handle_data(self, data):
+        if self._ignored_depth:
+            return
         self.visible_parts.append(data)
         if self._current_slide_parts is not None:
             self._current_slide_parts.append(data)
