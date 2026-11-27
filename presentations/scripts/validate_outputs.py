@@ -40,7 +40,7 @@ class PresentationHTMLParser(HTMLParser):
 
 
 def normalized_text(parts):
-    return re.sub(r"\\s+", " ", " ".join(parts)).strip()
+    return " ".join(" ".join(parts).split())
 
 
 root = Path(__file__).resolve().parents[1]
@@ -62,8 +62,8 @@ cover_text = normalized_text(parser.first_slide_parts)
 
 assert slides >= 30, f"Expected at least 30 slide sections, found {slides}"
 assert "Laporan Exploratory Data Analysis (EDA)" in all_text, "Presentation title missing"
-assert "Dr. Giat Karyono, M.Kom" in cover_text, "Lecturer name missing from rendered cover"
-assert "MUHAMMAD ZA’IIMUN NASYIITH" in cover_text, "Author name missing from rendered cover"
+assert "Dosen:" in cover_text, "Lecturer label missing from rendered cover"\nassert "Dr. Giat Karyono, M.Kom" in cover_text, "Lecturer name missing from rendered cover"
+assert "Disusun oleh:" in cover_text, "Author label missing from rendered cover"\nassert "MUHAMMAD ZA’IIMUN NASYIITH" in cover_text, "Author name missing from rendered cover"
 
 assert notes >= 30, f"Expected speaker notes on at least 30 slides, found {notes}"
 
@@ -97,7 +97,7 @@ with pdf.open("rb") as stream:
 info = subprocess.run(
     ["pdfinfo", str(pdf)], check=True, capture_output=True, text=True
 ).stdout
-match = re.search(r"^Pages:\\s+(\\d+)", info, re.MULTILINE)
+match = re.search(r"^Pages:[ \\t]+([0-9]+)$", info, re.MULTILINE)
 assert match and int(match.group(1)) >= 15, "PDF page count is missing or below 15"
 
 print(
