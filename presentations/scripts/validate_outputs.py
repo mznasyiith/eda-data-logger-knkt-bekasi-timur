@@ -1,7 +1,47 @@
+from html.parser import HTMLParser
 from pathlib import Path
 import re
-from html import unescape
 import subprocess
+
+
+class PresentationHTMLParser(HTMLParser):
+    """Collect rendered slide text and structural counts from reveal.js HTML."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.section_count = 0
+        self.notes_count = 0
+        self._section_depth = 0
+        self._first_slide_depth = None
+        self.first_slide_parts = []
+        self.visible_parts = []
+
+    def handle_starttag(self, tag, attrs):
+        attributes = dict(attrs)
+        classes = set((attributes.get("class") or "").split())
+
+        if tag == "section":
+            self.section_count += 1
+            self._section_depth += 1
+            if self._first_slide_depth is None:
+                self._first_slide_depth = self._section_depth
+
+        if "notes" in classes:
+            self.notes_count += 1
+
+    def handle_endtag(self, tag):
+        if tag == "section" and self._section_depth:
+            self._section_depth -= 1
+
+    def handle_data(self, data):
+        self.visible_parts.append(data)
+        if self._first_slide_depth is not None and self._section_depth >= self._first_slide_depth:
+            self.first_slide_parts.append(data)
+
+
+def normalized_text(parts):
+    return re.sub(r"\\s+", " ", " ".join(parts)).strip()
+
 
 root = Path(__file__).resolve().parents[1]
 dist = root / "dist"
@@ -11,16 +51,20 @@ pdf = dist / "eda-knkt-bekasi-timur.pdf"
 assert html.is_file() and html.stat().st_size > 10_000, "HTML missing or unexpectedly small"
 assert pdf.is_file() and pdf.stat().st_size > 10_000, "PDF missing or unexpectedly small"
 
-html_text = unescape(html.read_text(encoding="utf-8"))
-# Reveal.js slide sections are emitted as HTML <section> elements.
-slides = html_text.count("<section")
-assert slides >= 30, f"Expected at least 30 slide sections, found {slides}"
-assert "Laporan Exploratory Data Analysis (EDA)" in html_text, "Presentation title missing"
-assert "Dr. Giat Karyono, M.Kom" in html_text, "Lecturer name missing from cover"
-assert "MUHAMMAD ZA’IIMUN NASYIITH" in html_text, "Author name missing from cover"
+parser = PresentationHTMLParser()
+parser.feed(html.read_text(encoding="utf-8"))
+parser.close()
 
-# Quarto/reveal.js speaker notes are rendered as notes asides.
-notes = html_text.count('class="notes"')
+slides = parser.section_count
+notes = parser.notes_count
+all_text = normalized_text(parser.visible_parts)
+cover_text = normalized_text(parser.first_slide_parts)
+
+assert slides >= 30, f"Expected at least 30 slide sections, found {slides}"
+assert "Laporan Exploratory Data Analysis (EDA)" in all_text, "Presentation title missing"
+assert "Dr. Giat Karyono, M.Kom" in cover_text, "Lecturer name missing from rendered cover"
+assert "MUHAMMAD ZA’IIMUN NASYIITH" in cover_text, "Author name missing from rendered cover"
+
 assert notes >= 30, f"Expected speaker notes on at least 30 slides, found {notes}"
 
 # Guard source-critical semantics and values against accidental presentation drift.
@@ -42,10 +86,10 @@ for required in (
     "58 rekaman unik",
     "73 psi",
 ):
-    assert required in html_text, f"Required source-aligned content missing: {required}"
+    assert required in all_text, f"Required source-aligned content missing: {required}"
 
-assert "distance_to_stop_m" not in html_text, "Unsupported derived distance feature found"
-assert "Load (A)" in html_text, "Load unit label missing"
+assert "distance_to_stop_m" not in all_text, "Unsupported derived distance feature found"
+assert "Load (A)" in all_text, "Load unit label missing"
 
 with pdf.open("rb") as stream:
     assert stream.read(5) == b"%PDF-", "Invalid PDF signature"
@@ -53,7 +97,7 @@ with pdf.open("rb") as stream:
 info = subprocess.run(
     ["pdfinfo", str(pdf)], check=True, capture_output=True, text=True
 ).stdout
-match = re.search(r"^Pages:\s+(\d+)", info, re.MULTILINE)
+match = re.search(r"^Pages:\\s+(\\d+)", info, re.MULTILINE)
 assert match and int(match.group(1)) >= 15, "PDF page count is missing or below 15"
 
 print(
