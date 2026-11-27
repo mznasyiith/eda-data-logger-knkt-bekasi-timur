@@ -28,6 +28,58 @@ format:
     pdf-separate-fragments: false
 ---
 
+
+## Analisis Data Logger Lokomotif KA 4B
+
+<div class="cover-subtitle">
+Studi Kasus: Tabrakan KA 4B Argo Bromo Anggrek &amp; KA 5568A<br>
+<span>Stasiun Bekasi Timur · 27 April 2026</span>
+</div>
+
+::: {.columns gap="1.2em"}
+::: {.column width="50%"}
+<div class="info-panel">
+<div class="panel-heading">▤ &nbsp; SUMBER DATA &amp; PARAMETER</div>
+
+**Sumber data utama**
+
+Rekaman teknis *Data Logger* lokomotif KA 4B dari Laporan Akhir KNKT **No. KNKT.26.04.03.02**.
+
+<hr>
+
+**Parameter yang dikaji**
+
+- Waktu dan jarak
+- Kecepatan dan akselerasi
+- Arus motor traksi
+- Tekanan rem (*BP* dan *BC*)
+- Posisi *throttle*
+- Indikator *PCS* dan status *IBS*
+
+<div class="panel-visual-caption">DATA LOGGER · PARAMETER OPERASI · JEJAK WAKTU</div>
+</div>
+:::
+::: {.column width="50%"}
+<div class="info-panel">
+<div class="panel-heading">◎ &nbsp; FOKUS ANALISIS</div>
+
+**Fokus masalah — analitis, bukan komersial**
+
+- Menelaah perubahan kecepatan, pengereman, dan kontrol traksi pada rentang waktu kejadian.
+- Memastikan transkripsi data dari laporan dapat dibaca, diperiksa, dan dianalisis secara terstruktur.
+
+<div class="validation-panel">
+<div class="validation-title">✓ &nbsp; PRINSIP VALIDASI</div>
+Data Logger hanyalah satu bukti teknis. Temuan wajib diuji silang (*cross-check*) dengan kronologi KNKT dan bukti independen lain sebelum menarik kesimpulan sebab-akibat.
+</div>
+</div>
+:::
+:::
+
+::: {.notes}
+Slide ini memperkenalkan objek dan batas analisis. Sumber utama adalah rekaman teknis Data Logger lokomotif KA 4B sebagaimana ditampilkan dalam Laporan Akhir KNKT nomor KNKT.26.04.03.02. Parameter yang ditelaah meliputi waktu, jarak, kecepatan, akselerasi, arus motor traksi, tekanan Brake Pipe (BP) dan Brake Cylinder (BC), posisi throttle, indikator PCS, serta status IBS. Fokusnya deskriptif dan analitis: memahami perubahan parameter sepanjang rentang waktu kejadian serta memastikan transkripsi dapat ditelusuri dan diperiksa. Data logger tidak berdiri sendiri dan tidak cukup untuk menetapkan sebab-akibat. Setiap interpretasi perlu diuji silang dengan kronologi KNKT dan bukti independen lain.
+:::
+
 ## Mengapa EDA dilakukan?
 
 **EDA membantu kita memahami data sebelum mengambil keputusan atau membangun model.**
