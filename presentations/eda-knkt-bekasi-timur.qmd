@@ -653,3 +653,147 @@ Akhiri dengan pesan bahwa EDA yang baik bukan EDA yang melakukan sebanyak mungki
 ::: {.notes}
 Arahkan audiens ke laporan EDA untuk tabel, metodologi, dan angka yang lebih lengkap. Sumber utama data adalah laporan akhir KNKT. Setiap pembaruan presentasi harus dibangun ulang dari sumber dan angka yang diverifikasi, bukan disalin manual dari versi slide sebelumnya.
 :::
+
+
+## Lampiran visual 1 — Memahami masalah & tujuan
+
+![alur pemeriksaan data.png](../outputs/bab_i/alur_pemeriksaan_data.png)
+
+![issue tree pertanyaan eda.png](../outputs/bab_i/issue_tree_pertanyaan_eda.png)
+
+![kpi cakupan eda.png](../outputs/bab_i/kpi_cakupan_eda.png)
+
+![ruang lingkup eda.png](../outputs/bab_i/ruang_lingkup_eda.png)
+
+::: {.notes}
+Visual pendukung dari direktori outputs repositori. Gambar ditampilkan sebagai bahan penelusuran tambahan; interpretasi substantif tetap mengikuti uraian dan batasan pada slide utama.
+:::
+
+
+## Lampiran visual 2 — Memahami data
+
+![cakupan waktu rekaman.png](../outputs/bab_ii/cakupan_waktu_rekaman.png)
+
+![matriks data ke pertanyaan.png](../outputs/bab_ii/matriks_data_ke_pertanyaan.png)
+
+![pipeline akuisisi data.png](../outputs/bab_ii/pipeline_akuisisi_data.png)
+
+![ringkasan skema dataset.png](../outputs/bab_ii/ringkasan_skema_dataset.png)
+
+::: {.notes}
+Visual pendukung dari direktori outputs repositori. Gambar ditampilkan sebagai bahan penelusuran tambahan; interpretasi substantif tetap mengikuti uraian dan batasan pada slide utama.
+:::
+
+
+## Lampiran visual 3 — Memuat & memeriksa data
+
+![cuplikan data mentah.png](../outputs/bab_iii/cuplikan_data_mentah.png)
+
+![distribusi tipe data raw.png](../outputs/bab_iii/distribusi_tipe_data_raw.png)
+
+![kelengkapan kolom.png](../outputs/bab_iii/kelengkapan_kolom.png)
+
+![rentang minimum maksimum.png](../outputs/bab_iii/rentang_minimum_maksimum.png)
+
+::: {.notes}
+Visual pendukung dari direktori outputs repositori. Gambar ditampilkan sebagai bahan penelusuran tambahan; interpretasi substantif tetap mengikuti uraian dan batasan pada slide utama.
+:::
+
+
+## Lampiran visual 4 — Kualitas & missing data
+
+![scorecard struktur dataset.png](../outputs/bab_iii/scorecard_struktur_dataset.png)
+
+![dampak deduplikasi.png](../outputs/bab_iv/dampak_deduplikasi.png)
+
+![missingness kolom status.png](../outputs/bab_iv/missingness_kolom_status.png)
+
+![missingness matrix.png](../outputs/bab_iv/missingness_matrix.png)
+
+::: {.notes}
+Visual pendukung dari direktori outputs repositori. Gambar ditampilkan sebagai bahan penelusuran tambahan; interpretasi substantif tetap mengikuti uraian dan batasan pada slide utama.
+:::
+
+
+## Lampiran visual 5 — Karakteristik data
+
+![missingness per kolom.png](../outputs/bab_iv/missingness_per_kolom.png)
+
+![boxplot mean median.png](../outputs/bab_v/boxplot_mean_median.png)
+
+![distribusi numerik.png](../outputs/bab_v/distribusi_numerik.png)
+
+![ecdf variabel numerik.png](../outputs/bab_v/ecdf_variabel_numerik.png)
+
+::: {.notes}
+Visual pendukung dari direktori outputs repositori. Gambar ditampilkan sebagai bahan penelusuran tambahan; interpretasi substantif tetap mengikuti uraian dan batasan pada slide utama.
+:::
+
+
+## Lampiran visual 6 — Transformasi & waktu
+
+![frekuensi kategorikal.png](../outputs/bab_v/frekuensi_kategorikal.png)
+
+![skewness kurtosis.png](../outputs/bab_v/skewness_kurtosis.png)
+
+![alur transformasi aktual.png](../outputs/bab_vi/alur_transformasi_aktual.png)
+
+![interval temporal.png](../outputs/bab_vi/interval_temporal.png)
+
+::: {.notes}
+Visual pendukung dari direktori outputs repositori. Gambar ditampilkan sebagai bahan penelusuran tambahan; interpretasi substantif tetap mengikuti uraian dan batasan pada slide utama.
+:::
+
+
+## Lampiran visual 7 — Hubungan parameter
+
+![pemetaan tipe dan konversi.png](../outputs/bab_vi/pemetaan_tipe_dan_konversi.png)
+
+![categorical state timeline.png](../outputs/bab_vii/categorical_state_timeline.png)
+
+![grafik kecepatan waktu.png](../outputs/bab_vii/grafik_kecepatan_waktu.png)
+
+![heatmap spearman.png](../outputs/bab_vii/heatmap_spearman.png)
+
+::: {.notes}
+Visual pendukung dari direktori outputs repositori. Gambar ditampilkan sebagai bahan penelusuran tambahan; interpretasi substantif tetap mengikuti uraian dan batasan pada slide utama.
+:::
+
+
+## Lampiran visual 8 — Pencilan & konteks
+
+![multi panel parameter waktu.png](../outputs/bab_vii/multi_panel_parameter_waktu.png)
+
+![scatter hubungan parameter.png](../outputs/bab_vii/scatter_hubungan_parameter.png)
+
+![tekanan bp bc waktu.png](../outputs/bab_vii/tekanan_bp_bc_waktu.png)
+
+![boxplot iqr.png](../outputs/bab_viii/boxplot_iqr.png)
+
+::: {.notes}
+Visual pendukung dari direktori outputs repositori. Gambar ditampilkan sebagai bahan penelusuran tambahan; interpretasi substantif tetap mengikuti uraian dan batasan pada slide utama.
+:::
+
+
+## Lampiran visual 9 — Temuan & bukti lanjutan
+
+![jumlah kandidat iqr.png](../outputs/bab_viii/jumlah_kandidat_iqr.png)
+
+![konteks temporal parameter.png](../outputs/bab_viii/konteks_temporal_parameter.png)
+
+![decision matrix bukti lanjutan.png](../outputs/bab_ix/decision_matrix_bukti_lanjutan.png)
+
+![ikhtisar temuan.png](../outputs/bab_ix/ikhtisar_temuan.png)
+
+::: {.notes}
+Visual pendukung dari direktori outputs repositori. Gambar ditampilkan sebagai bahan penelusuran tambahan; interpretasi substantif tetap mengikuti uraian dan batasan pada slide utama.
+:::
+
+
+## Lampiran visual 10 — undefined
+
+![scorecard keterbatasan.png](../outputs/bab_ix/scorecard_keterbatasan.png)
+
+::: {.notes}
+Visual pendukung dari direktori outputs repositori. Gambar ditampilkan sebagai bahan penelusuran tambahan; interpretasi substantif tetap mengikuti uraian dan batasan pada slide utama.
+:::
