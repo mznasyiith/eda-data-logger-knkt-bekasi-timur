@@ -4,6 +4,7 @@ Sumber presentasi tunggal berada di `eda-knkt-bekasi-timur.qmd`. Dari sumber ini
 
 - HTML reveal.js untuk presentasi interaktif.
 - PDF landscape untuk distribusi dan arsip akademik.
+- PowerPoint (`.pptx`) untuk penyuntingan lanjutan di Microsoft PowerPoint atau aplikasi kompatibel.
 
 ## Build lokal
 
@@ -20,6 +21,8 @@ sudo apt-get install --yes poppler-utils python3-pil
 npm install --no-save --package-lock=false playwright@1.56.1
 npx playwright install --with-deps chromium
 node presentations/scripts/export-pdf.mjs
+quarto render eda-knkt-bekasi-timur.qmd --to pptx --output eda-knkt-bekasi-timur.pptx
+cd ..
 python presentations/scripts/validate_outputs.py
 ```
 
@@ -27,6 +30,7 @@ Keluaran ada di `presentations/dist/`:
 
 - `eda-knkt-bekasi-timur.html`
 - `eda-knkt-bekasi-timur.pdf`
+- `eda-knkt-bekasi-timur.pptx`
 
 ## Identitas visual: PT KAI Academic
 
@@ -40,4 +44,4 @@ Tema presentasi mengikuti palet yang ditetapkan: biru tua `#174B78`, putih lembu
 - Klaim data dibatasi pada transkripsi Tabel 6–10 (58 rekaman unik × 16 kolom).
 - Jangan mengubah batasan sumber, semantik jarak, atau interpretasi timestamp tanpa memperbarui audit dan laporan induk.
 
-Workflow GitHub Actions membangun kedua keluaran dan mengunggahnya sebagai artifact; workflow tidak melakukan commit otomatis dan tidak menerbitkan ke GitHub Pages.
+Workflow GitHub Actions membangun ketiga keluaran dan mengunggahnya sebagai artifact; workflow tidak melakukan commit otomatis dan tidak menerbitkan ke GitHub Pages.
