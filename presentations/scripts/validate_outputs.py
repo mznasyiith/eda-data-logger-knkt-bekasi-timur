@@ -83,7 +83,7 @@ for forbidden in ("::: {.column", ":::: {.columns", "::: {.notes}"):
     assert forbidden not in all_text, f"Raw Markdown fence leaked into HTML: {forbidden}"
 
 raw_html_pattern = re.compile(
-    r"</?(?:div|p|span|strong|em|ul|ol|li|img|figure|figcaption|br|hr)\\b[^>]*>",
+    r"</?(?:div|p|span|strong|em|ul|ol|li|img|figure|figcaption|br|hr)(?:[ >])[^>]*>",
     re.IGNORECASE,
 )
 html_markup_leaks = raw_html_pattern.findall(all_text)
@@ -140,7 +140,7 @@ assert not pdf_markup_leaks, (
     + ", ".join(pdf_markup_leaks[:8])
 )
 
-pdf_pages = [normalized_text(page.splitlines()) for page in pdf_text.split("\\f") if page.strip()]
+pdf_pages = [normalized_text(page.splitlines()) for page in pdf_text.split("\f") if page.strip()]
 assert len(pdf_pages) == page_count, (
     f"Expected text extraction for all {page_count} PDF pages, found {len(pdf_pages)}"
 )
