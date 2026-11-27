@@ -102,3 +102,113 @@ $code-block-font-size: 0.62em;
 @media print {
   .reveal .slides { transform: none !important; }
 }
+
+
+/* Objective slide and repository visual appendix */
+.reveal .objective-layout {
+  display: grid;
+  grid-template-columns: 1.55fr 0.85fr;
+  gap: 1.05em;
+  align-items: stretch;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.reveal .objective-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.48em;
+  align-content: stretch;
+}
+.reveal .objective-card {
+  position: relative;
+  min-height: 145px;
+  padding: 0.62em 0.7em 0.58em 0.82em;
+  border-radius: 12px;
+  background: #FFFFFF;
+  border-left: 5px solid #F28C28;
+  box-shadow: 0 5px 18px rgba(23,75,120,.09);
+  font-size: 0.58em;
+  line-height: 1.25;
+}
+.reveal .objective-card strong {
+  display: block;
+  color: #174B78;
+  font-size: 1.08em;
+  margin: 0.12em 0 0.28em;
+}
+.reveal .objective-card p { margin: 0; color: #344B63; }
+.reveal .objective-no {
+  display: inline-block;
+  color: #F28C28;
+  font-weight: 800;
+  letter-spacing: .08em;
+  font-size: .86em;
+}
+.reveal .objective-visual {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .5em;
+  padding: .55em;
+  background: #EAF1F7;
+  border-radius: 14px;
+}
+.reveal .objective-visual img {
+  width: 100%;
+  max-height: 38vh;
+  object-fit: contain;
+  box-shadow: none;
+}
+.reveal .objective-footnote {
+  color: #174B78;
+  background: #FFF7ED;
+  border-left: 4px solid #F28C28;
+  padding: .55em .65em;
+  border-radius: 6px;
+  font-size: .5em;
+  line-height: 1.25;
+}
+.reveal .visual-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: .45em .7em;
+  height: 66vh;
+  align-items: center;
+}
+.reveal .visual-gallery figure {
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: .2em;
+  background: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(23,75,120,.08);
+}
+.reveal .visual-gallery img {
+  max-width: 100%;
+  width: 100%;
+  max-height: 26vh;
+  height: auto;
+  object-fit: contain;
+  border: 0;
+  box-shadow: none;
+}
+.reveal .visual-gallery figcaption {
+  width: 100%;
+  margin-top: .18em;
+  color: #174B78;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: .38em;
+  line-height: 1.15;
+  text-align: center;
+  text-transform: capitalize;
+}
+@media (max-width: 900px) {
+  .reveal .objective-layout { grid-template-columns: 1fr; }
+  .reveal .objective-card { min-height: 0; }
+}
