@@ -12,24 +12,43 @@ try {
     viewport: { width: 1600, height: 900 },
     deviceScaleFactor: 1,
   });
-  const response = await page.goto(`file://${html}?print-pdf`, {
+
+  await page.goto(`file://${html}?print-pdf`, {
     waitUntil: "networkidle",
     timeout: 60000,
   });
-  if (!response && !(await page.locator(".reveal .slides section").count())) {
-    throw new Error("Reveal.js presentation did not load");
+  await page.waitForSelector(".reveal .slides section", { timeout: 30000 });
+
+  await page.evaluate(async () => {
+    if (window.Reveal?.isReady) await window.Reveal.isReady();
+    if (document.fonts?.ready) await document.fonts.ready;
+    await Promise.all(
+      [...document.images].map((image) =>
+        image.decode().catch(() => undefined)
+      )
+    );
+  });
+
+  const slideCount = await page.locator(".reveal .slides > section").count();
+  if (slideCount < 30) {
+    throw new Error(`Expected at least 30 top-level slides, found ${slideCount}`);
   }
-  await page.emulateMedia({ media: "print" });
-  await page.waitForTimeout(1000);
+
+  await page.addStyleTag({
+    content: `
+      @page { size: 16in 9in; margin: 0; }
+      html, body { margin: 0 !important; padding: 0 !important; }
+    `,
+  });
+
   await page.pdf({
     path: pdf,
-    format: "A4",
-    landscape: true,
     printBackground: true,
     preferCSSPageSize: true,
-    margin: { top: "0mm", right: "0mm", bottom: "0mm", left: "0mm" },
+    displayHeaderFooter: false,
+    margin: { top: "0", right: "0", bottom: "0", left: "0" },
   });
-  console.log(`PDF exported: ${pdf}`);
+  console.log(`PDF exported: ${pdf} (${slideCount} top-level slides)`);
 } finally {
   await browser.close();
 }
