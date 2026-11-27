@@ -12,8 +12,8 @@ class PresentationHTMLParser(HTMLParser):
         self.section_count = 0
         self.notes_count = 0
         self._section_depth = 0
-        self._first_slide_depth = None
-        self.first_slide_parts = []
+        self.slide_parts = []
+        self._current_slide_parts = None
         self.visible_parts = []
 
     def handle_starttag(self, tag, attrs):
@@ -22,9 +22,10 @@ class PresentationHTMLParser(HTMLParser):
 
         if tag == "section":
             self.section_count += 1
+            if self._section_depth == 0:
+                self._current_slide_parts = []
+                self.slide_parts.append(self._current_slide_parts)
             self._section_depth += 1
-            if self._first_slide_depth is None:
-                self._first_slide_depth = self._section_depth
 
         if "notes" in classes:
             self.notes_count += 1
@@ -32,11 +33,13 @@ class PresentationHTMLParser(HTMLParser):
     def handle_endtag(self, tag):
         if tag == "section" and self._section_depth:
             self._section_depth -= 1
+            if self._section_depth == 0:
+                self._current_slide_parts = None
 
     def handle_data(self, data):
         self.visible_parts.append(data)
-        if self._first_slide_depth is not None and self._section_depth >= self._first_slide_depth:
-            self.first_slide_parts.append(data)
+        if self._current_slide_parts is not None:
+            self._current_slide_parts.append(data)
 
 
 def normalized_text(parts):
@@ -58,7 +61,13 @@ parser.close()
 slides = parser.section_count
 notes = parser.notes_count
 all_text = normalized_text(parser.visible_parts)
-cover_text = normalized_text(parser.first_slide_parts)
+cover_slides = [
+    normalized_text(parts)
+    for parts in parser.slide_parts
+    if "Analisis Data Logger Lokomotif KA 4B" in normalized_text(parts)
+]
+assert cover_slides, "Opening cover slide not found"
+cover_text = cover_slides[0]
 
 assert slides >= 30, f"Expected at least 30 slide sections, found {slides}"
 assert "Laporan Exploratory Data Analysis (EDA)" in all_text, "Presentation title missing"
