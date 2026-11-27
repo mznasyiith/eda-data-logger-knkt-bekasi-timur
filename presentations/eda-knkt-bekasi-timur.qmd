@@ -18,6 +18,9 @@ format:
     preview-links: auto
     theme: [default, styles/knkt-theme.scss]
     pdf-separate-fragments: false
+  pptx:
+    slide-level: 2
+    incremental: false
 ---
 
 
