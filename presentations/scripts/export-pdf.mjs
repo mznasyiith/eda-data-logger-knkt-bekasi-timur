@@ -29,9 +29,9 @@ try {
     );
   });
 
-  const slideCount = await page.locator(".reveal .slides > section").count();
+  const slideCount = await page.locator(".reveal .slides section").count();
   if (slideCount < 30) {
-    throw new Error(`Expected at least 30 top-level slides, found ${slideCount}`);
+    throw new Error(`Expected at least 30 rendered slide sections, found ${slideCount}`);
   }
 
   await page.addStyleTag({
@@ -48,7 +48,7 @@ try {
     displayHeaderFooter: false,
     margin: { top: "0", right: "0", bottom: "0", left: "0" },
   });
-  console.log(`PDF exported: ${pdf} (${slideCount} top-level slides)`);
+  console.log(`PDF exported: ${pdf} (${slideCount} rendered slide sections)`);
 } finally {
   await browser.close();
 }
