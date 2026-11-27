@@ -80,6 +80,28 @@ Data Logger hanyalah satu bukti teknis. Temuan wajib diuji silang (*cross-check*
 Slide ini memperkenalkan objek dan batas analisis. Sumber utama adalah rekaman teknis Data Logger lokomotif KA 4B sebagaimana ditampilkan dalam Laporan Akhir KNKT nomor KNKT.26.04.03.02. Parameter yang ditelaah meliputi waktu, jarak, kecepatan, akselerasi, arus motor traksi, tekanan Brake Pipe (BP) dan Brake Cylinder (BC), posisi throttle, indikator PCS, serta status IBS. Fokusnya deskriptif dan analitis: memahami perubahan parameter sepanjang rentang waktu kejadian serta memastikan transkripsi dapat ditelusuri dan diperiksa. Data logger tidak berdiri sendiri dan tidak cukup untuk menetapkan sebab-akibat. Setiap interpretasi perlu diuji silang dengan kronologi KNKT dan bukti independen lain.
 :::
 
+
+## Tujuan Exploratory Data Analysis (EDA)
+
+<div class="objective-layout">
+  <div class="objective-grid">
+    <div class="objective-card"><span class="objective-no">01</span><strong>Memahami dataset</strong><p>Mengidentifikasi struktur, cakupan, jumlah rekaman, variabel, dan rentang waktu.</p></div>
+    <div class="objective-card"><span class="objective-no">02</span><strong>Mengaudit kualitas</strong><p>Memeriksa kelengkapan, konsistensi, tipe data, nilai kosong, placeholder, dan duplikasi.</p></div>
+    <div class="objective-card"><span class="objective-no">03</span><strong>Mendeskripsikan dinamika</strong><p>Menelaah perubahan kecepatan, jarak, BP/BC, arus traksi, throttle, PCS, dan IBS.</p></div>
+    <div class="objective-card"><span class="objective-no">04</span><strong>Mengeksplorasi pola</strong><p>Menyajikan statistik deskriptif dan visualisasi eksploratif yang sesuai.</p></div>
+    <div class="objective-card"><span class="objective-no">05</span><strong>Menjaga batas interpretasi</strong><p>Membedakan hasil EDA dari pembuktian sebab-akibat atau kesimpulan investigasi teknis.</p></div>
+    <div class="objective-card"><span class="objective-no">06</span><strong>Merumuskan bukti lanjutan</strong><p>Menetapkan kebutuhan integrasi data persinyalan, komunikasi, sarana, prasarana, dan faktor manusia.</p></div>
+  </div>
+  <div class="objective-visual">
+    <img src="../outputs/bab_i/ruang_lingkup_eda.png" alt="Ruang lingkup analisis EDA" />
+    <div class="objective-footnote"><strong>Prinsip utama</strong><br>Deskripsikan apa yang tercatat, uji konsistensi, lalu nyatakan keterbatasan sebelum menyusun interpretasi.</div>
+  </div>
+</div>
+
+::: {.notes}
+Tujuan EDA pada studi kasus ini terdiri atas enam bagian. Pertama, mengenali struktur dan cakupan dataset. Kedua, mengaudit kualitas transkripsi, termasuk nilai kosong, placeholder, tipe data, konsistensi, dan duplikasi. Ketiga, mendeskripsikan perubahan parameter operasi selama cuplikan waktu yang tersedia. Keempat, menyajikan pola dengan statistik deskriptif dan visualisasi. Kelima, menjaga agar hasil deskriptif tidak diperlakukan sebagai pembuktian sebab-akibat atau kesimpulan investigasi. Keenam, merumuskan kebutuhan integrasi bukti lanjutan, meliputi persinyalan, komunikasi, sarana, prasarana, dan faktor manusia. Tekankan bahwa tujuan keenam adalah kebutuhan penelitian lanjutan, bukan klaim bahwa semua data tersebut telah tersedia atau telah dianalisis.
+:::
+
 ## Mengapa EDA dilakukan?
 
 **EDA membantu kita memahami data sebelum mengambil keputusan atau membangun model.**
