@@ -68,7 +68,9 @@ cover_slides = [
     for parts in parser.slide_parts
     if "Analisis Data Logger Lokomotif KA 4B" in normalized_text(parts)
 ]
-assert cover_slides, "Authored opening cover slide not found"
+assert len(cover_slides) == 1, (
+    f"Expected exactly one authored cover slide, found {len(cover_slides)}"
+)
 cover_text = cover_slides[0]
 
 assert slides >= 30, f"Expected at least 30 slide sections, found {slides}"
@@ -79,6 +81,16 @@ assert notes >= 30, f"Expected speaker notes on at least 30 slides, found {notes
 
 for forbidden in ("::: {.column", ":::: {.columns", "::: {.notes}"):
     assert forbidden not in all_text, f"Raw Markdown fence leaked into HTML: {forbidden}"
+
+raw_html_pattern = re.compile(
+    r"</?(?:div|p|span|strong|em|ul|ol|li|img|figure|figcaption|br|hr)\\b[^>]*>",
+    re.IGNORECASE,
+)
+html_markup_leaks = raw_html_pattern.findall(all_text)
+assert not html_markup_leaks, (
+    "Raw HTML markup leaked into visible HTML slide text: "
+    + ", ".join(html_markup_leaks[:5])
+)
 
 for required in (
     "Bab 1 — Pendahuluan & memahami masalah",
@@ -122,6 +134,23 @@ pdf_text = subprocess.run(
 for leaked in ("::: {.column", ":::: {.columns", "::: {.notes}"):
     assert leaked not in pdf_text, f"Raw Markdown syntax leaked into PDF: {leaked}"
 
+pdf_markup_leaks = raw_html_pattern.findall(pdf_text)
+assert not pdf_markup_leaks, (
+    "Raw HTML markup leaked into PDF text: "
+    + ", ".join(pdf_markup_leaks[:8])
+)
+
+pdf_pages = [normalized_text(page.splitlines()) for page in pdf_text.split("\\f") if page.strip()]
+assert len(pdf_pages) == page_count, (
+    f"Expected text extraction for all {page_count} PDF pages, found {len(pdf_pages)}"
+)
+assert "Analisis Data Logger Lokomotif KA 4B" in pdf_pages[0], (
+    "PDF first page is not the authored cover"
+)
+assert sum("Analisis Data Logger Lokomotif KA 4B" in page for page in pdf_pages) == 1, (
+    "Duplicate cover/title detected in PDF"
+)
+
 with tempfile.TemporaryDirectory(prefix="eda-pdf-audit-") as temp_dir:
     prefix = str(Path(temp_dir) / "page")
     subprocess.run(
@@ -150,5 +179,5 @@ with tempfile.TemporaryDirectory(prefix="eda-pdf-audit-") as temp_dir:
 
 print(
     f"Validated HTML ({slides} sections, {notes} speaker notes) and "
-    f"PDF ({page_count} nonblank 16:9 pages; raw Markdown leakage checked)."
+    f"PDF ({page_count} nonblank 16:9 pages; raw Markdown/HTML leakage and duplicate cover checked)."
 )
