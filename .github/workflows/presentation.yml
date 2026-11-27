@@ -58,18 +58,23 @@ jobs:
         working-directory: presentations
         run: quarto render eda-knkt-bekasi-timur.qmd
 
+      - name: Render editable PowerPoint
+        working-directory: presentations
+        run: quarto render eda-knkt-bekasi-timur.qmd --to pptx --output eda-knkt-bekasi-timur.pptx
+
       - name: Export print-ready PDF
         run: node presentations/scripts/export-pdf.mjs
 
       - name: Validate deliverables
         run: python presentations/scripts/validate_outputs.py
 
-      - name: Upload HTML and PDF
+      - name: Upload HTML, PDF, and PowerPoint
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: eda-knkt-presentation
           path: |
             presentations/dist/eda-knkt-bekasi-timur.html
             presentations/dist/eda-knkt-bekasi-timur.pdf
+            presentations/dist/eda-knkt-bekasi-timur.pptx
           if-no-files-found: error
           retention-days: 30
