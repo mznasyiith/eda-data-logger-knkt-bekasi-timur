@@ -3,6 +3,8 @@ from pathlib import Path
 import re
 import subprocess
 import tempfile
+import zipfile
+import xml.etree.ElementTree as ET
 
 from PIL import Image, ImageStat
 
@@ -58,9 +60,11 @@ root = Path(__file__).resolve().parents[1]
 dist = root / "dist"
 html = dist / "eda-knkt-bekasi-timur.html"
 pdf = dist / "eda-knkt-bekasi-timur.pdf"
+pptx = dist / "eda-knkt-bekasi-timur.pptx"
 
 assert html.is_file() and html.stat().st_size > 10_000, "HTML missing or unexpectedly small"
 assert pdf.is_file() and pdf.stat().st_size > 10_000, "PDF missing or unexpectedly small"
+assert pptx.is_file() and pptx.stat().st_size > 10_000, "PowerPoint missing or unexpectedly small"
 
 html_source = html.read_text(encoding="utf-8")
 parser = PresentationHTMLParser()
@@ -184,7 +188,36 @@ with tempfile.TemporaryDirectory(prefix="eda-pdf-audit-") as temp_dir:
                 f"(dark-pixel ratio={dark_ratio:.4f})"
             )
 
+with zipfile.ZipFile(pptx) as archive:
+    slide_files = sorted(
+        (name for name in archive.namelist()
+         if re.fullmatch(r"ppt/slides/slide[0-9]+\\.xml", name)),
+        key=lambda name: int(re.search(r"slide([0-9]+)", name).group(1)),
+    )
+    assert len(slide_files) >= 30, (
+        f"Expected at least 30 PowerPoint slides, found {len(slide_files)}"
+    )
+    pptx_text = []
+    for slide_file in slide_files:
+        root_xml = ET.fromstring(archive.read(slide_file))
+        pptx_text.extend(
+            node.text or "" for node in root_xml.iter()
+            if node.tag.rsplit("}", 1)[-1] == "t"
+        )
+    pptx_text = normalized_text(pptx_text)
+    for required in (
+        "Analisis Data Logger Lokomotif KA 4B",
+        "MUHAMMAD ZA’IIMUN NASYIITH",
+        "Bab 1",
+        "Bab 9",
+        "58 rekaman unik",
+    ):
+        assert required in pptx_text, (
+            f"Required content missing from PowerPoint: {required}"
+        )
+
 print(
-    f"Validated HTML ({slides} sections, {notes} speaker notes) and "
-    f"PDF ({page_count} nonblank 16:9 pages; raw Markdown/HTML leakage and duplicate cover checked)."
+    f"Validated HTML ({slides} sections, {notes} speaker notes), "
+    f"PDF ({page_count} nonblank 16:9 pages), and "
+    f"PowerPoint ({len(slide_files)} slides; required content checked)."
 )
