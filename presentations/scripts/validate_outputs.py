@@ -16,6 +16,8 @@ html_text = unescape(html.read_text(encoding="utf-8"))
 slides = html_text.count("<section")
 assert slides >= 30, f"Expected at least 30 slide sections, found {slides}"
 assert "Laporan Exploratory Data Analysis (EDA)" in html_text, "Presentation title missing"
+assert "Dr. Giat Karyono, M.Kom" in html_text, "Lecturer name missing from cover"
+assert "MUHAMMAD ZA’IIMUN NASYIITH" in html_text, "Author name missing from cover"
 
 # Quarto/reveal.js speaker notes are rendered as notes asides.
 notes = html_text.count('class="notes"')
