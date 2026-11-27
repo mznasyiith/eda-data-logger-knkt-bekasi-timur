@@ -1,7 +1,7 @@
 ---
 title: "Laporan Exploratory Data Analysis (EDA)"
-subtitle: "Panduan sembilan bab dengan studi kasus Data Logger Lokomotif KA 4B"
-author: "Muhammad Za’iimun Nasyiith"
+subtitle: "Studi Kasus Data Logger Lokomotif KA 4B"
+author: "<span class=\"cover-label\">Dosen</span><br>Dr. Giat Karyono, M.Kom<br><br><span class=\"cover-label\">Disusun oleh</span><br><strong>MUHAMMAD ZA’IIMUN NASYIITH</strong><br>Magister Ilmu Komputer · Universitas Amikom Purwokerto"
 date: "26 November 2026"
 lang: id
 format:
@@ -20,6 +20,11 @@ format:
     scrollable: true
     preview-links: auto
     theme: [default, styles/knkt-theme.scss]
+    title-slide-attributes:
+      data-background-image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg_PGhGOvxr3FcRP_9_1oSIpoTQcYo67_NsJmAWEURdQ&s=10"
+      data-background-size: cover
+      data-background-position: center
+      data-background-opacity: "0.34"
     pdf-separate-fragments: false
 ---
 
