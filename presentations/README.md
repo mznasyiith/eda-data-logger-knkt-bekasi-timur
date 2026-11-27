@@ -7,15 +7,20 @@ Sumber presentasi tunggal berada di `eda-knkt-bekasi-timur.qmd`. Dari sumber ini
 
 ## Build lokal
 
-Prasyarat: Quarto CLI, Node.js, npm, dan Chromium yang dikelola Playwright.
+Prasyarat: Quarto CLI, Node.js, npm, Python 3 + Pillow, Poppler utilities (`pdfinfo`, `pdftotext`, `pdftoppm`), dan Chromium yang dikelola Playwright.
 
 ```bash
+# Render HTML dari direktori presentasi
 cd presentations
 quarto render eda-knkt-bekasi-timur.qmd
+cd ..
+
+# Instal tooling PDF dan jalankan ekspor/validasi dari root repositori
+sudo apt-get install --yes poppler-utils python3-pil
 npm install --no-save --package-lock=false playwright@1.56.1
 npx playwright install --with-deps chromium
-node scripts/export-pdf.mjs
-python scripts/validate_outputs.py
+node presentations/scripts/export-pdf.mjs
+python presentations/scripts/validate_outputs.py
 ```
 
 Keluaran ada di `presentations/dist/`:
@@ -25,7 +30,7 @@ Keluaran ada di `presentations/dist/`:
 
 ## Identitas visual: PT KAI Academic
 
-Tema presentasi mengikuti palet yang ditetapkan: biru tua `#323A70`, putih `#FFFFFF`, dan oranye `#ED6B23`, dengan Georgia sebagai tipografi utama. Slide pembuka menggunakan latar biru tua; slide isi menggunakan latar putih. Implementasi tema berada di `styles/knkt-theme.scss` dalam format SCSS untuk Reveal.js.
+Tema presentasi mengikuti palet yang ditetapkan: biru tua `#174B78`, putih lembut `#F7F8FA`, dan aksen oranye `#F28C28` / `#ED6B23`, dengan Georgia sebagai tipografi utama. Slide pembuka menggunakan latar biru tua; slide isi menggunakan latar putih. Implementasi tema berada di `styles/knkt-theme.scss` dalam format SCSS untuk Reveal.js.
 
 ## Prinsip pemeliharaan
 
