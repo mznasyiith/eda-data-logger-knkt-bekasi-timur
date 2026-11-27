@@ -47,6 +47,7 @@ Parameter yang dikaji:
 Menelaah perubahan parameter operasi dan memastikan transkripsi data dapat dibaca, diperiksa, serta dianalisis secara terstruktur.
 
 > **Prinsip validasi:** Data Logger merupakan satu bukti teknis. Temuan harus diuji silang dengan kronologi KNKT dan bukti independen sebelum menarik kesimpulan sebab-akibat.
+
 ::: {.notes}
 Slide ini memperkenalkan objek dan batas analisis. Sumber utama adalah rekaman teknis Data Logger lokomotif KA 4B sebagaimana ditampilkan dalam Laporan Akhir KNKT nomor KNKT.26.04.03.02. Parameter yang ditelaah meliputi waktu, jarak, kecepatan, akselerasi, arus motor traksi, tekanan Brake Pipe (BP) dan Brake Cylinder (BC), posisi throttle, indikator PCS, serta status IBS. Fokusnya deskriptif dan analitis: memahami perubahan parameter sepanjang rentang waktu kejadian serta memastikan transkripsi dapat ditelusuri dan diperiksa. Data logger tidak berdiri sendiri dan tidak cukup untuk menetapkan sebab-akibat. Setiap interpretasi perlu diuji silang dengan kronologi KNKT dan bukti independen lain.
 :::
@@ -62,6 +63,7 @@ Slide ini memperkenalkan objek dan batas analisis. Sumber utama adalah rekaman t
 6. **Merumuskan bukti lanjutan** — kebutuhan integrasi data persinyalan, komunikasi, sarana, prasarana, dan faktor manusia.
 
 **Prinsip utama:** Deskripsikan apa yang tercatat, uji konsistensi, lalu nyatakan keterbatasan sebelum menyusun interpretasi.
+
 ::: {.notes}
 Tujuan EDA pada studi kasus ini terdiri atas enam bagian. Pertama, mengenali struktur dan cakupan dataset. Kedua, mengaudit kualitas transkripsi, termasuk nilai kosong, placeholder, tipe data, konsistensi, dan duplikasi. Ketiga, mendeskripsikan perubahan parameter operasi selama cuplikan waktu yang tersedia. Keempat, menyajikan pola dengan statistik deskriptif dan visualisasi. Kelima, menjaga agar hasil deskriptif tidak diperlakukan sebagai pembuktian sebab-akibat atau kesimpulan investigasi. Keenam, merumuskan kebutuhan integrasi bukti lanjutan, meliputi persinyalan, komunikasi, sarana, prasarana, dan faktor manusia. Tekankan bahwa tujuan keenam adalah kebutuhan penelitian lanjutan, bukan klaim bahwa semua data tersebut telah tersedia atau telah dianalisis.
 :::
