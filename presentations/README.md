@@ -21,6 +21,7 @@ sudo apt-get install --yes poppler-utils python3-pil
 npm install --no-save --package-lock=false playwright@1.56.1
 npx playwright install --with-deps chromium
 node presentations/scripts/export-pdf.mjs
+cd presentations
 quarto render eda-knkt-bekasi-timur.qmd --to pptx --output eda-knkt-bekasi-timur.pptx
 cd ..
 python presentations/scripts/validate_outputs.py
