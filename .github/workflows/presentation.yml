@@ -1,4 +1,4 @@
-name: Presentation — Quarto + reveal.js + PDF
+name: Presentation — Quarto + reveal.js + PDF + PowerPoint
 
 on:
   push:
