@@ -1,8 +1,5 @@
 ---
-title: "Laporan Exploratory Data Analysis (EDA)"
-subtitle: "Studi Kasus Data Logger Lokomotif KA 4B"
-author: "<strong>Dosen:</strong> Dr. Giat Karyono, M.Kom<br><br><strong>Disusun oleh:</strong><br>MUHAMMAD ZA’IIMUN NASYIITH"
-date: "26 November 2026"
+pagetitle: "Laporan Exploratory Data Analysis (EDA) — Data Logger Lokomotif KA 4B"
 lang: id
 format:
   revealjs:
@@ -26,47 +23,30 @@ format:
 
 ## Analisis Data Logger Lokomotif KA 4B
 
-<div class="cover-subtitle">
-Studi Kasus: Tabrakan KA 4B Argo Bromo Anggrek &amp; KA 5568A<br>
-<span>Stasiun Bekasi Timur · 27 April 2026</span>
-</div>
+### Studi Kasus: Tabrakan KA 4B Argo Bromo Anggrek & KA 5568A
 
-<div class="cover-credits">
-  <p><strong>Dosen:</strong> Dr. Giat Karyono, M.Kom</p>
-  <p><strong>Disusun oleh:</strong> MUHAMMAD ZA’IIMUN NASYIITH</p>
-</div>
+**Stasiun Bekasi Timur · 27 April 2026**
 
-<div class="cover-grid">
-  <div class="info-panel">
-    <div class="panel-heading">▤ &nbsp; SUMBER DATA &amp; PARAMETER</div>
-    <p><strong>Sumber data utama</strong></p>
-    <p>Rekaman teknis <em>Data Logger</em> lokomotif KA 4B dari Laporan Akhir KNKT <strong>No. KNKT.26.04.03.02</strong>.</p>
-    <hr>
-    <p><strong>Parameter yang dikaji</strong></p>
-    <ul>
-      <li>Waktu dan jarak</li>
-      <li>Kecepatan dan akselerasi</li>
-      <li>Arus motor traksi</li>
-      <li>Tekanan rem (<em>BP</em> dan <em>BC</em>)</li>
-      <li>Posisi <em>throttle</em></li>
-      <li>Indikator <em>PCS</em> dan status <em>IBS</em></li>
-    </ul>
-    <div class="panel-visual-caption">DATA LOGGER · PARAMETER OPERASI · JEJAK WAKTU</div>
-  </div>
-  <div class="info-panel">
-    <div class="panel-heading">◎ &nbsp; FOKUS ANALISIS</div>
-    <p><strong>Fokus masalah — analitis, bukan komersial</strong></p>
-    <ul>
-      <li>Menelaah perubahan kecepatan, pengereman, dan kontrol traksi pada rentang waktu kejadian.</li>
-      <li>Memastikan transkripsi data dari laporan dapat dibaca, diperiksa, dan dianalisis secara terstruktur.</li>
-    </ul>
-    <div class="validation-panel">
-      <div class="validation-title">✓ &nbsp; PRINSIP VALIDASI</div>
-      <p>Data Logger hanyalah satu bukti teknis. Temuan wajib diuji silang (<em>cross-check</em>) dengan kronologi KNKT dan bukti independen lain sebelum menarik kesimpulan sebab-akibat.</p>
-    </div>
-  </div>
-</div>
+**Dosen:** Dr. Giat Karyono, M.Kom
 
+**Disusun oleh:** MUHAMMAD ZA’IIMUN NASYIITH
+
+---
+
+**SUMBER DATA & PARAMETER**
+
+Sumber utama: rekaman teknis *Data Logger* lokomotif KA 4B dalam Laporan Akhir KNKT No. **KNKT.26.04.03.02**.
+
+Parameter yang dikaji:
+- Waktu dan jarak; kecepatan dan akselerasi.
+- Arus motor traksi; tekanan rem (*BP* dan *BC*).
+- Posisi *throttle*; indikator *PCS* dan status *IBS*.
+
+**FOKUS ANALISIS**
+
+Menelaah perubahan parameter operasi dan memastikan transkripsi data dapat dibaca, diperiksa, serta dianalisis secara terstruktur.
+
+> **Prinsip validasi:** Data Logger merupakan satu bukti teknis. Temuan harus diuji silang dengan kronologi KNKT dan bukti independen sebelum menarik kesimpulan sebab-akibat.
 ::: {.notes}
 Slide ini memperkenalkan objek dan batas analisis. Sumber utama adalah rekaman teknis Data Logger lokomotif KA 4B sebagaimana ditampilkan dalam Laporan Akhir KNKT nomor KNKT.26.04.03.02. Parameter yang ditelaah meliputi waktu, jarak, kecepatan, akselerasi, arus motor traksi, tekanan Brake Pipe (BP) dan Brake Cylinder (BC), posisi throttle, indikator PCS, serta status IBS. Fokusnya deskriptif dan analitis: memahami perubahan parameter sepanjang rentang waktu kejadian serta memastikan transkripsi dapat ditelusuri dan diperiksa. Data logger tidak berdiri sendiri dan tidak cukup untuk menetapkan sebab-akibat. Setiap interpretasi perlu diuji silang dengan kronologi KNKT dan bukti independen lain.
 :::
@@ -74,21 +54,14 @@ Slide ini memperkenalkan objek dan batas analisis. Sumber utama adalah rekaman t
 
 ## Tujuan Exploratory Data Analysis (EDA)
 
-<div class="objective-layout">
-  <div class="objective-grid">
-    <div class="objective-card"><span class="objective-no">01</span><strong>Memahami dataset</strong><p>Mengidentifikasi struktur, cakupan, jumlah rekaman, variabel, dan rentang waktu.</p></div>
-    <div class="objective-card"><span class="objective-no">02</span><strong>Mengaudit kualitas</strong><p>Memeriksa kelengkapan, konsistensi, tipe data, nilai kosong, placeholder, dan duplikasi.</p></div>
-    <div class="objective-card"><span class="objective-no">03</span><strong>Mendeskripsikan dinamika</strong><p>Menelaah perubahan kecepatan, jarak, BP/BC, arus traksi, throttle, PCS, dan IBS.</p></div>
-    <div class="objective-card"><span class="objective-no">04</span><strong>Mengeksplorasi pola</strong><p>Menyajikan statistik deskriptif dan visualisasi eksploratif yang sesuai.</p></div>
-    <div class="objective-card"><span class="objective-no">05</span><strong>Menjaga batas interpretasi</strong><p>Membedakan hasil EDA dari pembuktian sebab-akibat atau kesimpulan investigasi teknis.</p></div>
-    <div class="objective-card"><span class="objective-no">06</span><strong>Merumuskan bukti lanjutan</strong><p>Menetapkan kebutuhan integrasi data persinyalan, komunikasi, sarana, prasarana, dan faktor manusia.</p></div>
-  </div>
-  <div class="objective-visual">
-    <img src="../outputs/bab_i/ruang_lingkup_eda.png" alt="Ruang lingkup analisis EDA" />
-    <div class="objective-footnote"><strong>Prinsip utama</strong><br>Deskripsikan apa yang tercatat, uji konsistensi, lalu nyatakan keterbatasan sebelum menyusun interpretasi.</div>
-  </div>
-</div>
+1. **Memahami dataset** — struktur, cakupan, jumlah rekaman, variabel, dan rentang waktu.
+2. **Mengaudit kualitas** — kelengkapan, konsistensi, tipe data, nilai kosong, placeholder, dan duplikasi.
+3. **Mendeskripsikan dinamika** — perubahan kecepatan, jarak, BP/BC, arus traksi, *throttle*, PCS, dan IBS.
+4. **Mengeksplorasi pola** — statistik deskriptif dan visualisasi eksploratif yang sesuai.
+5. **Menjaga batas interpretasi** — membedakan hasil EDA dari pembuktian sebab-akibat atau kesimpulan investigasi.
+6. **Merumuskan bukti lanjutan** — kebutuhan integrasi data persinyalan, komunikasi, sarana, prasarana, dan faktor manusia.
 
+**Prinsip utama:** Deskripsikan apa yang tercatat, uji konsistensi, lalu nyatakan keterbatasan sebelum menyusun interpretasi.
 ::: {.notes}
 Tujuan EDA pada studi kasus ini terdiri atas enam bagian. Pertama, mengenali struktur dan cakupan dataset. Kedua, mengaudit kualitas transkripsi, termasuk nilai kosong, placeholder, tipe data, konsistensi, dan duplikasi. Ketiga, mendeskripsikan perubahan parameter operasi selama cuplikan waktu yang tersedia. Keempat, menyajikan pola dengan statistik deskriptif dan visualisasi. Kelima, menjaga agar hasil deskriptif tidak diperlakukan sebagai pembuktian sebab-akibat atau kesimpulan investigasi. Keenam, merumuskan kebutuhan integrasi bukti lanjutan, meliputi persinyalan, komunikasi, sarana, prasarana, dan faktor manusia. Tekankan bahwa tujuan keenam adalah kebutuhan penelitian lanjutan, bukan klaim bahwa semua data tersebut telah tersedia atau telah dianalisis.
 :::
