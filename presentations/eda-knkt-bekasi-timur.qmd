@@ -36,6 +36,11 @@ Studi Kasus: Tabrakan KA 4B Argo Bromo Anggrek &amp; KA 5568A<br>
 <span>Stasiun Bekasi Timur · 27 April 2026</span>
 </div>
 
+<div class="cover-credits">
+  <p><strong>Dosen:</strong> Dr. Giat Karyono, M.Kom</p>
+  <p><strong>Disusun oleh:</strong> MUHAMMAD ZA’IIMUN NASYIITH</p>
+</div>
+
 :::: {.columns gap="1.2em"}
 ::: {.column width="50%"}
 <div class="info-panel">
