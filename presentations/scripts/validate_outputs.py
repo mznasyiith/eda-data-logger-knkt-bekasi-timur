@@ -191,7 +191,7 @@ with tempfile.TemporaryDirectory(prefix="eda-pdf-audit-") as temp_dir:
 with zipfile.ZipFile(pptx) as archive:
     slide_files = sorted(
         (name for name in archive.namelist()
-         if re.fullmatch(r"ppt/slides/slide[0-9]+\\.xml", name)),
+         if re.fullmatch(r"ppt/slides/slide[0-9]+\.xml", name)),
         key=lambda name: int(re.search(r"slide([0-9]+)", name).group(1)),
     )
     assert len(slide_files) >= 30, (
