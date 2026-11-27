@@ -21,7 +21,7 @@ format:
 ---
 
 
-## Analisis Data Logger Lokomotif KA 4B
+## Analisis Data Logger Lokomotif KA 4B {.title-slide}
 
 ### Studi Kasus: Tabrakan KA 4B Argo Bromo Anggrek & KA 5568A
 
@@ -38,6 +38,7 @@ format:
 Sumber utama: rekaman teknis *Data Logger* lokomotif KA 4B dalam Laporan Akhir KNKT No. **KNKT.26.04.03.02**.
 
 Parameter yang dikaji:
+
 - Waktu dan jarak; kecepatan dan akselerasi.
 - Arus motor traksi; tekanan rem (*BP* dan *BC*).
 - Posisi *throttle*; indikator *PCS* dan status *IBS*.
